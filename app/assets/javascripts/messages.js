@@ -1,3 +1,4 @@
+var messageFriendToken;
 var loadConversations = function() {
   $.get('/messages/load_conversations', {},
     function(data) {
@@ -8,6 +9,7 @@ var loadConversations = function() {
           elem.prependTo('#stream-items');
         });
         loadMessages(data[0]);
+        initMessageArea();
       }
     }
   );
@@ -34,7 +36,7 @@ var loadMessages = function(data) {
     elem.prependTo('#messages-items');
   });
   $('.tweet-box-title h2').html('给 ' + data.friend_name + ' 发信息');
-
+  messageFriendToken = data.friend_token;
 }
 var constructMessageBox = function(data) {
   var box = $('#message-item-id').clone().show()
@@ -47,14 +49,77 @@ var constructMessageBox = function(data) {
   box.find('.message-content .linked-text').html(data.text);
   return box;
 }
-var initMessageView = function() {
-  $('.text-area textarea').bind('keyup', updateReplyMessageCountdown)
-                          .bind('blur', updateReplyMessageCountdown);
-  $('#reply-message-countdown').text(messageTextLimit);
+var initMessageArea = function() {
+  $('.text-area textarea').bind('keyup', updateReplyButtonState)
+                          .bind('blur', updateReplyButtonState);
   $('#btn-reply-message').click(function(){
-    replyMessage(messageFriendToken);
+    replyMessage();
   });
-  $('#btn-back-to-conversations').click(function(){
-    ce6.site.redirect('messages/conversations');
+}
+var updateReplyButtonState = function() {
+  var msg = $('.text-area textarea').val();
+  if (msg.length > 0) {
+    $('#btn-reply-message').removeClass('disabled');
+  } else {
+    $('#btn-reply-message').addClass('disabled');
+  }
+}
+var replyMessage = function() {
+  if($('#btn-reply-message').hasClass('disabled'))
+    return;
+  $('#btn-reply-message').addClass('disabled');
+  var messageText = $('.text-area textarea').val();
+  $.post('/messages/send_message', {
+    'recipient_token' : messageFriendToken,
+    'text' : messageText
+  }, function(res){
+    if (res.rc) {
+      $('#btn-reply-message').removeClass('disabled');
+    } else {
+      showNewMessage(htmlEscape(messageText));
+      $('.text-area textarea').val('');
+    }
   });
+}
+var showNewMessage = function(messageText) {
+  var e = constructMessageBox({
+    owner_name : viewer.name,
+    owner_picture : viewer.avatar,
+    owner_profile_url : 'users/' + viewer.id,
+    time_created : '1 秒钟前',
+    text : messageText
+  });
+  e.prependTo('#messages-items');
+}
+var htmlEscape = function(txt) {
+  return txt.replace(/&/g,'&amp;').                                         
+              replace(/>/g,'&gt;').                                           
+              replace(/</g,'&lt;').                                           
+              replace(/"/g,'&quot;')              
+}
+var initMessageBox = function(){
+  sendMessageDialog = {
+    initialized : false,
+    autoOpen: false,
+    modal: true,
+    width: 500,
+    height: 325,
+    resizable: false,
+    title: 'New Message',
+    dialogClass: 'dlg-container-send-message',
+    draggable: false,
+    beforeClose: function() {
+      ce6.message.dialogOpened = false;
+      resetMessageDialog();
+    },
+    buttons: {
+      Cancel: function() {
+        // close dialog
+        $(this).dialog('close');
+      },
+      Send: function() {
+        if (!sendButtonDisabled)
+        submitMessage();
+      }
+    }
 }

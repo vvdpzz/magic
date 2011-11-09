@@ -45,7 +45,7 @@
               </div>
               <div class="tweet-button-container">
                 <div class="tweet-button-sub-container">
-                  <a href="#" class="tweet-button button disabled">发送</a>
+                  <a id="btn-reply-message" href="#" class="tweet-button button disabled">发送</a>
                 </div>
               </div>
             </div>
@@ -84,7 +84,40 @@
   </div>
 </div>
 <script type="text/javascript" charset="utf-8">
-$(function(){
-  loadConversations()
-});
+  var viewer = {
+    name: "<%= current_user.name%>",
+    id: "<%= current_user.id%>",
+    avatar: "<%= current_user.avatar %>"
+  }
+  $(function(){
+    loadConversations()
+  });
 </script>
+
+<div style="position: fixed; top: 0px; z-index: 1010;">
+	<div id="dlg-send-message" style="display:none;">
+		<div id='message-recipient' class="ui-dialog-box">
+			<span>To:</span>
+		</div>
+		<div id='message-body' class="ui-dialog-box">
+			<span>Message:</span>
+			<textarea></textarea>
+		</div>
+		<div id='send-message-countdown'></div>
+	</div>
+  <div id='dlg-ofac' style="display:none;" class="dlg-plain-content">
+		<div class='ofac-notice'>
+			For payment transactions, we're required by law to collect this information from you once.
+		</div>
+		<div class='ofac-row'>
+			<div class='ofac-field' >
+				<span>Order Number:</span>
+				<span id="order-number"></span>
+			</div>
+		</div>
+		<div class='ofac-row'>
+			<div class='ofac-field' id="alipay-form">
+			</div>
+		</div>
+	</div>
+</div>
