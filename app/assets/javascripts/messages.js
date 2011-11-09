@@ -5,7 +5,7 @@ var loadConversations = function() {
         $('#messagebox-and-messages').show();
         $.each(data, function(idx, conversation) {
           var elem = constructConversationBox(conversation);
-          elem.appendTo('#stream-items');
+          elem.prependTo('#stream-items');
         });
         loadMessages(data[0]);
       }
@@ -31,7 +31,7 @@ var constructConversationBox = function(data) {
 var loadMessages = function(data) {
   $.each(data.messages, function(idx, message) {
     var elem = constructMessageBox(message);
-    elem.appendTo('#messages-items');
+    elem.prependTo('#messages-items');
   });
   $('.tweet-box-title h2').html('给 ' + data.friend_name + ' 发信息');
 
