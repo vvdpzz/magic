@@ -13,6 +13,14 @@ class User < ActiveRecord::Base
   has_many :answers
   has_many :comments
   has_many :recharge_records
+  has_many :reputation_transactions
+  has_many :credit_transactions
+  
+  has_one :photo
+  
+  def gavatar
+    self.avatar ||= "/assets/default-profile-photo.png"
+  end
 
   acts_as_voter
 end

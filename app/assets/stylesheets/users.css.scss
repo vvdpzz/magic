@@ -38,3 +38,18 @@
     text-align:center;
   }
 }
+.fluploader_wrapper{
+  display: inline;
+  position: relative;
+  margin:0;
+  padding:0;
+  line-height:1;
+}
+.fluploader_swfdiv{
+  top: 0px;
+  left: 0px;
+  margin:0;
+  padding:0;
+  line-height:1;
+  position: absolute;
+}

@@ -25,6 +25,10 @@ Magic::Application.routes.draw do
       post :generate_order
     end
   end
+  
+  resources :accounts
+  
+  resources :photos
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

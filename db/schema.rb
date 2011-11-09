@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111109150254) do
+ActiveRecord::Schema.define(:version => 20111109195759) do
 
   create_table "answers", :id => false, :force => true do |t|
     t.integer  "id",             :limit => 8
@@ -56,6 +56,16 @@ ActiveRecord::Schema.define(:version => 20111109150254) do
   add_index "credit_transactions", ["magic_id"], :name => "index_credit_transactions_on_magic_id"
   add_index "credit_transactions", ["user_id"], :name => "index_credit_transactions_on_user_id"
   add_index "credit_transactions", ["winner_id"], :name => "index_credit_transactions_on_winner_id"
+
+  create_table "photos", :force => true do |t|
+    t.integer  "user_id",    :limit => 8,                 :null => false
+    t.string   "image",                   :default => ""
+    t.string   "salt",                    :default => ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "photos", ["user_id"], :name => "index_photos_on_user_id"
 
   create_table "questions", :id => false, :force => true do |t|
     t.integer  "id",                :limit => 8
