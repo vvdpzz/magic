@@ -19,7 +19,11 @@ class User < ActiveRecord::Base
   has_one :photo
   
   def gavatar
-    self.avatar ||= "/assets/default-profile-photo.png"
+    if self.avatar == ""
+      return "/assets/default.png"
+    else
+      return self.avatar
+    end
   end
 
   acts_as_voter

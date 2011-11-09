@@ -2,8 +2,8 @@ class CreatePhotos < ActiveRecord::Migration
   def change
     create_table :photos do |t|
       t.integer :user_id, :limit => 8, :null => false
-      t.string :image, :default => ""
-      t.string :salt, :default => ""
+      t.string :image
+      t.string :salt
 
       t.timestamps
     end
