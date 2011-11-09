@@ -1,5 +1,5 @@
 <div class="passport clearfix">
-  <div class="gravatar32"><%= image_tag "http://gravatar.com/avatar/5a4861470749020a5a1165cbe2facfbc.png?r=PG&s=32" %></div>
+  <div class="gravatar32"><%= image_tag user.gavatar %></div>
   <div class="detail">
     <%= link_to user.name, "/users/#{user.id}" %><br>
     <div class="credit"><%= user.reputation %></div>

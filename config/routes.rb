@@ -26,6 +26,10 @@ Magic::Application.routes.draw do
     end
   end
   
+  resources :accounts
+  
+  resources :photos
+  
   resources :messages do
       collection do
         get :load_conversations

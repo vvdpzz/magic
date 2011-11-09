@@ -1,10 +1,19 @@
+.upload-button{
+  margin-top:10px;
+  text-align:center;
+}
+.profile-avatar{
+  float:left;
+}
+.profile-detail{
+  margin-left:153px;
+}
 .profilePicThumb {
   background: rgba(0, 0, 0, .3);
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .07);
-  display: block;
   padding: 1px;
-  float:left;
+  width:133px;
 }
 .profilePic {
   background-color: white;
@@ -16,16 +25,14 @@
 .profile{
   padding:10px 0 30px;
   h2{
-    margin: 16px 0 0 157px;
+    margin-top:0;
   }
   p{
-    margin: 5px 0 0 157px;
     font-size:16px;
     line-height:1.4;
   }
   strong{
     font-size:20px;
-    margin-left:20px;
     line-height:40px;
   }
 }
@@ -37,4 +44,26 @@
   a{
     text-align:center;
   }
+}
+.fluploader_wrapper{
+  display: inline;
+  position: relative;
+  margin:0;
+  padding:0;
+  line-height:1;
+}
+.fluploader_swfdiv{
+  top: 0px;
+  left: 0px;
+  margin:0;
+  padding:0;
+  line-height:1;
+  position: absolute;
+}
+.uiButton{display:inline-block;font-size: 12px;font-weight:bold;line-height:normal !important;padding:2px 6px;text-align:center;text-decoration:none;vertical-align:top;white-space:nowrap}
+.uiButton:hover{text-decoration:none}
+.uiButton .select-photo{border:0;color:#333;cursor:pointer;display:-moz-inline-box;display:inline-block;margin:0;outline:none;padding:1px 0 2px;}
+.vine{
+  float:left;
+  margin:15px;
 }

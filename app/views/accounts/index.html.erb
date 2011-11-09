@@ -1,0 +1,86 @@
+<div class="record-table">
+  <h1>帐户基本信息</h1>
+  <table class="bordered-table">
+    <thead>
+      <tr>
+        <th>现金</th>
+        <th>积分</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>¥ <%= @user.credit %></th>
+        <td># <%= @user.reputation %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="record-table">
+  <h1>充值流水</h1>
+  <table class="bordered-table zebra-striped">
+    <thead>
+      <tr><th>日期</th><th>概述</th><th>类型</th><th>收支</th></tr>
+    </thead>
+    <tbody>
+      <% if @user.recharge_records.empty? %>
+      <tr><td colspan="4"><div class="table-info">暂时没有充值记录</div></td></tr>
+      <% else %>
+      <% @user.recharge_records.each do |record| %>
+      <tr>
+        <td><%= record.created_at.strftime("%Y/%m/%d") %></td>
+        <td>充值</td>
+        <td>收入</td>
+        <td><%= record.credit %></td>
+      </tr>
+      <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="record-table">
+  <h1>现金帐户流水</h1>
+  <table class="bordered-table zebra-striped">
+    <thead>
+      <tr><th>日期</th><th>概述</th><th>类型</th><th>收支</th></tr>
+    </thead>
+    <tbody>
+      <% if @user.credit_transactions.empty? %>
+      <tr><td colspan="4"><div class="table-info">暂时没有现金流水记录</div></td></tr>
+      <% else %>
+      <% @user.credit_transactions.each do |record| %>
+      <tr>
+        <td><%= record.created_at.strftime("%Y/%m/%d") %></td>
+        <td>答题</td>
+        <td><% if record.payment %>支出<% else %>收入<% end %></td>
+        <td><%= record.value %></td>
+      </tr>
+      <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="record-table">
+  <h1>积分帐户流水</h1>
+  <table class="bordered-table zebra-striped">
+    <thead>
+      <tr><th>日期</th><th>概述</th><th>类型</th><th>收支</th></tr>
+    </thead>
+    <tbody>
+      <% if @user.reputation_transactions.empty? %>
+      <tr><td colspan="4"><div class="table-info">暂时没有积分流水记录</div></td></tr>
+      <% else %>
+      <% @user.reputation_transactions.each do |record| %>
+      <tr>
+        <td><%= record.created_at.strftime("%Y/%m/%d") %></td>
+        <td>答题</td>
+        <td><% if record.payment %>支出<% else %>收入<% end %></td>
+        <td><%= record.value %></td>
+      </tr>
+      <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,13 +1,34 @@
 <div id="main-content" class="span12">
   <div class="profile clearfix">
-    <a class="profilePicThumb" href="">
-      <div class="uiScaledImageContainer profilePic">
-        <%= image_tag "http://gravatar.com/avatar/5a4861470749020a5a1165cbe2facfbc.png?r=PG&s=125", :class => "img" %>
+    <div class="profile-avatar">
+      <div class="profilePicThumb">
+        <div class="uiScaledImageContainer profilePic" id="avatar">
+          <%= image_tag @user.gavatar, :class => "img" %>
+        </div>
       </div>
-    </a>
-    <h2><%= on_the_spot_edit @user, :name %></h2>
-    <p><%= on_the_spot_edit @user, :about_me %></p>
-    <strong>#<%= @user.reputation %></strong>
+      <% if @user.id == current_user.id %>
+      <div class="upload-button">
+        <div class="fluploader_wrapper">
+          <div class="fluploader_select uiButton">
+            <div class="select-photo">更换头像</div>
+          </div>
+          <div class="fluploader_swfdiv">
+            <input id="uploadify" name="uploadify" type="file" />
+          </div>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <div class="profile-detail">
+      <% if @user.id == current_user.id %>
+      <h2><%= on_the_spot_edit @user, :name %></h2>
+      <p><%= on_the_spot_edit @user, :about_me %></p>
+      <% else %>
+        <h2><%= @user.name %></h2>
+        <p><%= @user.about_me %></p>
+      <% end %>
+      <strong>#<%= @user.reputation %></strong>
+    </div>
   </div>
 </div>
 <div id="sidebar" class="span4">
@@ -40,6 +61,33 @@
 </div>
 <script type="text/javascript" charset="utf-8">
 $(function () {
-  $('.tabs').tabs()
+  $('.tabs').tabs();
+  
+  <% key = Rails.application.config.session_options[:key] %>
+  var uploadify_script_data = {};
+  var csrf_param = $('meta[name=csrf-param]').attr('content');
+  var csrf_token = $('meta[name=csrf-token]').attr('content');
+  uploadify_script_data[csrf_param] = encodeURI(encodeURIComponent(csrf_token));
+  uploadify_script_data['<%= key %>'] = '<%= cookies[key] %>';
+  $('#uploadify').uploadify({
+    uploader  		: '/assets/uploadify.swf',
+    script    		: '/photos',
+    cancelImg		: '/images/cancel.png',
+    auto			: true,
+    multi			: false,
+    removeCompleted : true,
+    fileExt			: '*.jpg;*.jpeg;*.gif;*.png',
+    fileDesc		: 'Image Files (.JPG, .JPEG, .GIF, .PNG)',
+    scriptData		: uploadify_script_data,
+    wmode			: "transparent",
+    hideButton		: true,
+    height			: 20,
+    width			: 58,
+    queueID			: 'photos_Queue',
+    onComplete		: function(event, ID, fileObj, response, data) {
+      response = eval('(' + response + ')');
+      $("#avatar").html('<img class="img" src="'+response.url+'">');
+    }
+  });
 });
 </script>
