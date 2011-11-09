@@ -2,7 +2,7 @@
   <div class="main-content messages-main-content" style="min-height: 805px; ">
     <div class="messages-header header">
       <h1>私信</h1>
-      <div class="new-message-button js-new-message-button button">撰写新私信</div>
+      <div id="new-msg-btn" class="new-message-button js-new-message-button button">撰写新私信</div>
     </div>
     <div class="stream-manager js-stream-manager-container">
       <div class="js-stream-manager" id="messages-stream-manager">
@@ -83,6 +83,20 @@
     </div>
   </div>
 </div>
+
+<div style="position: fixed; top: 0px; z-index: 1010;">
+  <div id="dlg-send-message" style="display:none;">
+    <div id='message-recipient' class="ui-dialog-box">
+      <span>To:</span>
+      <input type='text'>
+    </div>
+    <div id='message-body' class="ui-dialog-box">
+      <span>Message:</span>
+      <textarea></textarea>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript" charset="utf-8">
   var viewer = {
     name: "<%= current_user.name%>",
@@ -90,34 +104,8 @@
     avatar: "<%= current_user.avatar %>"
   }
   $(function(){
-    loadConversations()
+    initMessageDialog();
+    loadConversations();
   });
 </script>
 
-<div style="position: fixed; top: 0px; z-index: 1010;">
-	<div id="dlg-send-message" style="display:none;">
-		<div id='message-recipient' class="ui-dialog-box">
-			<span>To:</span>
-		</div>
-		<div id='message-body' class="ui-dialog-box">
-			<span>Message:</span>
-			<textarea></textarea>
-		</div>
-		<div id='send-message-countdown'></div>
-	</div>
-  <div id='dlg-ofac' style="display:none;" class="dlg-plain-content">
-		<div class='ofac-notice'>
-			For payment transactions, we're required by law to collect this information from you once.
-		</div>
-		<div class='ofac-row'>
-			<div class='ofac-field' >
-				<span>Order Number:</span>
-				<span id="order-number"></span>
-			</div>
-		</div>
-		<div class='ofac-row'>
-			<div class='ofac-field' id="alipay-form">
-			</div>
-		</div>
-	</div>
-</div>

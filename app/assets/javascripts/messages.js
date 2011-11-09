@@ -1,4 +1,5 @@
 var messageFriendToken;
+var dialogOpened = false;
 var loadConversations = function() {
   $.get('/messages/load_conversations', {},
     function(data) {
@@ -9,7 +10,7 @@ var loadConversations = function() {
           elem.prependTo('#stream-items');
         });
         loadMessages(data[0]);
-        initMessageArea();
+        initMessageBox();
       }
     }
   );
@@ -49,7 +50,7 @@ var constructMessageBox = function(data) {
   box.find('.message-content .linked-text').html(data.text);
   return box;
 }
-var initMessageArea = function() {
+var initMessageBox = function() {
   $('.text-area textarea').bind('keyup', updateReplyButtonState)
                           .bind('blur', updateReplyButtonState);
   $('#btn-reply-message').click(function(){
@@ -97,7 +98,9 @@ var htmlEscape = function(txt) {
               replace(/</g,'&lt;').                                           
               replace(/"/g,'&quot;')              
 }
-var initMessageBox = function(){
+
+// init message dialog
+var initMessageDialog = function(){
   sendMessageDialog = {
     initialized : false,
     autoOpen: false,
@@ -109,17 +112,19 @@ var initMessageBox = function(){
     dialogClass: 'dlg-container-send-message',
     draggable: false,
     beforeClose: function() {
-      ce6.message.dialogOpened = false;
-      resetMessageDialog();
+      dialogOpened = false;
+      // resetMessageDialog();
     },
     buttons: {
-      Cancel: function() {
-        // close dialog
-        $(this).dialog('close');
-      },
       Send: function() {
         if (!sendButtonDisabled)
         submitMessage();
       }
     }
+  };
+  $('#dlg-send-message').dialog(sendMessageDialog);
+	$('#message-body textarea')
+  $('#new-msg-btn').click(function(){
+    $('#dlg-send-message').dialog('open');
+  });
 }
