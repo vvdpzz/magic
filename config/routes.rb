@@ -20,6 +20,12 @@ Magic::Application.routes.draw do
       post :generate_order
     end
   end
+  
+  resources :messages do
+      collection do
+        get :load_conversations
+      end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
