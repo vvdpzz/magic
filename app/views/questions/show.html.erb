@@ -1,0 +1,24 @@
+<div id="question-header">
+  <h1><%= link_to safe_html(@question.title), @question, :class => "question-hyperlink" %></h1>
+</div>
+<%= div_for(@question, :class => "clearfix") do %>
+<div class="vote-area">
+  <span class="vote-count-post" id="<%= @question.id %>"><%= @question.votes_count %></span>
+</div>
+<div class="post">
+  <%= @question.content.html_safe %>
+</div>
+<% end %>
+<div id="answers">
+  <% @question.answers.each do |answer| %>
+    <%= div_for answer do %>
+      <div class="vote-area">
+        <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
+      </div>
+      <div class="post">
+        <%= safe_html answer.content %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<%= render 'answer_form' %>

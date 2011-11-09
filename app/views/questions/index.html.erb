@@ -1,0 +1,16 @@
+<div id="main-content" class="span12">
+  <div id="questions">
+    <% @questions.each do |question| %>
+    <%= div_for question do %>
+    <div class="status">
+      <div class="square"><div class="count"><%= question.credit %></div>元</div>
+      <div class="square"><div class="count"><%= question.reputation %></div>积分</div>
+    </div>
+    <div class="summary">
+      <div class="excerpt"><h5><a href="/questions/<%= question.id %>"><%= question.title %></a></h5></div>
+      <div class="timestamp"><%= question.answers_count %> 回答</div>
+    </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+defaults: &defaults
+  answer_price: 5
+  vote_for_limit: 15
+  vote_against_limit: 125
+  answer_vote_up: 10
+  vote_down: 2
+  answer_voter_down: 1
+  question_vote_up: 5
+  answers_per_page: 10
+  questions_per_page: 15
+  answer_accept: 10
+  question_accept_answer: 2
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
