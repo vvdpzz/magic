@@ -29,6 +29,13 @@ Magic::Application.routes.draw do
   resources :accounts
   
   resources :photos
+  
+  resources :messages do
+      collection do
+        get :load_conversations
+        post :send_message
+      end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

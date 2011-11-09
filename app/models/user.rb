@@ -23,4 +23,8 @@ class User < ActiveRecord::Base
   end
 
   acts_as_voter
+  
+  def self.basic(id)
+    User.select("id,name,avatar").find_by_id(id)
+  end
 end
