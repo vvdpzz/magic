@@ -1,0 +1,32 @@
+<section id="forms">
+  <div class="page-header">
+    <h1>注册</h1>
+  </div>
+  <div class="row">
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+    <fieldset>
+      <div class="clearfix">
+        <label for="text_field">姓名</label>
+        <div class="input">
+          <%= f.text_field :name %>
+        </div>
+      </div>
+      <div class="clearfix">
+        <label for="text_field">邮箱</label>
+        <div class="input">
+          <%= f.text_field :email %>
+        </div>
+      </div>
+      <div class="clearfix">
+        <label for="text_field">密码</label>
+        <div class="input">
+          <%= f.password_field :password %>
+        </div>
+      </div>
+      <div class="actions blank">
+        <%= f.submit '注册', :class => "btn primary" %> 或者 <%= link_to "登录", new_session_path(resource_name) %>
+      </div>
+    </fieldset>
+    <% end %>
+  </div>
+</section>

@@ -7,9 +7,32 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="container">
+        <a class="brand" href="#">Magic Q&A</a>
+        <ul class="nav">
+          <li id="questions-page" class="active"><a href="/">问题</a></li>
+          <li id="profile-page"><a href="/users/<%= current_user.id %>">个人主页</a></li>
+          <li id="create-question-page"><a href="/questions/new">提问</a></li>
+        </ul>
+        <ul class="nav secondary-nav">
+          <li class="dropdown" data-dropdown="dropdown">
+            <a href="#" class="dropdown-toggle"><%= current_user.name %></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">帐户流水</a></li>
+              <li><a href="#">偏好设置</a></li>
+              <li class="divider"></li>
+              <li><a href="/users/sign_out">退出帐户</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <div id="page-outer">
-      <div id="page-container">
+      <div id="page-container" class="row">
         <%= yield %>
       </div>
     </div>

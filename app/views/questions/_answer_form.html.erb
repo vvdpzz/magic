@@ -7,11 +7,11 @@
 </div>
 <%= f.submit '回答', :class => "btn primary" %>
 <% end %>
-<% else %>
-<div class="answered-message">一个问题你只能回答一次，但你可以对现有的回答进行修改</div>
 <% end %>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
-  new nicEditor({buttonList: ['bold','italic','underline', 'strikethrough', 'ol', 'ul', 'hr']}).panelInstance('answer_content');
+  if($("#answer_content").length > 0){
+    new nicEditor({buttonList: ['bold','italic','underline', 'strikethrough', 'ol', 'ul', 'hr']}).panelInstance('answer_content');
+  }
 });
 </script>

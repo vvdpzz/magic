@@ -12,6 +12,7 @@ Magic::Application.routes.draw do
     end
   end
   devise_for :users
+  resources :users
   
   resources :recharge do
     collection do

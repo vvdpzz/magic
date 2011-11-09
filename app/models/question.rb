@@ -36,4 +36,12 @@ class Question < ActiveRecord::Base
   def could_answer_by?(user_id)
     self.answers.select('user_id').where(:user_id => user_id).empty?
   end
+  
+  def answered_by?(user_id)
+    not self.answers.select('user_id').where(:user_id => user_id).empty?
+  end
+  
+  def answer_for(user_id)
+    self.answers.find_by_user_id(user_id)
+  end
 end

@@ -6,6 +6,9 @@
  *= require_self
  *= require_tree . 
 */
+body{
+  padding-top:60px;
+}
 .clearfix {
   zoom: 1;
 }
@@ -15,4 +18,14 @@
 }
 .clearfix:after {
   clear: both;
+}
+.right-tabs li{
+  float:right;
+}
+.items{
+  margin-bottom:40px;
+}
+.item{
+  border-bottom:1px solid #DDD;
+  padding:10px 0;
 }

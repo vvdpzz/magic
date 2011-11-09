@@ -1,24 +1,87 @@
 <div id="question-header">
   <h1><%= link_to safe_html(@question.title), @question, :class => "question-hyperlink" %></h1>
 </div>
-<%= div_for(@question, :class => "clearfix") do %>
-<div class="vote-area">
-  <span class="vote-count-post" id="<%= @question.id %>"><%= @question.votes_count %></span>
-</div>
-<div class="post">
-  <%= @question.content.html_safe %>
-</div>
-<% end %>
-<div id="answers">
-  <% @question.answers.each do |answer| %>
-    <%= div_for answer do %>
-      <div class="vote-area">
-        <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
-      </div>
-      <div class="post">
-        <%= safe_html answer.content %>
-      </div>
-    <% end %>
+<div id="main-content" class="span12">
+  <%= div_for(@question, :class => "clearfix") do %>
+  <div class="vote-area">
+    <a class="vote-up-off" href="/questions/<%= @question.id %>/vote_for">up vote</a>
+    <span class="vote-count-post" id="<%= @question.id %>"><%= @question.votes_count %></span>
+    <a class="vote-down-off" href="/questions/<%= @question.id %>/vote_against">down vote</a>
+  </div>
+  <div class="post">
+    <div class="content">
+      <%= @question.content.html_safe %>
+    </div>
+    <%= render "/partials/passport", :user => @question.user %>
+  </div>
   <% end %>
+  
+  <% answers = @question.answers %>
+  
+  <% if @question.answered_by? current_user.id %>
+    <div id="my-answer">
+      <div id="my-answer-header">
+        <div class="subheader">
+          <h2>我的答案</h2>
+        </div>
+      </div>
+      <% answer = @question.answer_for current_user.id %>
+      <%= div_for(answer, :class => "clearfix") do %>
+        <div class="vote-area">
+          <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
+          <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
+          <a class="vote-down-off" href="/answers/<%= answer.id %>/vote_against">down vote</a>
+        </div>
+        <div class="post">
+          <div class="content">
+            <%= safe_html answer.content %>
+          </div>
+          <%= render "/partials/passport", :user => current_user %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <div id="answers">
+    <div id="answers-header">
+      <div class="subheader">
+        <% if @question.answers_count > 0 %>
+        <h2><%= @question.answers_count %> 个答案</h2>
+        <% end %>
+      </div>
+    </div>
+    <% answers.each do |answer| %>
+      <%= div_for(answer, :class => "clearfix") do %>
+        <div class="vote-area">
+          <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
+          <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
+          <a class="vote-down-off" href="/answers/<%= answer.id %>/vote_against">down vote</a>
+        </div>
+        <div class="post">
+          <div class="content">
+            <%= safe_html answer.content %>
+          </div>
+          <%= render "/partials/passport", :user => answer.user %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <%= render 'answer_form' %>
 </div>
-<%= render 'answer_form' %>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    $(".vote-up-off, .vote-down-off").live("click", function(e){
+      e.preventDefault();
+      $.ajax({
+        url: this.href,
+        type: 'PUT',
+        dataType: 'json',
+        success: function(data, textStatus, xhr) {
+          $("#"+data.id).html(data.votes_count);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert(xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
