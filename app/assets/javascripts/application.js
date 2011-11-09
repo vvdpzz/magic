@@ -6,4 +6,5 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require on_the_spot
 //= require_tree .
