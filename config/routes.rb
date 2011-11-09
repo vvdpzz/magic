@@ -12,6 +12,11 @@ Magic::Application.routes.draw do
     end
   end
   devise_for :users
+  resources :users do
+    collection do
+      put :update_attribute_on_the_spot
+    end
+  end
   
   resources :recharge do
     collection do

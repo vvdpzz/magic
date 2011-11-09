@@ -135,11 +135,11 @@ ActiveRecord::Schema.define(:version => 20111109150254) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "votes", :force => true do |t|
-    t.boolean  "vote",          :default => false
-    t.integer  "voteable_id",                      :null => false
-    t.string   "voteable_type",                    :null => false
-    t.integer  "voter_id"
-    t.string   "voter_type"
+    t.boolean  "vote",                       :default => false
+    t.integer  "voteable_id",   :limit => 8,                    :null => false
+    t.integer  "voter_id",      :limit => 8,                    :null => false
+    t.string   "voter_type",                                    :null => false
+    t.string   "voteable_type",                                 :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -21,6 +21,8 @@ gem 'kaminari'
 # https://github.com/brady8/thumbs_up
 gem 'thumbs_up'
 
+gem 'on_the_spot'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

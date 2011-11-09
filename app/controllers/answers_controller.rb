@@ -12,29 +12,45 @@ class AnswersController < ApplicationController
   end
   
   def vote_for
-    if current_user.reputation >= Settings.vote_for_limit and @voted != true
-      if @voted == nil
-        if current_user.vote_for @answer
-          render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
-        end
-      else
-        if current_user.vote_exclusively_against @answer
-          render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
-        end
+    if current_user.reputation < Settings.vote_for_limit
+      render json: {errors: "Reputation not enough"}, status: :unprocessable_entity
+      return
+    end
+    if @voted
+      render json: {errors: "Already vote for"}, status: :unprocessable_entity
+      return
+    end
+    if @voted == nil
+      if current_user.vote_for @answer
+        @answer.update_attribute(:votes_count, @answer.plusminus)
+        render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
+      end
+    else
+      if current_user.vote_exclusively_for @answer
+        @answer.update_attribute(:votes_count, @answer.plusminus)
+        render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
       end
     end
   end
-  
+
   def vote_against
-    if current_user.reputation >= Settings.vote_against_limit and @voted != false
-      if @voted == nil
-        if current_user.vote_against @answer
-          render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
-        end
-      else
-        if current_user.vote_exclusively_for @answer
-          render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
-        end
+    if current_user.reputation < Settings.vote_against_limit
+      render json: {errors: "Reputation not enough"}, status: :unprocessable_entity
+      return
+    end
+    if @voted == false
+      render json: {errors: "Already vote against"}, status: :unprocessable_entity
+      return
+    end
+    if @voted == nil
+      if current_user.vote_against @answer
+        @answer.update_attribute(:votes_count, @answer.plusminus)
+        render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
+      end
+    else
+      if current_user.vote_exclusively_against @answer
+        @answer.update_attribute(:votes_count, @answer.plusminus)
+        render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
       end
     end
   end

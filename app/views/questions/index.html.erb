@@ -1,4 +1,9 @@
 <div id="main-content" class="span12">
+  <ul class="tabs">
+    <li class="active"><a href="#">悬赏问题</a></li>
+    <li><a href="#">社区问题</a></li>
+    <li><a href="#">未解决问题</a></li>
+  </ul>
   <div id="questions">
     <% @questions.each do |question| %>
     <%= div_for question do %>
@@ -11,6 +16,39 @@
       <div class="timestamp"><%= question.answers_count %> 回答</div>
     </div>
     <% end %>
+    <% end %>
+  </div>
+</div>
+<div id="sidebar" class="span4">
+  <ul class="tabs right-tabs">
+    <li class="active"><a href="#">最高奖项</a></li>
+  </ul>
+  <div class="items">
+    <% @questions.first(5).each do |question| %>
+      <div class="item">
+        <%= link_to truncate(question.title, :length => 20), question %>
+      </div>
+    <% end %>
+  </div>
+  <ul class="tabs right-tabs">
+    <li class="active"><a href="#">热门问题</a></li>
+  </ul>
+  <div class="items">
+    <% @questions.first(5).each do |question| %>
+      <div class="item">
+        <%= link_to truncate(question.title, :length => 20), question %>
+      </div>
+    <% end %>
+  </div>
+  <ul class="tabs right-tabs">
+    <li class="active"><a href="#">最近获胜</a></li>
+  </ul>
+  <div class="items">
+    <% User.all.first(5).each do |user| %>
+    <% question = Question.first %>
+      <div class="item">
+        <%= link_to user.name, user %> 在 <%= link_to truncate(question.title, :length => 20), question %> 问题中赢得了 10元。
+      </div>
     <% end %>
   </div>
 </div>

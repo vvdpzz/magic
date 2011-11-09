@@ -3,8 +3,10 @@ class ThumbsUpMigration < ActiveRecord::Migration
     create_table :votes, :force => true do |t|
       
       t.boolean    :vote,     :default => false
-      t.references :voteable, :polymorphic => true, :null => false
-      t.references :voter,    :polymorphic => true
+      t.integer :voteable_id, :limit => 8, :null => false
+      t.integer :voter_id, :limit => 8, :null => false
+      t.string :voter_type, :null => false
+      t.string :voteable_type, :null => false
       t.timestamps
       
     end

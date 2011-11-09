@@ -1,3 +1,23 @@
-// Place all the styles related to the answers controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+#answers,#my-answer{
+  padding-top:29px;
+  #my-answer-header,#answers-header {
+    margin:20px 0;
+  }
+  .subheader {
+    border-bottom: 1px solid #C6C6C6;
+    height: 36px;
+    clear: both;
+    margin-bottom: 15px;
+    padding:0 5px;
+    h2{
+      color:#666;
+    }
+  }
+  .answer{
+    padding:20px 0 19px;
+    border-bottom:1px solid #E8E8E8;
+  }
+  .answer:last-child{
+    border-bottom:none;
+  }
+}
