@@ -163,3 +163,23 @@ $text_gray: #ababab;
     line-height:1;
   }
 }
+
+.loading{
+  position: relative;
+  height: 39px;
+  text-align: center;
+  background: #EBF2FC;
+  border: 1px solid #CDDCF9;
+  cursor:pointer;
+  .blueText{
+    color: #3B5998;
+    padding:12px;
+  }
+  .spinner {
+    height: 11px;
+    width: 16px;
+    background-image: url(/assets/loading.gif);
+    margin: 14px auto;
+    display:none;
+  }
+}

@@ -53,5 +53,7 @@
 # )
 
 User.select("id,name,avatar").find(:all).each do |user|
-  $redis.hset("users_info", user.id, user.serializable_hash.to_json)
+  hash = user.serializable_hash
+  hash["avatar"] = user.gavatar
+  $redis.hset("users_info", user.id, hash.to_json)
 end

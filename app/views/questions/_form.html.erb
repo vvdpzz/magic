@@ -5,6 +5,7 @@
       <label for="question_title">标题</label>
       <div class="input">
         <%= f.text_field :title, :class => "xxlarge", :size => 70, :maxlength => 70 %>
+        <span id="titleCount">70</span>
       </div>
     </div>
     <!-- content -->
@@ -13,6 +14,7 @@
       <div class="input">
         <%= f.text_area :content, :class => "xxlarge", :rows => 10 %>
         <span class="help-block">在文本框中完成你对问题的描述</span>
+        <span id="contentCount"></span>
       </div>
     </div>
     <!-- rules_list -->
@@ -39,11 +41,11 @@
             </label>
           </li>
           <li>
-            <label>
+            <label id="addedRule">
               <input type="checkbox" name="rules_list" id="rules_0">
               <span>额外的规则</span>
             </label>
-            <textarea id="additional_rule" name="customized_rule" class="xxlarge" row=3></textarea>
+            <textarea id="additional_rule" style="display:none" name="customized_rule" class="xxlarge" row=3></textarea>
           </li>
         </ul>
         <span class="help-block"><strong>提示:</strong> 点击上面的选择框输入更多的竞标规则</span>
@@ -53,14 +55,19 @@
     <div class="clearfix">
       <label for="question_credit">金钱</label>
       <div class="input">
-        <%= f.text_field :credit, :class => "xxlarge", :size => 70, :maxlength => 70 %>
+        <%= f.text_field :credit, :class => "span5", :size => 70, :maxlength => 70 %>元
+        <div id="reCharge">
+          <a class="btn primary" id="into_recharge" style="display:none">进入充值</a>
+          <span id='credit_tips' class="help-inline"></span>
+        </div>
       </div>
     </div>
     <!-- reputation -->
     <div class="clearfix">
       <label for="question_reputation">积分</label>
       <div class="input">
-        <%= f.text_field :reputation, :class => "xxlarge", :size => 70, :maxlength => 70 %>
+        <%= f.text_field :reputation, :class => "span5", :size => 70, :maxlength => 70 %>分
+        <span id='reputation_tips' class="help-inline"></span>
       </div>
     </div>
     <!-- actions -->
@@ -69,6 +76,13 @@
       &nbsp;<a href="/" class="btn">返回</a>
     </div>
   </fieldset>
+  <div id="control" style="z-index:10010;display:none">
+    <div id="dialog_payment" style="display:none">
+     <span> 流水号：</span><span id='order_number'></span>
+     <h1 id="order_credit" class=""></h1>
+     <div id="alipay_form"></div>
+    </div>
+  </div>
 <% end %>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
