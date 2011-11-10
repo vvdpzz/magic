@@ -4,6 +4,7 @@ Magic::Application.routes.draw do
       put :vote_for
       put :vote_against
     end
+    get 'page/:page', :action => :index, :on => :collection
   end
   resources :answers do
     member do
@@ -15,6 +16,9 @@ Magic::Application.routes.draw do
   resources :users do
     collection do
       put :update_attribute_on_the_spot
+    end
+    member do
+      put :follow
     end
   end
   

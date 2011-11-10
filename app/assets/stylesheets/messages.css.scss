@@ -32,12 +32,6 @@
   border-top-right-radius: 0;
   height: 30px;
 }
-h1 {
-  font-size: 18px;
-  margin-top: 2px;
-  margin-left: 2px;
-  text-shadow: 0 1px 0 white;
-}
 .button:active {
   background-image: none;
   text-shadow: none;
@@ -94,15 +88,7 @@ h1 {
   font-size: 15px;
   padding: 6px 9px;
 }
-h2 {
-  display: block;
-  font-size: 1.5em;
-  -webkit-margin-before: 0.83em;
-  -webkit-margin-after: 0.83em;
-  -webkit-margin-start: 0px;
-  -webkit-margin-end: 0px;
-  font-weight: bold;
-}
+
 .stream-title h2 {
   padding: 14px 20px 5px 20px;
   font-size: 15px;
@@ -331,41 +317,41 @@ div.pane-toolbar {
 .tweet-box textarea {
   resize: vertical;
 }
-input, input[type="password"], input[type="search"], isindex {
-  -webkit-appearance: textfield;
-  padding: 1px;
-  background-color: white;
-  border: 2px inset;
-  -webkit-rtl-ordering: logical;
-  -webkit-user-select: text;
-  cursor: auto;
-  }
-input, textarea, keygen, select, button, isindex {
-  margin: 0em;
-  font: -webkit-small-control;
-  color: initial;
-  letter-spacing: normal;
-  word-spacing: normal;
-  line-height: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: -webkit-auto;
-}
-textarea {
-  -webkit-appearance: textarea;
-  background-color: white;
-  border: 1px solid;
-  -webkit-rtl-ordering: logical;
-  -webkit-user-select: text;
-  -webkit-box-orient: vertical;
-  resize: auto;
-  cursor: auto;
-  padding: 2px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
+//input, input[type="password"], input[type="search"], isindex {
+//  -webkit-appearance: textfield;
+//  padding: 1px;
+//  background-color: white;
+//  border: 2px inset;
+//  -webkit-rtl-ordering: logical;
+//  -webkit-user-select: text;
+//  cursor: auto;
+//  }
+//input, textarea, keygen, select, button, isindex {
+//  margin: 0em;
+//  font: -webkit-small-control;
+//  color: initial;
+//  letter-spacing: normal;
+//  word-spacing: normal;
+//  line-height: normal;
+//  text-transform: none;
+//  text-indent: 0px;
+//  text-shadow: none;
+//  display: inline-block;
+//  text-align: -webkit-auto;
+//}
+//textarea {
+//  -webkit-appearance: textarea;
+//  background-color: white;
+//  border: 1px solid;
+//  -webkit-rtl-ordering: logical;
+//  -webkit-user-select: text;
+//  -webkit-box-orient: vertical;
+//  resize: auto;
+//  cursor: auto;
+//  padding: 2px;
+//  white-space: pre-wrap;
+//  word-wrap: break-word;
+//}
 .autocomplete-container {
   visibility: hidden;
   margin: 0;
@@ -382,15 +368,15 @@ textarea {
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
-ul, menu, dir {
-  display: block;
-  list-style-type: disc;
-  -webkit-margin-before: 1em;
-  -webkit-margin-after: 1em;
-  -webkit-margin-start: 0px;
-  -webkit-margin-end: 0px;
-  -webkit-padding-start: 40px;
-}
+//menu, dir {
+//  display: block;
+//  list-style-type: disc;
+//  -webkit-margin-before: 1em;
+//  -webkit-margin-after: 1em;
+//  -webkit-margin-start: 0px;
+//  -webkit-margin-end: 0px;
+//  -webkit-padding-start: 40px;
+//}
 .tweet-button-container {
   position: relative;
   text-align: right;

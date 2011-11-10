@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_filter :vote_init, :only => [:vote_for, :vote_against]
   
   def index
-    @questions = Question.all
+    @questions = Question.page(params[:page])
   end
 
   def new
@@ -11,10 +11,15 @@ class QuestionsController < ApplicationController
 
   def create
     @question = current_user.questions.build params[:question]
-    if @question.save and @question.deduct_credit and @question.order_credit and @question.deduct_reputation and @question.order_reputation
-      redirect_to @question
-    else
-      render :new
+    respond_to do |format|
+      if @question.save
+        @question.save and @question.deduct_credit and @question.order_credit and @question.deduct_reputation and @question.order_reputation
+        format.html { redirect_to @question, :notice => 'Question was successfully created.' }
+        format.json { render :json => @question, :status => :ok, :location => @question }
+      else
+        format.html { render :action => "new" }
+        format.json { render :json => @question.errors, :status => :unprocessable_entity }
+      end
     end
   end
   
