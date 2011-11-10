@@ -33,4 +33,12 @@ class User < ActiveRecord::Base
   def self.basic(id)
     User.select("id,name,avatar").find_by_id(id)
   end
+  
+  def has_relationship_redis(user_id)
+    $redis.sismember("users:#{user_id}.following_users", self.id)
+  end
+  
+  def has_relationship_db(user_id,follower_id)
+    FollowedUser.where(:user_id => user_id, :follower_id => follower_id, :flag => true)
+  end
 end
