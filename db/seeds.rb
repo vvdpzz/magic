@@ -53,5 +53,5 @@
 # )
 
 User.select("id,name,avatar").find(:all).each do |user|
-  $redis.hset("users_info", user.id, user.serializable_hash)
+  $redis.hset("users_info", user.id, user.serializable_hash.to_json)
 end
