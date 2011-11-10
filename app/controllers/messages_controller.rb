@@ -24,19 +24,14 @@ class MessagesController < ApplicationController
         last_message = MultiJson.decode($redis.lrange(key, -1, -1)[0])
         hash = {}
         hash[:unread_message_count] = $redis.get(key + ":unreadcount")
-        if current_user.id.to_s == last_message["sender_id"]
-          hash[:last_message_is_outgoing] = true
-        else
-          hash[:last_message_is_outgoing] = false
-        end
-        hash[:last_message]   = last_message["text"]
         if conver_id == last_message["sender_id"]
           hash[:friend_name]    = last_message["sender_name"]
+          hash[:friend_picture] = last_message["sender_avatar"]
         else
           hash[:friend_name]    = last_message["receiver_name"]
+          hash[:friend_picture] = last_message["receiver_avatar"]
         end
         hash[:friend_token]   = conver_id
-        hash[:friend_picture] = "/assets/default-profile-photo.png"
         hash[:last_update]    = time_ago_in_words(Time.parse last_message["created_at"]) + " ago"
         
         return hash
@@ -60,9 +55,9 @@ class MessagesController < ApplicationController
       message_list_redis.each do |message_redis|
         message_redis_hash = MultiJson.decode(message_redis)
         message = {}
-        message[:owner_picture]     = "/assets/default-profile-photo.png"
+        message[:owner_picture]     = message_redis_hash["sender_avatar"]
+        message[:owner_profile_url] = "/users/" + message_redis_hash["sender_id"].to_s
         message[:text]              = message_redis_hash["text"]
-        message[:owner_profile_url] = ""
         message[:time_created]      = time_ago_in_words(Time.parse message_redis_hash["created_at"]) + " ago"
         message[:owner_name]        = message_redis_hash["sender_name"]
         message_list << message
@@ -90,8 +85,10 @@ class MessagesController < ApplicationController
     $redis.rpush("messages:#{receiver.id}:unread_messages", MultiJson.encode(hash))
     # Pusher["presence-messages_#{receiver.id}"].trigger('message_created', MultiJson.encode(hash))
     
-    hash[:receiver_id]    = receiver.id.to_s
-    hash[:receiver_name]  = receiver.name
+    hash[:sender_avatar]    = sender.gavatar
+    hash[:receiver_avatar]  = receiver.gavatar
+    hash[:receiver_id]      = receiver.id.to_s
+    hash[:receiver_name]    = receiver.name
     
     sender_conver_timecount    = $redis.incr("messages:#{sender.id}:count")
     receiver_conver_timecount  = $redis.incr("messages:#{receiver.id}:count")

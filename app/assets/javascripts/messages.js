@@ -45,7 +45,6 @@ var constructConversationBox = function(data) {
   if (data.unread_message_count > 0)
     friendName += ' (' + data.unread_message_count + ')';
   box.find('.user-name strong').html(friendName);
-  // box.find('.conversation-info .message-preview').html(data.last_message);
   box.find('.created-at ._timestamp').html(data.last_update);
   return box;
 };
@@ -113,7 +112,7 @@ var showNewMessage = function(messageText) {
   var message = {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
-    owner_profile_url : 'users/' + viewer.id,
+    owner_profile_url : '/users/' + viewer.id,
     time_created : '1 秒钟前',
     text : messageText
   };
@@ -323,12 +322,10 @@ var addNewMessageToConversation = function(friendToken, messageText) {
     var messages = new Array(message);
     var conversation = {
       'friend_token' : friendToken,
-      'friend_picture' : friend.picture,
+      'friend_picture' : friend.avatar,
       'friend_name' : friend.name,
       'unread_message_count' : 0,
-      'last_message' : htmlEscape(messageText),
       'last_update' : '1 second ago',
-      'last_message_is_outgoing' : true,
       'messages' : messages
     }
     box = constructConversationBox(conversation);
