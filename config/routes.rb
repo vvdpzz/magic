@@ -35,6 +35,7 @@ Magic::Application.routes.draw do
       collection do
         get :load_conversations
         post :send_message
+        get :load_contact_list
       end
   end
 
