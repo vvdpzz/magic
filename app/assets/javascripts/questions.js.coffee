@@ -32,6 +32,7 @@ $(->
         window.open url, "_blank"
         $(this).dialog("option",question_paymentDlg_reTry)
   }
+  
   needRecharge = 0;
   question_paymentDlg_reTry = {
     buttons:
@@ -48,15 +49,12 @@ $(->
         url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
         window.open url, "_blank"
   }
-  $.get "/cash", (data, textStatus, xhr) ->
-    user_accout.credit = data.credit
-    userReputation = data.reputation  
-    $('#addedRule').bind 'mouseup',->
-      if $('#additional_rule').css('display') is 'none'
-        $('#additional_rule').slideDown(200)
-      else
-        $('#additional_rule').slideUp(300)
-    $("#new_question").submit -> 
+  $('#addedRule').bind 'mouseup',->
+    if $('#additional_rule').css('display') is 'none'
+      $('#additional_rule').slideDown(200)
+    else
+      $('#additional_rule').slideUp(300)
+      $("#new_question").submit -> 
       isSubmit = true
       isRecharge = false
       #init element style

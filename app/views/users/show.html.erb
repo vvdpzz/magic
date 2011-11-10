@@ -60,6 +60,9 @@
 </div>
 <script type="text/javascript" charset="utf-8">
 $(function () {
+  $(".nav li").removeClass('active');
+  $("#profile-page").addClass('active');
+  
   $('.tabs').bind('change', function (e) {
     $("#tab-content").html('<img src="/assets/loading.gif" />');
     url = "/users/<%= @user.id %>/" + e.link.replace("#","");
