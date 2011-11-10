@@ -32,6 +32,12 @@
   border-top-right-radius: 0;
   height: 30px;
 }
+.messages-header h1 {
+font-size: 18px;
+margin-top: 2px;
+margin-left: 2px;
+text-shadow: 0 1px 0 white;
+}
 .button:active {
   background-image: none;
   text-shadow: none;
@@ -95,6 +101,7 @@
   font-weight: 300;
   margin-bottom: 0;
   color: #666;
+  line-height: 22px;
 }
 .stream-manager {
   z-index: 1;
@@ -271,7 +278,7 @@ div.pane-toolbar {
   margin-bottom: 0;
 }
 .send-message-box {
-  padding: 2px 10px 10px 10px;
+  padding: 2px 0px 10px 10px;
 }
 .gray-component {
   background-color: #F4F4F4;
@@ -301,7 +308,6 @@ div.pane-toolbar {
   margin-bottom: 10px;
 }
 .tweet-box .twitter-anywhere-tweet-box-editor, .proxy-editor {
-  border: 1px solid #CCC;
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -495,16 +501,23 @@ width: 100%;
 vertical-align: top;
 padding-top: 5px;
 }
+#message-recipient .recipient-name {
+height: 24px;
+font-weight: normal;
+text-align: left;
+width: auto;
+max-width: 340px;
+}
+#message-recipient input {
+width: 368px;
+height: 24px;
+}
 #dlg-send-message span {
 display: inline-block;
 font-weight: bold;
 padding: 5px 10px 0 0;
 text-align: right;
-width: 70px;
-}
-#message-recipient input {
-width: 368px;
-height: 24px;
+width: 50px;
 }
 .ui-dialog-box {
 width: 100%;
@@ -523,22 +536,30 @@ height: 110px;
 resize: none;
 }
 .ui-dialog .ui-dialog-buttonpane {
-margin: 0;
-}
-.ui-dialog .ui-dialog-buttonpane {
 -moz-border-radius: 0;
 -webkit-border-radius: 0;
 border-top-left-radius: 0;
 border-top-right-radius: 0;
-border: 1px solid #707070;
 border-top: none;
 }
-
+.ui-dialog .ui-dialog-buttonpane {
+text-align: left;
+background: url(../../../js/jquery-ui-1.8.7/css/custom-theme/images/ui-bg_highlight-soft_50_dddddd_1x100.png) 50% 50% repeat-x;
+margin: .5em 0 0 0;
+padding: .3em 3em .5em .4em;
+border-bottom-left-radius: 8px 8px;
+border-bottom-right-radius: 8px 8px;
+}
+.ui-dialog-buttonset {
+float: right;
+bottom: 5px;
+right: 45px;
+}
 .user-selector-list {
 z-index: 1999;
 position: absolute;
 border: 1px solid #999;
-min-width: 195px;
+min-width: 135px;
 }
 .ce6-sel-table {
 list-style-type: none;
@@ -576,4 +597,18 @@ width: 14px;
 cursor: pointer;
 padding-top: 0;
 margin-top: 8px;
+}
+#message-recipient .remove-button:hover {
+background-position: 0 -14px;
+}
+.user-selector-list .default-message {
+color: black;
+font-size: 13px;
+line-height: 30px;
+padding-left: 5px;
+padding-right: 5px;
+cursor: default;
+font-weight: normal;
+color: #909090;
+width: 100%;
 }
