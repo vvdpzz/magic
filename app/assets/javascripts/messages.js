@@ -1,3 +1,6 @@
+var conversations = {};
+
+
 var messageFriendToken;
 var recipientToken = null;
 var dialogOpened = false;
@@ -19,10 +22,12 @@ var loadConversations = function() {
       if (data.length > 0){
         $('#messagebox-and-messages').show();
         $.each(data, function(idx, conversation) {
+          conversations[conversation.friend_token] = conversation;
           var elem = constructConversationBox(conversation);
           elem.prependTo('#stream-items');
         });
-        loadMessages(data[0]);
+        con = data[data.length-1];
+        loadMessages(con.friend_token, con.friend_name);
         initMessageBox();
       }
     }
@@ -33,7 +38,7 @@ var constructConversationBox = function(data) {
             .attr('id', 'stream-item-' + data.friend_token)
             .data('friendToken', data.friend_token)
             .click(function() {
-              loadMessages(data);
+              loadMessages(data.friend_token, data.friend_name);
             });
   box.find('.message-inner img').attr('src', data.friend_picture);
   var friendName = data.friend_name;
@@ -44,16 +49,22 @@ var constructConversationBox = function(data) {
   box.find('.created-at ._timestamp').html(data.last_update);
   return box;
 };
-var loadMessages = function(data) {
+var loadMessages = function(friend_token, friend_name) {
+  // add focus style to the conversation itme clicked at left
+  $('#stream-item-' + friend_token).addClass('focused-stream-item').siblings().removeClass('focused-stream-item');
+  
+  // clear the messages below div-'messages-items'
   var item = $('#message-item-id');
   $('#messages-items').empty();
   item.appendTo('#messages-items');
-  $.each(data.messages, function(idx, message) {
+  // add messages
+  var messages = conversations[friend_token].messages;
+  $.each(messages, function(idx, message) {
     var elem = constructMessageBox(message);
     elem.prependTo('#messages-items');
   });
-  $('.tweet-box-title h2').html('给 ' + data.friend_name + ' 发信息');
-  messageFriendToken = data.friend_token;
+  $('.tweet-box-title h2').html('给 ' + friend_name + ' 发信息');
+  messageFriendToken = friend_token;
 }
 var constructMessageBox = function(data) {
   var box = $('#message-item-id').clone().show()
@@ -99,14 +110,16 @@ var replyMessage = function() {
   });
 }
 var showNewMessage = function(messageText) {
-  var e = constructMessageBox({
+  var message = {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : 'users/' + viewer.id,
     time_created : '1 秒钟前',
     text : messageText
-  });
+  };
+  var e = constructMessageBox(message);
   e.prependTo('#messages-items');
+  conversations[messageFriendToken].messages.push(message);
 }
 var getUserInfoByToken = function(token) {
 	var matched = $.grep(userList, function(user) {
@@ -295,21 +308,36 @@ var sendPrivateMessage = function(user, successCallback) {
 }
 var addNewMessageToConversation = function(friendToken, messageText) {
   var box = $('#stream-item-' + friendToken);
+  var message = {
+    owner_name : viewer.name,
+    owner_picture : viewer.avatar,
+    owner_profile_url : 'users/' + viewer.id,
+    time_created : '1 秒钟前',
+    text : htmlEscape(messageText)
+  }
   if (box.length == 1) {
     box.find('.created-at ._timestamp').html('1 second ago');
+    conversations[friendToken].messages.push(message);
   } else {
     var friend = getUserInfoByToken(friendToken);
-    box = constructConversationBox({
+    var messages = new Array(message);
+    var conversation = {
       'friend_token' : friendToken,
       'friend_picture' : friend.picture,
       'friend_name' : friend.name,
       'unread_message_count' : 0,
       'last_message' : htmlEscape(messageText),
       'last_update' : '1 second ago',
-      'last_message_is_outgoing' : true
-    });
+      'last_message_is_outgoing' : true,
+      'messages' : messages
+    }
+    box = constructConversationBox(conversation);
+    box.prependTo('#stream-items');
+    conversations[friendToken] = conversation;
   }
-  box.prependTo('#stream-items');
+  if(friendToken == messageFriendToken){
+    $('#messages-items').prepend(constructMessageBox(message));
+  }
   // $('#conversations-empty').hide();
 };
 
