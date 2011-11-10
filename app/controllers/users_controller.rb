@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   can_edit_on_the_spot
-  
   def show
     @user = User.find params[:id]
   end
@@ -27,6 +26,15 @@ class UsersController < ApplicationController
      render :json => {:flag => flag}, status: :ok
     else
      render :json => {:error => true}, :status => :unprocessable_entity
+    end
+  end
+  
+  def owners
+    user = User.find params[:id]
+    @questions = user.questions
+    respond_to do |format|
+      format.html
+      format.js 
     end
   end
 end

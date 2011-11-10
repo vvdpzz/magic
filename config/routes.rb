@@ -20,6 +20,7 @@ Magic::Application.routes.draw do
     end
     member do
       put :follow
+      get :owners
     end
   end
   

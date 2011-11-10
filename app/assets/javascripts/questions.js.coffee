@@ -15,6 +15,16 @@ $(->
     resizable: false,
     buttons: 
       '取消': ()-> 
+        $.get "/cash", (data, textStatus, xhr) ->
+          user_accout.credit = data.credit
+          userReputation = data.reputation
+          needRecharge = parseInt($("#question_credit").val())-user_accout.credit
+          if needRecharge > 0
+            $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
+          else
+            $("#credit_tips").fadeOut()
+            $("#question_credit").closest('.clearfix').removeClass('error')
+            $("#question_credit").removeClass("xlarge error")
         $(this).dialog("close")
       '充值':()->
         $($("#payment-form").get(0).utf8).remove()
@@ -73,21 +83,23 @@ $(->
           $("#question_credit").closest('.clearfix').addClass('error')
           $("#question_credit").addClass("xlarge error")
           needRecharge = parseInt($("#question_credit").val(),10)-user_accout.credit
-          alert user_accout.credit
           $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
           isRecharge = true
           $("#into_recharge").fadeIn()
           $("#into_recharge").bind "click",->
-            if isRecharge
-              $.ajax
-                url: "/recharge/generate_order"
-                type: "POST"
-                dataType: "json"
-                data:{credit: needRecharge}
-                success: (data, textStatus, xhr) ->
-                  $("#order_number").html data.order_id
-                  $("#order_credit").text "您要支付的金额为："+data.order_credit+"元"
-                  $("#alipay_form").html data.html
+            $.get "/cash", (data, textStatus, xhr) ->
+              user_accout.credit = data.credit
+              userReputation = data.reputation
+              if isRecharge
+                $.ajax
+                  url: "/recharge/generate_order"
+                  type: "POST"
+                  dataType: "json"
+                  data:{credit: user_accout.credit}
+                  success: (data, textStatus, xhr) ->
+                    $("#order_number").html data.order_id
+                    $("#order_credit").text "您要支付的金额为："+(parseInt($("#question_credit").val(),10)-data.order_credit)+"元"
+                    $("#alipay_form").html data.html
               $("#dialog_payment").dialog(question_paymentDlg)
               $("#dialog_payment").dialog('open')
           isSubmit = false
