@@ -120,8 +120,14 @@
   margin-top: -1px;
   border-top: 1px solid transparent;
 }
-.focused-stream-item, .focused-stream-item:hover {
-  cursor: pointer;
+
+ 
+.stream-item:hover {          
+  background-color: rgba(0,132,180,0.1);              
+  border-color: rgba(0,132,180,0.15);      
+}
+
+.focused-stream-item {
   background: #EEE;
   border-bottom: 1px solid #CCC;
   margin-top: -1px;
@@ -409,17 +415,6 @@ div.pane-toolbar {
 }
 .messages-pane {
   padding: 5px 20px;
-}
-.message, .message-thread-preview {
-  line-height: 16px;
-  padding: 6px 25px 6px 15px;
-  min-height: 60px;
-  font-size: 13px;
-  line-height: 17px;
-  overflow: hidden;
-  clear: both;
-  display: block;
-  position: relative;
 }
 .message {
   min-height: 36px;

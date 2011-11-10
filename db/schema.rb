@@ -31,14 +31,14 @@ ActiveRecord::Schema.define(:version => 20111110042348) do
   create_table "comments", :id => false, :force => true do |t|
     t.integer  "id",         :limit => 8
     t.integer  "user_id",    :limit => 8, :null => false
-    t.integer  "pixar_id",   :limit => 8, :null => false
+    t.integer  "magic_id",   :limit => 8, :null => false
     t.string   "name",                    :null => false
     t.text     "content",                 :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "comments", ["pixar_id"], :name => "index_comments_on_pixar_id"
+  add_index "comments", ["magic_id"], :name => "index_comments_on_magic_id"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "credit_transactions", :force => true do |t|
