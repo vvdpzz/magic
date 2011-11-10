@@ -52,14 +52,12 @@ $(function() {
     url = "/questions/" + e.link.replace("#","");
     $.get(url,function(data){
         $("#questions").html(data);
-        var $qlm = $("#questions #load-more");
-        $qlm.length&&$("#questions #load-more").attr("data-url", url)
       });
   })
   
   $("#load-more").live("click",function(){
     $.ajax({
-      url: $(this).attr("data-url"),
+      url: url,
       type: "get",
       dataType: "script",
       data: {page: ++current_page},

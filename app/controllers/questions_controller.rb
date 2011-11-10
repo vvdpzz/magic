@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   
   def index
     @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
+    @url = "/questions"
     respond_to do |format|
       format.html
       format.js

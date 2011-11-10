@@ -90,9 +90,9 @@ $text_gray: #ababab;
   text-align:center;
 }
 .vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-off,.star-on{
-	background-image: url(/assets/sprites.png);
-	background-repeat: no-repeat;
-	overflow: hidden;
+  background-image: url(/assets/sprites.png);
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 .vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on{
   background-position: 0px -265px;

@@ -36,36 +36,37 @@ class UsersController < ApplicationController
   
   def myquestions
     @questions = @user.questions
-    render partial: "myquestion", :collection => @questions, layout: false
+    render partial: "myquestion", :collection => @questions, :as => :question,  layout: false
   end
   
   def myanswers
     @answers = @user.answers
-    render partial: "myanswer", :collection => @answers, layout: false
+    render partial: "myanswer", :collection => @answers, :as => :answer, layout: false
   end
   
   def winquestions
     @questions = @user.questions
-    render partial: "myquestion", :collection => @questions, layout: false
+    render partial: "myquestion", :collection => @questions, :as => :question, layout: false
   end
   
   def favourites
-    @follow = @user.follow
-    render partial: "myquestion", :collection => @questions, layout: false
+    @questions = @user.favorite_questions
+    render partial: "myquestion", :collection => @questions, :as => :question, layout: false
   end
   
-  def watchs
-    
+  def watches
+    @questions = @user.followed_questions
+    render partial: "favourites", :collection => @questions, :as => :question, layout: false
   end
   
   def followings
     @users = @user.followings_inredis
-    render partial: "follow", :collection => @users, layout: false
+    render partial: "follow", :collection => @users, :as => :user, layout: false
   end
   
   def followers
     @users = @user.followers_inredis
-    render partial: "follow", :collection => @users, layout: false
+    render partial: "follow", :collection => @users, :as => :user, layout: false
   end
   
   protected

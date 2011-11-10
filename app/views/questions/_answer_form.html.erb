@@ -1,12 +1,12 @@
 <% if @question.could_answer_by? current_user.id %>
-<h3 class="answer-title">添加答案</h3>
-<%= form_for(Answer.new) do |f| %>
-<%= f.hidden_field :question_id, :value => @question.id %>
-<div class="clearfix">
-  <%= f.text_area :content, :class => "span12", :rows => 7 %>
-</div>
-<%= f.submit '回答', :class => "btn primary" %>
-<% end %>
+  <h3 class="answer-title">添加答案</h3>
+  <%= form_for(Answer.new) do |f| %>
+    <%= f.hidden_field :question_id, :value => @question.id %>
+    <div class="clearfix">
+      <%= f.text_area :content, :class => "span12", :rows => 7 %>
+    </div>
+    <%= f.submit '回答', :class => "btn primary" %>
+  <% end %>
 <% end %>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {

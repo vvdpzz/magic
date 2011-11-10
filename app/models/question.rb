@@ -40,7 +40,7 @@ class Question < ActiveRecord::Base
   end
 
   def could_answer_by?(user_id)
-    self.answers.select('user_id').where(:user_id => user_id).empty?
+     user_id != self.user_id  and not answered_by?(user_id)
   end
   
   def answered_by?(user_id)
