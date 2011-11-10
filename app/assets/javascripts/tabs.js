@@ -58,7 +58,8 @@
 
       $this.trigger({
         type: 'change'
-      , relatedTarget: previous
+      , relatedTarget: previous,
+      link:href
       })
     }
   }
