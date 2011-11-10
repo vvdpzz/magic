@@ -198,6 +198,7 @@ Selector = function(options) {
   * should not be override
   ****************************************/
   this.refreshList = function(list) {
+    
     // 1st, clear the current list.
     self.clear();
 
@@ -426,35 +427,6 @@ Selector = function(options) {
       _t.addClass(_cssTable);
     };
 
-
-    /* options:
-    *
-    * recommended given:
-    *   inputElem        - the input element,  '#id' or '.class' format
-    *   dropdownClass    - dropdown element css class
-    *   rowClass         - row of dropdown, css class
-    *   timeout          - show the dropdown list after 'timeout' time 
-    *                      from the last keypress.
-    *   
-    * can be given:
-    *   tableClass       - contains rows in dropdown, css class
-    *         <inputElem></input>
-    *         <dropdownClass>
-    *            <tableClass>
-    *               <rowClass, idx=0>
-    *               <rowClass, idx=1>
-    *               ...
-    *            </tableClass>
-    *         </dropdownClass>
-    * 
-    *   limit            - num of rows in dropdown list
-    *   defaultMsg       - default message, if no rows in dropdown list
-    *                      if not given, will not show the msg
-    *   autoSelect:      - no use now
-    *   autoComplete:    - no use now
-    *   refresh (function) - can be given at init, or override after init
-    *
-    * */
     var _init = function(options) {
       options = options || {};
 
