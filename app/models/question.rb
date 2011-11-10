@@ -44,4 +44,7 @@ class Question < ActiveRecord::Base
   def answer_for(user_id)
     self.answers.find_by_user_id(user_id)
   end
+  
+  def favorited_users
+  end
 end

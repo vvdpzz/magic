@@ -89,7 +89,7 @@ $text_gray: #ababab;
 .vote-area{
   text-align:center;
 }
-.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on{
+.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-off,.star-on{
 	background-image: url(/assets/sprites.png);
 	background-repeat: no-repeat;
 	overflow: hidden;
@@ -117,14 +117,26 @@ $text_gray: #ababab;
 .vote-down-off {
   background-position: 0px -300px;
 }
-
+.favoritecount{
+  text-align: center;
+  color: #808185;
+  font-weight:bold;
+}
 .vote-count-post {
   color: #707070!important;
   line-height: 17px!important;
   padding: 6px 0 9px 0!important;
   font-size: 22px;
 }
-
+.star-off, .star-on {
+  display: block;
+  margin: 0 auto;
+  background-position: 0px -150px;
+  width: 33px;
+  height: 31px;
+  text-indent: -9999em;
+  font-size: 1px;
+}
 .vote-area{
   float:left;
   width:50px;

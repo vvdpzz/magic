@@ -78,6 +78,42 @@ class QuestionsController < ApplicationController
     end
   end
   
+  def follow
+    question = Question.find params[:id]
+    status = true
+    if question
+      records = FollowedQuestion.where(:user_id => current_user.id, :question_id => question.id)
+      if records.empty?
+        current_user.followed_questions.create(:question_id => question.id)
+      else
+        record = records.first
+        status = record.status if record.update_attribute(:status, !record.status)
+      end
+      render :json => {:status => status}
+    end
+  end
+  
+  def favorite
+    question = Question.find params[:id]
+    status = true
+    if question
+      records = FavoriteQuestion.where(:user_id => current_user.id, :question_id => question.id)
+      if records.empty?
+        current_user.favorite_questions.create(:question_id => question.id)
+      else
+        record = records.first
+        status = record.status if record.update_attribute(:status, !record.status)
+      end
+      render :json => {:status => status}
+    end
+  end
+  
+  def watch
+    l = "list:#{current_user.id}:watched"
+    items = $redis.lrange(l, 0, -1)
+    @list = items.collect{ |item| $redis.lrange(item, 0, -1) }
+  end
+  
   protected
     def vote_init
       @question = Question.select("id").find_by_id(params[:id])
