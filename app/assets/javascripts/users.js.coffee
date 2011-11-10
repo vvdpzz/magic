@@ -3,13 +3,16 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 jQuery ->
-  $('a#follow').click ->
+  $('a#follow-user').click ->
     link = $(this)
-    $.get this.href, (data) ->
-      if data.followed
-        link.removeClass('green').addClass('white').html("取消关注")
-      else
-        link.removeClass('white').addClass('green').html("关注")
+    $.ajax
+      type: "PUT"
+      url: this.href
+      success: (data)->
+        if data.flag
+          link.removeClass('success').addClass('normal').html("取消关注")
+        else
+          link.removeClass('normal').addClass('success').html("关注")
     false
   
   $('a#favorite-question').click ->

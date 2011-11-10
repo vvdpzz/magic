@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
   has_many :recharge_records
   has_many :reputation_transactions
   has_many :credit_transactions
+  has_many :followers, :class_name => "FollowedUser", :foreign_key => "user_id"
+  has_many :following, :class_name => "FollowedUser", :foreign_key => "follower_id"
   
   has_one :photo
   

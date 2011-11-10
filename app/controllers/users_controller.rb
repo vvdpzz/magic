@@ -4,40 +4,20 @@ class UsersController < ApplicationController
     @user = User.find params[:id]
   end
   
-  def follow_question
-    question = Question.find_by_id params[:qid]
-    if question && current_user.follow_question!(question)
-      render nothing: true
+  def follow
+    user = User.find params[:id]
+    flag = true
+    if user and user.id != current_user.id
+     records = FollowedUser.where(:user_id => user.id, :follower_id => current_user.id)
+     if records.empty?
+       user.followers.create(:follower_id => current_user.id)
+     else
+       record = records.first
+       flag = record.flag if record.update_attribute(:flag, !record.flag)
+     end
+     render :json => {:flag => flag}, :status => :ok
     else
-      render :json => {status: :unprocessable_entity}
+     render :json => {:error => true}, :status => :unprocessable_entity
     end
   end
-  
-  def unfollow_question
-    question = Question.find_by_id params[:qid]
-    if question && current_user.unfollow_question!(question)
-      render nothing: true
-    else
-      render :json => {status: :unprocessable_entity}
-    end
-  end
-  
-  def follow_user
-    user = User.find_by_id params[:uid]
-    if user && current_user.follow_user!(user)
-      render nothing: true
-    else
-      render :json => {status: :unprocessable_entity}
-    end
-  end
-  
-  def unfollow_user
-    user = User.find_by_id params[:uid]
-    if user && current_user.unfollow_user!(user)
-      render nothing: true
-    else
-      render :json => {status: :unprocessable_entity}
-    end
-  end
-  
 end
