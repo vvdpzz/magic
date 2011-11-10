@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_filter :vote_init, :only => [:vote_for, :vote_against]
   
   def index
-    @questions = Question.all
+    @questions = Question.page(params[:page]).per(5)
   end
 
   def new
