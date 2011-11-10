@@ -5,6 +5,7 @@
       <label for="question_title">标题</label>
       <div class="input">
         <%= f.text_field :title, :class => "xxlarge", :size => 70, :maxlength => 70 %>
+        <span id="titleCount">70</span>
       </div>
     </div>
     <!-- content -->
@@ -13,6 +14,7 @@
       <div class="input">
         <%= f.text_area :content, :class => "xxlarge", :rows => 10 %>
         <span class="help-block">在文本框中完成你对问题的描述</span>
+        <span id="contentCount"></span>
       </div>
     </div>
     <!-- rules_list -->
@@ -39,11 +41,11 @@
             </label>
           </li>
           <li>
-            <label>
+            <label id="addedRule">
               <input type="checkbox" name="rules_list" id="rules_0">
               <span>额外的规则</span>
             </label>
-            <textarea id="additional_rule" name="customized_rule" class="xxlarge" row=3></textarea>
+            <textarea id="additional_rule" style="display:none" name="customized_rule" class="xxlarge" row=3></textarea>
           </li>
         </ul>
         <span class="help-block"><strong>提示:</strong> 点击上面的选择框输入更多的竞标规则</span>
@@ -54,13 +56,16 @@
       <label for="question_credit">金钱</label>
       <div class="input">
         <%= f.text_field :credit, :class => "xxlarge", :size => 70, :maxlength => 70 %>
+        <span id='credit_tips' class="help-inline"></span>
       </div>
+
     </div>
     <!-- reputation -->
     <div class="clearfix">
       <label for="question_reputation">积分</label>
       <div class="input">
         <%= f.text_field :reputation, :class => "xxlarge", :size => 70, :maxlength => 70 %>
+        <span id='reputation_tips' class="help-inline"></span>
       </div>
     </div>
     <!-- actions -->
