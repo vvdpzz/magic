@@ -25,12 +25,15 @@ class UsersController < ApplicationController
     end
   end
   
-  def owners
+  def myquestions
     user = User.find params[:id]
     @questions = user.questions
-    respond_to do |format|
-      format.html
-      format.js 
-    end
+    render partial: "myquestion", :collection => @questions, layout: false
+  end
+  
+  def myanswers
+    user = User.find params[:id]
+    @answers = user.answers
+    render partial: "myanswer", :collection => @answers, layout: false
   end
 end

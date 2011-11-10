@@ -19,7 +19,8 @@ Magic::Application.routes.draw do
     end
     member do
       put :follow
-      get :owners
+      get :myquestions
+      get :myanswers
     end
   end
   
