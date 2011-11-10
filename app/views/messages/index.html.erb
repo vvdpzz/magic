@@ -84,16 +84,13 @@
   </div>
 </div>
 
-<div style="position: fixed; top: 0px; z-index: 1010;">
-  <div id="dlg-send-message" style="display:none;">
-    <div id='message-recipient' class="ui-dialog-box">
-      <span>To:</span>
-      <input type='text'>
-    </div>
-    <div id='message-body' class="ui-dialog-box">
-      <span>Message:</span>
-      <textarea></textarea>
-    </div>
+<div id="dlg-send-message" style="display:none;">
+  <div id="message-recipient" class="ui-dialog-box">
+    <span>To:</span>
+  </div>
+  <div id="message-body" class="ui-dialog-box">
+    <span>Message:</span>
+    <textarea></textarea>
   </div>
 </div>
 
@@ -104,8 +101,7 @@
     avatar: "<%= current_user.avatar %>"
   }
   $(function(){
-    initMessageDialog();
-    loadConversations();
+    init();
   });
 </script>
 

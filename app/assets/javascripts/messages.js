@@ -1,5 +1,18 @@
 var messageFriendToken;
+var recipientToken = null;
 var dialogOpened = false;
+var sendButtonDisabled = true;
+var sendButton = null;
+
+var userList = null;
+var userSelector = null;
+var initialized = false;
+
+var init = function() {
+  loadConversations();
+  $('#new-msg-btn').click(sendMessageOnConversationView);
+}
+
 var loadConversations = function() {
   $.get('/messages/load_conversations', {},
     function(data) {
@@ -98,11 +111,18 @@ var htmlEscape = function(txt) {
               replace(/</g,'&lt;').                                           
               replace(/"/g,'&quot;')              
 }
+var getUserInfoByToken = function(token) {
+	var matched = $.grep(userList, function(user) {
+		return user.id == token;
+	});
+	return matched.length == 0 ? null : matched[0];
+}
+
 
 // init message dialog
 var initMessageDialog = function(){
+  initialized = true;
   sendMessageDialog = {
-    initialized : false,
     autoOpen: false,
     modal: true,
     width: 500,
@@ -113,7 +133,7 @@ var initMessageDialog = function(){
     draggable: false,
     beforeClose: function() {
       dialogOpened = false;
-      // resetMessageDialog();
+      resetMessageDialog();
     },
     buttons: {
       Send: function() {
@@ -124,7 +144,238 @@ var initMessageDialog = function(){
   };
   $('#dlg-send-message').dialog(sendMessageDialog);
 	$('#message-body textarea')
-  $('#new-msg-btn').click(function(){
-    $('#dlg-send-message').dialog('open');
+      .bind('keyup', updateSendButtonState)
+      .bind('blur', updateSendButtonState)
+      .bind('focus', messageTextOnFocus)
+      .val('');
+  addRecipientInputBox();
+  sendButton = $('.dlg-container-send-message .ui-dialog-buttonpane button:last');
+  disableSendButton();
+  
+  // $('#new-msg-btn').click(function(){
+  //   $('#dlg-send-message').dialog('open');
+  //   disableSendButton();
+  // });
+}
+var updateSendButtonState = function() {
+  var messageText = getMessageText();
+  if (!recipientToken || !messageText)
+    disableSendButton();
+  else
+    enableSendButton();
+}
+var messageTextOnFocus = function() {
+	userSelector.hide();
+}
+var getMessageText = function() {
+  return $('#message-body textarea').val();
+}
+var disableSendButton = function() {
+  sendButton.addClass('ui-state-disabled');
+  sendButtonDisabled = true;
+}
+var enableSendButton = function() {
+  sendButton.removeClass('ui-state-disabled');
+  sendButtonDisabled = false;
+}
+var addRecipientInputBox = function() {
+  var recipientInput = "<input type='text' id='msg-user-input'/>";
+  $(recipientInput).appendTo($('#message-recipient')).focus();
+  userSelector.bindInputElement('#msg-user-input');
+  userSelector.refresh();
+}
+var submitMessage = function() {
+  sendButtonDisabled = true;
+  var messageText = getMessageText();
+  $.post('/messages/send_message', {
+    'recipient_token' : recipientToken,
+    'text' : messageText
+  }, function(res){
+    if (res.rc) {
+      // ce6.notifyBar(res.msg, 'error');
+      sendButtonDisabled = false;
+    } else {
+      // ce6.notifyBar('The message has been sent successfully', 'success');
+      var cb = $('#dlg-send-message').data('successCallback');
+      if (cb)
+        cb(recipientToken, messageText);
+      $('#dlg-send-message').dialog('close');
+    }
   });
 }
+
+var resetMessageDialog = function() {
+  if (recipientToken)
+    removeRecipient();
+  $('#message-body textarea').val('');
+  $('#message-recipient input').val('');
+  userSelector.clear();
+  userSelector.hide();
+  $('#dlg-send-message').data('successCallback', null);
+}
+var removeRecipient = function() {
+  $('#message-recipient .recipient-name').remove();
+  $('#message-recipient .remove-button').remove();
+  userSelector.clear();
+  addRecipientInputBox();
+  recipientToken = null;
+  disableSendButton();
+}
+var submitMessage = function() {
+  sendButtonDisabled = true;
+  var messageText = getMessageText();
+  ajaxJson('/messages/send_message', {
+    'recipient_token' : recipientToken,
+    'text' : messageText
+  }, function(res){
+    if (res.rc) {
+      // ce6.notifyBar(res.msg, 'error');
+      sendButtonDisabled = false;
+    } else {
+      // ce6.notifyBar('The message has been sent successfully', 'success');
+      var cb = $('#dlg-send-message').data('successCallback');
+      if (cb)
+      cb(recipientToken, messageText);
+      $('#dlg-send-message').dialog('close');
+    }
+  });
+}
+var loadUserConnectionList = function(profileOwner) {
+  userSelector = new msgUserSelector(); 
+  ajaxJsonGet('/messages/load_contact_list', {
+  }, function(data) {	
+    userList = data.contact_list;
+    // alert(JSON.stringify(data));
+    if (profileOwner) {
+      var isOwnerInList = false;
+      for (var i = 0; i < data.contact_list.length; i++)
+      if (data.contact_list[i].token == profileOwner.token) {
+        isOwnerInList = true;
+        break;
+      }
+      if (!isOwnerInList)
+      data.contact_list.push(profileOwner);
+    }
+    userSelector.userList = data.contact_list; 
+  });
+}
+var selectRecipient = function(user) {
+  $('#message-recipient input').remove();
+  $('#message-recipient .recipient-name').remove();
+  $('#message-recipient .remove-button').remove();
+
+  var userSpan = "<span class='recipient-name'>" + stringutil.cut(user.name, 35) + "</span><span class='remove-button'></span>";
+  $('#message-recipient').append(userSpan);
+  $('#message-recipient .remove-button').click(removeRecipient);
+
+  recipientToken = user.id;
+
+  updateSendButtonState();
+}
+var sendMessageOnConversationView = function() {
+	sendPrivateMessage(null, addNewMessageToConversation);
+}
+var sendPrivateMessage = function(user, successCallback) {
+	if (!userSelector) {
+		loadUserConnectionList(user);
+	}  
+  if (!initialized) {
+    initMessageDialog();
+  }
+	$('#dlg-send-message').dialog('open');
+
+	if (successCallback) {
+		$('#dlg-send-message').data('successCallback', successCallback);
+	}
+	if (user) {
+		selectRecipient(user);
+		$('#message-body textarea').focus();
+	} else {
+		$('#message-recipient input').focus();
+	}
+}
+var addNewMessageToConversation = function(friendToken, messageText) {
+  var box = $('#stream-item-' + friendToken);
+  if (box.length == 1) {
+    box.find('.created-at ._timestamp').html('1 second ago');
+  } else {
+    var friend = getUserInfoByToken(friendToken);
+    box = constructConversationBox({
+      'friend_token' : friendToken,
+      'friend_picture' : friend.picture,
+      'friend_name' : friend.name,
+      'unread_message_count' : 0,
+      'last_message' : htmlEscape(messageText),
+      'last_update' : '1 second ago',
+      'last_message_is_outgoing' : true
+    });
+  }
+  box.prependTo('#stream-items');
+  // $('#conversations-empty').hide();
+}
+
+
+
+
+
+msgUserSelector = function() {
+	var superClass = new Selector({
+		dropdownClass: "user-selector-list",
+		rowClass: "user-entry-item",
+		defaultMsg : "Enter the name of someone you're following..."
+	});
+
+	superClass.userList = [];
+	
+	var sortUser = function(a, b) {
+		return a.username.toLowerCase() < b.username.toLowerCase() ? -1 : 1;
+	}
+
+	var matchUsers = function(userList, pat) {
+		var firstClassMatch = [];
+		var secondClassMatch = [];
+		pat = pat.toLowerCase();
+		if (!pat) {
+			return []
+		}
+		$.each(userList, function(idx, userObj) {
+			var name = userObj.username.toLowerCase();
+			var pos = name.indexOf(pat);
+			if (pos == 0)
+				firstClassMatch.push(userObj);
+			else if (pos > -1)
+				secondClassMatch.push(userObj);
+		});
+		firstClassMatch.sort(sortUser);
+		secondClassMatch.sort(sortUser);
+		return firstClassMatch.concat(secondClassMatch);
+	}
+
+	superClass.constructRow = function(idx, rowObj) {
+		var row = "<div class='user-entry-item' index=" + idx + ">";
+		row += "<img src='" + rowObj.picture + "'>";
+		row += "<span>" + rowObj.username + "</span>";
+		row += "</div>";
+		return $(row);
+	}
+
+	superClass.refresh = function() {
+		if (!dialogOpened) {
+			return false;
+		}
+		var value = $.trim($(superClass.inputElem).val());
+		var list = matchUsers(superClass.userList, value);
+		superClass.refreshList(list);
+	}
+	
+	superClass.onEnter = function(e) {
+		return;
+	}
+
+	superClass.onSelect = function(idx) {
+		var user = superClass.list[idx];
+		selectRecipient(user);
+	}
+
+	return superClass;
+};
