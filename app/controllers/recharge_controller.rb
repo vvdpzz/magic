@@ -17,7 +17,7 @@ class RechargeController < ApplicationController
   def generate_order
     order = current_user.recharge_records.build credit: params[:credit]
     if order.save
-      render json: {:order_id => order.id, :order_credit => order.credit, :html => render_to_string(:partial => 'alipay_form', :locals => {:order => order})}, :status :ok
+      render json: {:order_id => order.id, :order_credit => order.credit, :html => render_to_string(:partial => 'alipay_form', :locals => {:order => order})}, status: :ok
     else
       render status: :unprocessable_entity
     end

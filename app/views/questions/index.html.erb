@@ -18,7 +18,7 @@
     <% end %>
     <% end %>
   </div>
-  <%= paginate @questions %>
+  <%= render '/partials/load_more' %>
 </div>
 <div id="sidebar" class="span4">
   <ul class="tabs right-tabs">
@@ -53,3 +53,25 @@
     <% end %>
   </div>
 </div>
+<script type="text/javascript" charset="utf-8">
+var current_page = 1;
+$(function() {
+  $("#load-more").live("click",function(){
+    $.ajax({
+      url: location.href,
+      type: "get",
+      dataType: "script",
+      data: {page: ++current_page},
+      beforeSend: function(){
+        $("#load-more .blueText").hide();
+        $("#load-more .spinner").show();
+      },
+      complete: function(){
+        $("#load-more .spinner").hide();
+        $("#load-more .blueText").show();
+      }
+    });
+    return false;
+  });
+});
+</script>

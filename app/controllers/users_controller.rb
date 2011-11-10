@@ -4,6 +4,10 @@ class UsersController < ApplicationController
     @user = User.find params[:id]
   end
   
+  def cash
+    render :json => {credit: current_user.credit, reputation: current_user.reputation}, status: :ok 
+  end
+  
   def follow
     user = User.find params[:id]
     flag = true
@@ -19,7 +23,7 @@ class UsersController < ApplicationController
        $redis.srem("users:#{current_user.id}.following_users", params[:id])
        $redis.srem("users:#{params[:id]}.follower_users", current_user.id)
      end
-     render :json => {:flag => flag}, :status => :ok
+     render :json => {:flag => flag}, status: :ok
     else
      render :json => {:error => true}, :status => :unprocessable_entity
     end
