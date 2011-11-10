@@ -4,7 +4,8 @@ class Question < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   has_many :comments, :class_name => "Comment", :foreign_key => "magic_id", :dependent => :destroy
   default_scope order("created_at DESC")
-  
+  scope :free, lambda { where(["reputation = 0 AND credit = 0.00"]) }
+  scope :paid, lambda { where(["reputation <> 0 OR credit <> 0.00"])}
   acts_as_voteable
   
   def not_free?

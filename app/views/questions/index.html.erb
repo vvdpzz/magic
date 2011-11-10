@@ -1,24 +1,13 @@
 <div id="main-content" class="span12">
-  <ul class="tabs">
-    <li class="active"><a href="#">悬赏问题</a></li>
-    <li><a href="#">社区问题</a></li>
-    <li><a href="#">未解决问题</a></li>
+  <ul class="tabs" data-tabs="tabs">
+    <li class="active"><a href="#paid">悬赏问题</a></li>
+    <li><a href="#free">社区问题</a></li>
   </ul>
   <div id="questions">
-    <% @questions.each do |question| %>
-    <%= div_for question do %>
-    <div class="status">
-      <div class="square"><div class="count"><%= question.credit %></div>元</div>
-      <div class="square"><div class="count"><%= question.reputation %></div>积分</div>
-    </div>
-    <div class="summary">
-      <div class="excerpt"><h5><a href="/questions/<%= question.id %>"><%= question.title %></a></h5></div>
-      <div class="timestamp"><%= question.answers_count %> 回答</div>
-    </div>
-    <% end %>
-    <% end %>
+    <%= render :partial => 'paid', :collection => @questions, :as => :question %>
+    <%= render '/partials/load_more' %>
   </div>
-  <%= render '/partials/load_more' %>
+
 </div>
 <div id="sidebar" class="span4">
   <ul class="tabs right-tabs">
@@ -53,12 +42,24 @@
     <% end %>
   </div>
 </div>
+<div id="loading" class="span12" style="display:none"></div>
 <script type="text/javascript" charset="utf-8">
-var current_page = 1;
+var current_page = 1, url = "/questions/index";
 $(function() {
+  $('#main-content .tabs').bind('change', function (e) {
+    current_page = 1;
+    $("#questions").html($("#loading").clone().show());
+    url = "/questions/" + e.link.replace("#","");
+    $.get(url,function(data){
+        $("#questions").html(data);
+        var $qlm = $("#questions #load-more");
+        $qlm.length&&$("#questions #load-more").attr("data-url", url)
+      });
+  })
+  
   $("#load-more").live("click",function(){
     $.ajax({
-      url: location.href,
+      url: $(this).attr("data-url"),
       type: "get",
       dataType: "script",
       data: {page: ++current_page},

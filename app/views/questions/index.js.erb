@@ -1,5 +1,5 @@
 <% if not @questions.empty? %>
-$("#questions").append('<%= j(render "index", :questions => @questions) %>');
+$("#questions").append('<%= j(render :partial => "index", :collection => @questions, :as => :question) %>');
 <% else %>
 $("#load-more").remove();
 <% end %>
