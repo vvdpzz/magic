@@ -26,6 +26,10 @@ gem 'on_the_spot'
 gem 'carrierwave'
 gem 'rmagick'
 
+# Payment
+gem 'activemerchant'
+gem 'activemerchant_patch_for_china'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
