@@ -275,7 +275,7 @@ var selectRecipient = function(user) {
   $('#message-recipient .recipient-name').remove();
   $('#message-recipient .remove-button').remove();
 
-  var userSpan = "<span class='recipient-name'>" + stringutil.cut(user.username, 35) + "</span><span class='remove-button'></span>";
+  var userSpan = "<span class='recipient-name'>" + stringutil.cut(user.name, 35) + "</span><span class='remove-button'></span>";
   $('#message-recipient').append(userSpan);
   $('#message-recipient .remove-button').click(removeRecipient);
 
@@ -355,7 +355,7 @@ msgUserSelector = function() {
   superClass.userList = [];
 
   var sortUser = function(a, b) {
-    return a.username.toLowerCase() < b.username.toLowerCase() ? -1 : 1;
+    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
   }
 
   var matchUsers = function(userList, pat) {
@@ -366,7 +366,7 @@ msgUserSelector = function() {
       return []
     }
     $.each(userList, function(idx, userObj) {
-      var name = userObj.username.toLowerCase();
+      var name = userObj.name.toLowerCase();
       var pos = name.indexOf(pat);
       if (pos == 0)
       firstClassMatch.push(userObj);
@@ -380,8 +380,8 @@ msgUserSelector = function() {
 
   superClass.constructRow = function(idx, rowObj) {
     var row = "<div class='user-entry-item' index=" + idx + ">";
-    row += "<img src='" + rowObj.picture + "'>";
-    row += "<span>" + rowObj.username + "</span>";
+    row += "<img src='" + rowObj.avatar + "'>";
+    row += "<span>" + rowObj.name + "</span>";
     row += "</div>";
     return $(row);
   }
