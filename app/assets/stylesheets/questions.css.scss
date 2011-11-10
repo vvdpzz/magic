@@ -195,3 +195,46 @@ $text_gray: #ababab;
     display:none;
   }
 }
+.question_detail{
+  float:right;
+  width:240px;
+  height:250px;
+  div{
+      margin-left:25px;
+  }
+  .btn{
+    margin-bottom:15px;
+  }
+  .question_info{
+    border-top:2px solid #ddd;
+    .user_head{
+      width:25px;
+      height:25px;
+    }
+    .blueBlod{
+      font-weight:bold;
+      color:blue;
+    }
+  }
+}
+.error-notification{
+  z-index:1;
+  cursor:pointer;
+  display:none;
+  position:absolute;
+  padding:15px;
+  background-color: #FE7A15;
+  opacity:0.95;
+  -moz-box-shadow:2px 2px 5px #000000;
+  -webkit-box-shadow:2px 2px 5px #000000;
+  box-shadow:2px 2px 5px #000000;
+  a{
+    color:inherit;
+    text-decoration:underline;
+  }
+  li{
+    font-size:110%;
+    padding-top:3px;
+  }
+}
+
