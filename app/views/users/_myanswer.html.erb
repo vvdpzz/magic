@@ -1,0 +1,7 @@
+<div class="myanswer">
+  <h3 class="title"><a href="/questions/<%= myanswer.question_id %>"><%= myanswer.question.title %></a></h3>
+  <div class="content">
+    <span class="vc"><%= myanswer.votes_count %></span>
+    <p><%=truncate safe_html(myanswer.content)%></p>
+  </div>
+</div>

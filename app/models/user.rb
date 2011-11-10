@@ -41,4 +41,5 @@ class User < ActiveRecord::Base
   def has_relationship_db(user_id,follower_id)
     FollowedUser.where(:user_id => user_id, :follower_id => follower_id, :flag => true)
   end
+  
 end

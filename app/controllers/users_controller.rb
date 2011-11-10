@@ -19,9 +19,14 @@ class UsersController < ApplicationController
        $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
      else
        record = records.first
+       if record.flag
+         $redis.srem("users:#{current_user.id}.following_users", params[:id])
+         $redis.srem("users:#{params[:id]}.follower_users", current_user.id)
+       else
+         $redis.sadd("users:#{current_user.id}.following_users", params[:id])
+         $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
+       end
        flag = record.flag if record.update_attribute(:flag, !record.flag)
-       $redis.srem("users:#{current_user.id}.following_users", params[:id])
-       $redis.srem("users:#{params[:id]}.follower_users", current_user.id)
      end
      render :json => {:flag => flag}, status: :ok
     else
@@ -29,12 +34,15 @@ class UsersController < ApplicationController
     end
   end
   
-  def owners
+  def myquestions
     user = User.find params[:id]
     @questions = user.questions
-    respond_to do |format|
-      format.html
-      format.js 
-    end
+    render partial: "myquestion", :collection => @questions, layout: false
+  end
+  
+  def myanswers
+    user = User.find params[:id]
+    @answers = user.answers
+    render partial: "myanswer", :collection => @answers, layout: false
   end
 end
