@@ -53,6 +53,9 @@
 </div>
 <script type="text/javascript" charset="utf-8">
 $(function () {
+  $(".nav li").removeClass('active');
+  $("#profile-page").addClass('active');
+  
   $('.tabs').bind('change', function (e) {
     // alert(e.target); // activated tab
     // alert(e.relatedTarget); // previous tab
