@@ -34,6 +34,11 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def followed_users
+    uids = FollowedQuestion.select('user_id').where(:question_id => self.id, :status => true).collect{ |item| item.user_id }
+    User.select("id,name,avatar").find uids
+  end
+
   def could_answer_by?(user_id)
     self.answers.select('user_id').where(:user_id => user_id).empty?
   end
@@ -41,9 +46,18 @@ class Question < ActiveRecord::Base
   def answered_by?(user_id)
     not self.answers.select('user_id').where(:user_id => user_id).empty?
   end
+
+  def followed_dy?(user_id)
+    records = FollowedQuestion.where(:user_id => user_id, :question_id => self.id)
+    records.empty? ? false : records.first.status
+  end
   
   def answer_for(user_id)
     self.answers.find_by_user_id(user_id)
+  end
+  
+  def watched_user
+      
   end
   
   def favorited_users

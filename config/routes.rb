@@ -8,6 +8,8 @@ Magic::Application.routes.draw do
     member do
       put :vote_for
       put :vote_against
+      put :follow
+      put :favorite
     end
     get 'page/:page', :action => :index, :on => :collection
   end

@@ -58,9 +58,9 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
   add_index "credit_transactions", ["winner_id"], :name => "index_credit_transactions_on_winner_id"
 
   create_table "favorite_questions", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "question_id"
-    t.boolean  "status",      :default => true
+    t.integer  "user_id",     :limit => 8,                   :null => false
+    t.integer  "question_id", :limit => 8,                   :null => false
+    t.boolean  "status",                   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
   add_index "favorite_questions", ["user_id"], :name => "index_favorite_questions_on_user_id"
 
   create_table "followed_questions", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "question_id"
-    t.boolean  "status",      :default => true
+    t.integer  "user_id",     :limit => 8,                   :null => false
+    t.integer  "question_id", :limit => 8,                   :null => false
+    t.boolean  "status",                   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

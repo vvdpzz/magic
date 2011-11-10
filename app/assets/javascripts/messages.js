@@ -11,8 +11,11 @@ var userList = null;
 var userSelector = null;
 var initialized = false;
 
+var isFirst = true;
+
 var init = function() {
   loadConversations();
+  initMessageBox();
   $('#new-msg-btn').click(sendMessageOnConversationView);
 }
 
@@ -28,7 +31,7 @@ var loadConversations = function() {
         });
         con = data[data.length-1];
         loadMessages(con.friend_token, con.friend_name);
-        initMessageBox();
+        isFirst = false;
       }
     }
   );
@@ -41,10 +44,7 @@ var constructConversationBox = function(data) {
               loadMessages(data.friend_token, data.friend_name);
             });
   box.find('.message-inner img').attr('src', data.friend_picture);
-  var friendName = data.friend_name;
-  if (data.unread_message_count > 0)
-    friendName += ' (' + data.unread_message_count + ')';
-  box.find('.user-name strong').html(friendName);
+  box.find('.user-name strong').html(data.friend_name);
   box.find('.created-at ._timestamp').html(data.last_update);
   return box;
 };
@@ -135,9 +135,9 @@ var initMessageDialog = function(){
     autoOpen: false,
     modal: true,
     width: 500,
-    height: 325,
+    height: 285,
     resizable: false,
-    title: 'New Message',
+    title: '发送私信',
     dialogClass: 'dlg-container-send-message',
     draggable: false,
     beforeClose: function() {
@@ -145,7 +145,7 @@ var initMessageDialog = function(){
       resetMessageDialog();
     },
     buttons: {
-      Send: function() {
+      发送: function() {
         if (!sendButtonDisabled)
         submitMessage();
       }
@@ -316,7 +316,12 @@ var addNewMessageToConversation = function(friendToken, messageText) {
   }
   if (box.length == 1) {
     box.find('.created-at ._timestamp').html('1 second ago');
+    conversations[friendToken].last_update = '1 second ago';
     conversations[friendToken].messages.push(message);
+    
+    if(friendToken == messageFriendToken){
+      $('#messages-items').prepend(constructMessageBox(message));
+    }
   } else {
     var friend = getUserInfoByToken(friendToken);
     var messages = new Array(message);
@@ -331,9 +336,11 @@ var addNewMessageToConversation = function(friendToken, messageText) {
     box = constructConversationBox(conversation);
     box.prependTo('#stream-items');
     conversations[friendToken] = conversation;
-  }
-  if(friendToken == messageFriendToken){
-    $('#messages-items').prepend(constructMessageBox(message));
+    if (isFirst){
+      $('#messagebox-and-messages').show();
+      loadMessages(friendToken, friend.name);
+      isFirst = false;
+    }  
   }
   // $('#conversations-empty').hide();
 };
@@ -346,7 +353,7 @@ msgUserSelector = function() {
   var superClass = new Selector({
     dropdownClass: "user-selector-list",
     rowClass: "user-entry-item",
-    defaultMsg : "Enter the name of someone you're following..."
+    defaultMsg : "输入您关注的人..."
   });
 
   superClass.userList = [];
