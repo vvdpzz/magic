@@ -1,4 +1,5 @@
 Magic::Application.routes.draw do
+  get '/cash' => "users#cash"
   resources :questions do
     member do
       put :vote_for
