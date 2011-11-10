@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   can_edit_on_the_spot
+  before_filter :build_user
   def show
     @user = User.find params[:id]
   end
@@ -9,12 +10,11 @@ class UsersController < ApplicationController
   end
   
   def follow
-    user = User.find params[:id]
     flag = true
-    if user and user.id != current_user.id
-     records = FollowedUser.where(:user_id => user.id, :follower_id => current_user.id)
+    if @user and @user.id != current_user.id
+     records = FollowedUser.where(:user_id => @user.id, :follower_id => current_user.id)
      if records.empty?
-       user.followers.create(:follower_id => current_user.id)
+       @user.followers.create(:follower_id => current_user.id)
        $redis.sadd("users:#{current_user.id}.following_users", params[:id])
        $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
      else
@@ -35,14 +35,41 @@ class UsersController < ApplicationController
   end
   
   def myquestions
-    user = User.find params[:id]
-    @questions = user.questions
+    @questions = @user.questions
     render partial: "myquestion", :collection => @questions, layout: false
   end
   
   def myanswers
-    user = User.find params[:id]
-    @answers = user.answers
+    @answers = @user.answers
     render partial: "myanswer", :collection => @answers, layout: false
   end
+  
+  def winquestions
+    @questions = @user.questions
+    render partial: "myquestion", :collection => @questions, layout: false
+  end
+  
+  def favourites
+    @follow = @user.follow
+    render partial: "myquestion", :collection => @questions, layout: false
+  end
+  
+  def watchs
+    
+  end
+  
+  def followings
+    @users = @user.followings_inredis
+    render partial: "follow", :collection => @users, layout: false
+  end
+  
+  def followers
+    @users = @user.followers_inredis
+    render partial: "follow", :collection => @users, layout: false
+  end
+  
+  protected
+    def build_user
+      @user = User.find params[:id]
+    end
 end

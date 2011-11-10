@@ -46,25 +46,26 @@
 </div>
 <div class="row span16">
   <ul id="tab-profile" class="tabs" data-tabs="tabs">
-    <li class="active"><a href="#myquestions">我的问题</a></li>
-    <li><a href="#myanswers">我的答案</a></li>
-    <li><a href="#wins">胜出的答案</a></li>
-    <li><a href="#favourites">收藏的问题</a></li>
-    <li><a href="#watch">关注的问题</a></li>
-    <li><a href="#following">关注</a></li>
-    <li><a href="#follower">关注者</a></li>
+    <li class="active"><a href="#myquestions">我的问题<span class="label notice"><%=@user.questions_count%></span></a></li>
+    <li><a href="#myanswers">我的答案<span class="label notice"><%=@user.answers_count%></span></a></li>
+    <li><a href="#winquestions">胜出的答案<span class="label notice"><%=@user.questions_count%></span></a></li>
+    <li><a href="#favourites">收藏的问题<span class="label notice"><%=@user.questions_count%></span></a></li>
+    <li><a href="#watches">关注的问题<span class="label notice"><%=@user.questions_count%></span></a></li>
+    <li><a href="#followings">关注<span class="label notice"><%=@user.followings_count%></span></a></li>
+    <li><a href="#followers">关注者<span class="label notice"><%=@user.followers_count%></span></a></li>
   </ul>
   <div id="tab-content">
     <%= render partial: "myquestion", :collection => @user.questions %>
   </div>
 </div>
+<div id="loading" class="span12" style="display:none"></div>
 <script type="text/javascript" charset="utf-8">
 $(function () {
   $(".nav li").removeClass('active');
   $("#profile-page").addClass('active');
   
   $('.tabs').bind('change', function (e) {
-    $("#tab-content").html('<img src="/assets/loading.gif" />');
+    $("#tab-content").html($("#loading").clone().show());
     url = "/users/<%= @user.id %>/" + e.link.replace("#","");
     $.get(url,function(data){
         $("#tab-content").html(data);

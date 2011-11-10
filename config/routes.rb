@@ -22,6 +22,10 @@ Magic::Application.routes.draw do
       put :follow
       get :myquestions
       get :myanswers
+      get :winquestions
+      get :favourites
+      get :followings
+      get :followers
     end
   end
   

@@ -29,3 +29,8 @@ body{
   border-bottom:1px solid #DDD;
   padding:10px 0;
 }
+#loading{
+
+  height:50px;
+  background:url('/assets/loading.gif') no-repeat center;
+}
