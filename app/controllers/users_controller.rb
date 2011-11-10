@@ -45,4 +45,26 @@ class UsersController < ApplicationController
     @answers = user.answers
     render partial: "myanswer", :collection => @answers, layout: false
   end
+  
+  def winquestions
+    user = User.find params[:id]
+    @questions = user.questions
+    render partial: "myquestion", :collection => @questions, layout: false
+  end
+  
+  def favourites
+    
+  end
+  
+  def watchs
+    
+  end
+  
+  def followings
+    
+  end
+  
+  def followers
+    
+  end
 end
