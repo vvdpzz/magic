@@ -24,4 +24,4 @@ jQuery ->
         link.removeClass('white').addClass('green').html "收藏"
     false
   
-  false
+  

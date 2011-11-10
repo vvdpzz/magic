@@ -24,4 +24,13 @@ class UsersController < ApplicationController
      render :json => {:error => true}, :status => :unprocessable_entity
     end
   end
+  
+  def owners
+    user = User.find params[:id]
+    @questions = user.questions
+    respond_to do |format|
+      format.html
+      format.js 
+    end
+  end
 end
