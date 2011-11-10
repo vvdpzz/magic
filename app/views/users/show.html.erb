@@ -24,8 +24,8 @@
       <h2><%= on_the_spot_edit @user, :name %></h2>
       <p><%= on_the_spot_edit @user, :about_me %></p>
       <% else %>
-        <h2><%= @user.name %></h2>
-        <p><%= @user.about_me %></p>
+      <h2><%= @user.name %></h2>
+      <p><%= @user.about_me %></p>
       <% end %>
       <strong>#<%= @user.reputation %></strong>
     </div>
@@ -34,13 +34,12 @@
 <div id="sidebar" class="span4">
   <div class="operate-me">
     <a class="normal large btn span2">私 信</a></br></br>
-    <a class="success large btn span2">关 注</a>
+    <a href="/users/<%= @user.id %>/follow" class="success large btn span2">关 注</a>
   </div>
 </div>
 <div class="row span16">
   <ul class="tabs" data-tabs="tabs">
-    <li class="active"><a href="#aboutme">关于我</a></li>
-    <li><a href="#myquestions">我的问题</a></li>
+    <li class="active"><a href="#myquestions">我的问题</a></li>
     <li><a href="#myanswers">我的答案</a></li>
     <li><a href="#winners">胜出的答案</a></li>
     <li><a href="#favourites">收藏的问题</a></li>
@@ -49,8 +48,7 @@
     <li><a href="#follower">关注者</a></li>
   </ul>
   <div class="pill-content">
-    <div class="active" id="aboutme">关于我</div>
-    <div id="myquestions">我的问题</div>
+    <div class="active" id="myquestions">我的问题</div>
     <div id="myanswers">我的答案</div>
     <div id="winners">胜出的答案</div>
     <div id="favourites">收藏的问题</div>
@@ -62,7 +60,7 @@
 <script type="text/javascript" charset="utf-8">
 $(function () {
   $('.tabs').tabs();
-  
+
   <% key = Rails.application.config.session_options[:key] %>
   var uploadify_script_data = {};
   var csrf_param = $('meta[name=csrf-param]').attr('content');
@@ -70,11 +68,11 @@ $(function () {
   uploadify_script_data[csrf_param] = encodeURI(encodeURIComponent(csrf_token));
   uploadify_script_data['<%= key %>'] = '<%= cookies[key] %>';
   $('#uploadify').uploadify({
-    uploader  		: '/assets/uploadify.swf',
-    script    		: '/photos',
-    cancelImg		: '/images/cancel.png',
-    auto			: true,
-    multi			: false,
+    uploader      : '/assets/uploadify.swf',
+    script        : '/photos',
+    cancelImg     : '/images/cancel.png',
+    auto      : true,
+    multi     : false,
     removeCompleted : true,
     fileExt			: '*.jpg;*.jpeg;*.gif;*.png',
     fileDesc		: 'Image Files (.JPG, .JPEG, .GIF, .PNG)',
