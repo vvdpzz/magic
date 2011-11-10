@@ -32,16 +32,23 @@
   </div>
 </div>
 <div id="sidebar" class="span4">
-  <div class="operate-me">
-    <a class="normal large btn span2">私 信</a></br></br>
-    <a id="follow-user"href="/users/<%= @user.id %>/follow" class="success large btn span2">关 注</a>
-  </div>
+  <% if @user.id == current_user.id %>
+  <% else %>
+    <div class="operate-me">
+      <a class="normal large btn span2">私 信</a></br></br>
+      <% if @user.has_relationship_redis(current_user.id) %>
+         <a id="follow-user"href="/users/<%= @user.id %>/follow" class="normal large btn span2">取消关注</a>
+      <% else %>
+        <a id="follow-user"href="/users/<%= @user.id %>/follow" class="success large btn span2">关 注</a>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 <div class="row span16">
   <ul id="tab-profile" class="tabs" data-tabs="tabs">
     <li class="active"><a href="#myquestions">我的问题</a></li>
     <li><a href="#myanswers">我的答案</a></li>
-    <li><a href="#winners">胜出的答案</a></li>
+    <li><a href="#wins">胜出的答案</a></li>
     <li><a href="#favourites">收藏的问题</a></li>
     <li><a href="#watch">关注的问题</a></li>
     <li><a href="#following">关注</a></li>

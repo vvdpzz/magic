@@ -12,7 +12,7 @@ jQuery ->
         if data.flag
           link.removeClass('success').addClass('normal').html("取消关注")
         else
-          link.removeClass('normal').addClass('success').html("关注")
+          link.removeClass('normal').addClass('success').html("关 注")
     false
   
   $('a#favorite-question').click ->
