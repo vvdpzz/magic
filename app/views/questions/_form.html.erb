@@ -56,10 +56,11 @@
       <label for="question_credit">金钱</label>
       <div class="input">
         <%= f.text_field :credit, :class => "span5", :size => 70, :maxlength => 70 %>元
-        <a class="btn primary" id="into_recharge" style="display:none">进入充值</a>
-        <span id='credit_tips' class="help-inline"></span>
+        <div id="reCharge">
+          <a class="btn primary" id="into_recharge" style="display:none">进入充值</a>
+          <span id='credit_tips' class="help-inline"></span>
+        </div>
       </div>
-
     </div>
     <!-- reputation -->
     <div class="clearfix">
@@ -77,8 +78,9 @@
   </fieldset>
   <div id="control" style="z-index:10010;display:none">
     <div id="dialog_payment" style="display:none">
-     <a> 流水号：<span id='numerical_order'></span></a>
-     <button class="btn" id="payment_btn">确认充值</btn>
+     <span> 流水号：</span><span id='order_number'></span>
+     <h1 id="order_credit" class=""></h1>
+     <div id="alipay_form"></div>
     </div>
   </div>
 <% end %>

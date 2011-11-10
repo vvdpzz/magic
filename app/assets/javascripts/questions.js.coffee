@@ -2,6 +2,10 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $(->
+  user_accout = {
+    credit : 0,
+    reputation : 0
+  }
   question_paymentDlg = {
     title : "赏金支付",
     autoOpen: false,
@@ -12,19 +16,47 @@ $(->
     buttons: 
       '取消': ()-> 
         $(this).dialog("close")
-      '确定充值':()->      
+      '充值':()->
+        $($("#payment-form").get(0).utf8).remove()
+        url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
+        window.open url, "_blank"
+        $(this).dialog("option",question_paymentDlg_reTry)
+  }
+  needRecharge = 0;
+  question_paymentDlg_reTry = {
+    buttons:
+      '完成':()->
+        $.get "/cash", (data, textStatus, xhr) ->
+          user_accout.credit = data.credit
+          if $('#question_credit').val() <= user_accout.credit
+            $("#reCharge").fadeOut()
+          else
+            needRecharge = parseInt($("#question_credit").val())-user_accout.credit
+            $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
+        $(this).dialog("close")
+      '重试':()->
+        url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
+        window.open url, "_blank"
   }
   $.get "/cash", (data, textStatus, xhr) ->
-    userCash = data.credit
+    user_accout.credit = data.credit
     userReputation = data.reputation  
     $('#addedRule').bind 'mouseup',->
       if $('#additional_rule').css('display') is 'none'
         $('#additional_rule').slideDown(200)
       else
         $('#additional_rule').slideUp(300)
-    $("#new_question").submit ->
+    $("#new_question").submit -> 
       isSubmit = true
       isRecharge = false
+      #init element style
+      $("#contentCount").hide();
+      $("#question_credit").closest('.clearfix').removeClass('error')
+      $("#question_credit").removeClass("xlarge error")
+      $("#question_credit").closest('.clearfix').removeClass('error')
+      $("#question_credit").removeClass("xlarge error")
+      
+      #into judge block
       unless $("#question_title").val().length
         $('#titleCount').text('请输入标题')
         isSubmit = false
@@ -37,17 +69,27 @@ $(->
           $("#question_credit").addClass("xlarge error")
           $("#credit_tips").text("请输入正确金额")
           isSubmit = false
-        if(parseInt($("#question_credit").val()) > userCash)
+        if(parseInt($("#question_credit").val()) > user_accout.credit)
           $("#question_credit").closest('.clearfix').addClass('error')
           $("#question_credit").addClass("xlarge error")
-          needRecharge = parseInt($("#question_credit").val(),10)-userCash
+          needRecharge = parseInt($("#question_credit").val(),10)-user_accout.credit
+          alert user_accout.credit
           $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
           isRecharge = true
-          $("#into_charge").fadeIn()
-          $("#into_charge").bind "click",->
+          $("#into_recharge").fadeIn()
+          $("#into_recharge").bind "click",->
             if isRecharge
-              $("#dialog_payment").dialog(question_paymentDlg);
-              $("#dialog_payment").dialog('open');
+              $.ajax
+                url: "/recharge/generate_order"
+                type: "POST"
+                dataType: "json"
+                data:{credit: needRecharge}
+                success: (data, textStatus, xhr) ->
+                  $("#order_number").html data.order_id
+                  $("#order_credit").text "您要支付的金额为："+data.order_credit+"元"
+                  $("#alipay_form").html data.html
+              $("#dialog_payment").dialog(question_paymentDlg)
+              $("#dialog_payment").dialog('open')
           isSubmit = false
       unless checkNum($("#question_reputation").val())
         $("#question_reputation").closest('.clearfix').addClass('error')
@@ -61,16 +103,13 @@ $(->
         needReputation = parseInt($("#question_reputation").val()) - userReputation
         $("#reputation_tips").text("您的积分不足，缺少"+needReputation+"积分")
         isSubmit = false
-      # false # unless isSubmit
-      return false
-  #bind
-  
+       false unless isSubmit
   $("#question_title").bind "keydown",()->
     numCountDown($('#question_title'),$('#titleCount'),70)
   $('.nicEdit-main').bind "keydown",()->
     numCountDown($('.nicEdit-main'),$('#contentCount'),1000)
-  return
 )
+
 numCountDown = (input,num,len)->
   input = input.val()
   numDiv = num
