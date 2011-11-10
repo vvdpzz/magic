@@ -17,6 +17,9 @@ Magic::Application.routes.draw do
     collection do
       put :update_attribute_on_the_spot
     end
+    member do
+      put :follow
+    end
   end
   
   resources :recharge do
