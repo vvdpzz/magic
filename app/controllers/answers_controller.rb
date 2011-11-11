@@ -4,11 +4,11 @@ class AnswersController < ApplicationController
   def create
     question = Question.find params[:answer][:question_id]
     if not question.could_answer_by?(current_user.id)
-      render json: {:errors => "You've already answered this question"}, :status => :unprocessable_entity
+      render json: {:errors => "You've already answered this question",rc: 1}, :status => :unprocessable_entity
       return
     end
     if question.not_free? and question.correct_answer_id == 0 and current_user.reputation < Settings.answer_price
-      render json: {:errors => "You do not have enough reputation to answering a paid question, 5 reputation is minimum."}, :status => :unprocessable_entity
+      render json: {:errors => "You do not have enough reputation to answering a paid question, 5 reputation is minimum.",rc: 2}, :status => :unprocessable_entity
       return
     end
     @answer = current_user.answers.build(params[:answer])

@@ -93,6 +93,14 @@ $(document).ready(function() {
   new nicEditor({buttonList: ['bold','italic','underline', 'strikethrough', 'ol', 'ul', 'hr']}).panelInstance('question_content');
   $(".nav li").removeClass('active');
   $("#create-question-page").addClass('active');
+  user_accout = {
+    credit : "",
+    reputation : ""
+  }
+  $.get("/cash", function(data, textStatus, xhr) {
+    user_accout.credit = data.credit;
+    user_accout.reputation = data.reputation;
+  });
 });
 
 </script>

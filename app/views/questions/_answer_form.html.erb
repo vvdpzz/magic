@@ -20,5 +20,14 @@ $(document).ready(function() {
      $('.answer-title').fadeOut();
      $("#answers").append(data.html);
   })
+  $('#answer-form').live('ajax:error',function(xhr,textStatus, errorThrown) {
+    var errorText = "";
+    var errorRc = JSON.parse(xhr.responseText).rc
+    switch(errorRc){
+      case 1:errorText = "你已经回答过这个问题";break;
+      case 2:errorText = "您的积分不足五分，无法回答付费问题";break;
+    }
+    showAjaxError($(dom).closest("#answer_content"),errorText)
+  })
 });
 </script>
