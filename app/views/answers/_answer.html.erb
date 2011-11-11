@@ -1,0 +1,13 @@
+<%= div_for(answer, :class => "clearfix") do %>
+<div class="vote-area">
+  <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
+  <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
+  <a class="vote-down-off" href="/answers/<%= answer.id %>/vote_against">down vote</a>
+</div>
+<div class="post">
+  <div class="content">
+    <%= safe_html answer.content %>
+  </div>
+  <%= render "/partials/passport", :user => answer.user %>
+</div>
+<% end %>
