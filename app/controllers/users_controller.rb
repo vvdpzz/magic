@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   end
   
   def winquestions
-    @questions = @user.questions
+    @questions = (@user.credit_winners + @user.reputation_winners).uniq.collect{|item| item.question}
     render partial: "winquestions", :collection => @questions, :as => :question, layout: false
   end
   

@@ -134,12 +134,5 @@ numCountDown = (input,num,len)->
   else
     numDiv.text length
 
-checkNum = (str)->
-<<<<<<< HEAD
-  /^\d+$/.test str
-=======
-   str
->>>>>>> 838f3729f9a91093fe0a7a7451a3b8b34d705d96
-
 
 

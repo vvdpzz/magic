@@ -87,4 +87,7 @@ class User < ActiveRecord::Base
     $redis.scard("users:#{self.id}.follower_users")
   end
   
+  def wins_count
+    (self.credit_winners + self.reputation_winners).uniq.size
+  end
 end

@@ -2,6 +2,6 @@
   <h3 class="title"><a href="/questions/<%= answer.question_id %>"><%= answer.question.title %></a></h3>
   <div class="content">
     <span class="vc"><%= answer.votes_count %></span>
-    <p><%=truncate safe_html(answer.content)%></p>
+    <p><%=raw answer.content%></p>
   </div>
 </div>
