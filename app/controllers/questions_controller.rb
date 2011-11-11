@@ -53,11 +53,11 @@ class QuestionsController < ApplicationController
   
   def vote_for
     if current_user.reputation < Settings.vote_for_limit
-      render json: {errors: "Reputation not enough"}, status: :unprocessable_entity
+      render json: {errors: "Reputation not enough", rc: 1}, status: :unprocessable_entity
       return
     end
     if @voted
-      render json: {errors: "Already vote for"}, status: :unprocessable_entity
+      render json: {errors: "Already vote for", rc: 2}, status: :unprocessable_entity
       return
     end
     if @voted == nil
@@ -75,11 +75,11 @@ class QuestionsController < ApplicationController
   
   def vote_against
     if current_user.reputation < Settings.vote_against_limit
-      render json: {errors: "Reputation not enough"}, status: :unprocessable_entity
+      render json: {errors: "Reputation not enough", rc: 3}, status: :unprocessable_entity
       return
     end
     if @voted == false
-      render json: {errors: "Already vote against"}, status: :unprocessable_entity
+      render json: {errors: "Already vote against", rc: 2}, status: :unprocessable_entity
       return
     end
     if @voted == nil

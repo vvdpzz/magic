@@ -11,7 +11,7 @@
   </div>
   <div class="question_info">
       <h4>问题状态</h4>
-      <p>被浏览了<span><%= @question.votes_count %></span>次，关注者<span class="blueBlod"><%= @question.votes_count %></span>人</p>
+      <p>关注者<span class="blueBlod"><%= @question.votes_count %></span>人</p>
       <% @question.followed_users.each do |user|%>
         <a title="<%= user.name %>" href="../users/<%= user.id %>"><img src="<%= user.gavatar %>" class='user_head'/></a>
       <% end %> 
@@ -36,8 +36,6 @@
   </div>
   <% end %>
   
-  <% answers = @question.answers %>
-  
   <% if @question.answered_by? current_user.id %>
     <div id="my-answer">
       <div id="my-answer-header">
@@ -45,20 +43,7 @@
           <h2>我的答案</h2>
         </div>
       </div>
-      <% answer = @question.answer_for current_user.id %>
-      <%= div_for(answer, :class => "clearfix") do %>
-        <div class="vote-area">
-          <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
-          <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
-          <a class="vote-down-off" href="/answers/<%= answer.id %>/vote_against">down vote</a>
-        </div>
-        <div class="post">
-          <div class="content">
-            <%= safe_html answer.content %>
-          </div>
-          <%= render "/partials/passport", :user => current_user %>
-        </div>
-      <% end %>
+      <%= render @question.answer_for current_user.id %>
     </div>
   <% end %>
   <div id="answers">
@@ -69,22 +54,7 @@
         <% end %>
       </div>
     </div>
-    <% answers.each do |answer| %>
-      <% # if answer.user_id == current_user.id then next end %>
-      <%= div_for(answer, :class => "clearfix") do %>
-        <div class="vote-area">
-          <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
-          <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
-          <a class="vote-down-off" href="/answers/<%= answer.id %>/vote_against">down vote</a>
-        </div>
-        <div class="post">
-          <div class="content">
-            <%= safe_html answer.content %>
-          </div>
-          <%= render "/partials/passport", :user => answer.user %>
-        </div>
-      <% end %>
-    <% end %>
+    <%= render @question.answers %>
   </div>
   <%= render 'answer_form' %>
 </div>

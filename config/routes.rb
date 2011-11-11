@@ -12,6 +12,11 @@ Magic::Application.routes.draw do
       put :favorite
     end
     get 'page/:page', :action => :index, :on => :collection
+    resources :answers, :only => [] do
+      member do
+        get :accept
+      end
+    end
   end
   resources :answers do
     member do
