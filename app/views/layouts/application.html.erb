@@ -17,7 +17,9 @@
           <li id="create-question-page"><a href="/questions/new">提问</a></li>
         </ul>
         <ul class="nav secondary-nav">
-          <li id="messages-page"><a href="/messages">私信</a></li>
+          <li id="messages-page">
+            <a href="/messages">私信<span id="nav-msg-new-num" style="display: none; "></span></a>   
+          </li>
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle"><%= current_user.name %></a>
             <ul class="dropdown-menu">
@@ -40,3 +42,19 @@
   </div>
 </body>
 </html>
+
+<script type="text/javascript" charset="utf-8">
+  //Messages Pusher
+  var pusher = new Pusher('2f20b4687fdaada149b2');
+  var message_channel = pusher.subscribe("presence-messages_<%= current_user.id %>");
+
+  message_channel.bind('message_created', function(message) {
+    count = 1;
+    if($('#nav-msg-new-num').text().trim() != '')
+    count = parseInt($('#nav-msg-new-num').text().trim()) + 1;
+    $('#nav-msg-new-num').text(count).show();
+  });
+  $(function(){
+    initNav();
+  });
+</script>

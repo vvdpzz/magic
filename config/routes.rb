@@ -1,5 +1,8 @@
 Magic::Application.routes.draw do
   get '/cash' => "users#cash"
+  
+  match 'pusher/auth' => "pusher#auth"
+  
   resources :questions do
     collection do
       get :free
@@ -56,11 +59,13 @@ Magic::Application.routes.draw do
   resources :photos
   
   resources :messages do
-      collection do
-        get :load_conversations
-        post :send_message
-        get :load_contact_list
-      end
+    collection do
+      get :load_conversations
+      get :load_contact_list
+      get :load_messages_on_navbar
+      post :send_message
+      post :update_last_viewed
+    end
   end
 
   # The priority is based upon order of creation:

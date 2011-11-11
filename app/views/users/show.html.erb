@@ -35,7 +35,7 @@
   <% if @user.id == current_user.id %>
   <% else %>
     <div class="operate-me">
-      <a class="normal large btn span2">私 信</a></br></br>
+      <a id="profile-send-message" class="normal large btn span2">私 信</a></br></br>
       <% if @user.has_relationship_redis(current_user.id) %>
          <a id="follow-user"href="/users/<%= @user.id %>/follow" class="normal large btn span2">取消关注</a>
       <% else %>
@@ -59,7 +59,25 @@
   </div>
 </div>
 <div id="loading" class="span12" style="display:none"></div>
+
+
+<div id="dlg-send-message" style="display:none;">
+  <div id="message-recipient" class="ui-dialog-box">
+    <span>发给:</span>
+  </div>
+  <div id="message-body" class="ui-dialog-box">
+    <span>私信:</span>
+    <textarea></textarea>
+  </div>
+</div>
+
 <script type="text/javascript" charset="utf-8">
+var profileOwner = {
+  id : "<%= @user.id %>",
+	name : "<%= @user.name %>",
+	avatar : "<%= @user.gavatar %>"
+}
+
 $(function () {
   $(".nav li").removeClass('active');
   $("#profile-page").addClass('active');

@@ -12,6 +12,8 @@ gem 'devise_invitable'
 
 gem 'uuidtools'
 
+gem 'pusher'
+
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 
