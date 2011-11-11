@@ -1,0 +1,4 @@
+$("#load-more").remove()
+$("#questions")
+  .append('<%= j(render :partial => "paid", :collection => @questions, :as => :question) %>')
+  .append('<%= j(render '/partials/load_more') %>')

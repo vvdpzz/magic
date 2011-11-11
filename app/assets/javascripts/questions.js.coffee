@@ -17,12 +17,12 @@ $(->
       '取消': ()-> 
         $.get "/cash", (data, textStatus, xhr) ->
           user_accout.credit = data.credit
-          userReputation = data.reputation
+          user_accout.reputation = data.reputation
           needRecharge = parseInt($("#question_credit").val())-user_accout.credit
           if needRecharge > 0
             $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
           else
-            $("#credit_tips").fadeOut()
+            $("#credit_tips,#into_recharge").fadeOut()
             $("#question_credit").closest('.clearfix').removeClass('error')
             $("#question_credit").removeClass("xlarge error")
         $(this).dialog("close")
@@ -32,8 +32,6 @@ $(->
         window.open url, "_blank"
         $(this).dialog("option",question_paymentDlg_reTry)
   }
-  
-  needRecharge = 0;
   question_paymentDlg_reTry = {
     buttons:
       '完成':()->
@@ -41,6 +39,8 @@ $(->
           user_accout.credit = data.credit
           if $('#question_credit').val() <= user_accout.credit
             $("#reCharge").fadeOut()
+            $("#question_credit").closest('.clearfix').removeClass('error')
+            $("#question_credit").removeClass("xlarge error")
           else
             needRecharge = parseInt($("#question_credit").val())-user_accout.credit
             $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
@@ -54,66 +54,70 @@ $(->
       $('#additional_rule').slideDown(200)
     else
       $('#additional_rule').slideUp(300)
-      $("#new_question").submit -> 
-      isSubmit = true
-      isRecharge = false
-      #init element style
-      $("#contentCount").hide();
-      $("#question_credit").closest('.clearfix').removeClass('error')
-      $("#question_credit").removeClass("xlarge error")
-      $("#question_credit").closest('.clearfix').removeClass('error')
-      $("#question_credit").removeClass("xlarge error")
-      
-      #into judge block
-      unless $("#question_title").val().length
-        $('#titleCount').text('请输入标题')
+  $("#new_question").submit -> 
+    isSubmit = true
+    isRecharge = false
+    #init element style
+    $("#contentCount").hide();
+    $("#question_credit").closest('.clearfix').removeClass('error')
+    $("#question_credit").removeClass("xlarge error")
+    $("#question_credit").closest('.clearfix').removeClass('error')
+    $("#question_credit").removeClass("xlarge error")
+    #into judge block
+    unless $("#question_title").val().length
+      $('#titleCount').text('请输入标题')
+      isSubmit = false
+    unless $(".nicEdit-main").text().length
+      $("#contentCount").text('请完善内容')
+      isSubmit = false
+    unless ($("#question_credit").val() is "0.0")
+      unless checkNum($("#question_credit").val())
+        $("#question_credit").closest('.clearfix').addClass('error')
+        $("#question_credit").addClass("xlarge error")
+        $("#credit_tips").text("请输入正确金额")
         isSubmit = false
-      unless $(".nicEdit-main").text().length
-        $("#contentCount").text('请完善内容')
+        #get init userCredit
+    $.get "/cash", (data, textStatus, xhr) ->
+      user_accout.credit = data.credit
+      user_accout.reputation = data.reputation
+      if(parseInt($("#question_credit").val()) > user_accout.credit)
+        $("#question_credit").closest('.clearfix').addClass('error')
+        $("#question_credit").addClass("xlarge error")
+        needRecharge = parseInt($("#question_credit").val(),10)-user_accout.credit
+        $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
+        isRecharge = true
+        $("#into_recharge").fadeIn()
+        $("#into_recharge").bind "click",->
+          $.get "/cash", (data, textStatus, xhr) ->
+            user_accout.credit = data.credit
+            if isRecharge
+              $.ajax
+                url:      "/recharge/generate_order"
+                type:     "POST"
+                dataType: "json"
+                data:     {credit: user_accout.credit}
+                success:  (data, textStatus, xhr) ->
+                  $("#order_number").html data.order_id
+                  $("#order_credit").text "您要支付的金额为："+(parseInt($("#question_credit").val(),10)-data.order_credit)+"元"
+                  $("#alipay_form").html data.html
+          $("#dialog_payment").dialog(question_paymentDlg)
+          $("#dialog_payment").dialog('open')
         isSubmit = false
-      unless ($("#question_credit").val() is "0.0")
-        unless checkNum($("#question_credit").val())
-          $("#question_credit").closest('.clearfix').addClass('error')
-          $("#question_credit").addClass("xlarge error")
-          $("#credit_tips").text("请输入正确金额")
-          isSubmit = false
-        if(parseInt($("#question_credit").val()) > user_accout.credit)
-          $("#question_credit").closest('.clearfix').addClass('error')
-          $("#question_credit").addClass("xlarge error")
-          needRecharge = parseInt($("#question_credit").val(),10)-user_accout.credit
-          $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
-          isRecharge = true
-          $("#into_recharge").fadeIn()
-          $("#into_recharge").bind "click",->
-            $.get "/cash", (data, textStatus, xhr) ->
-              user_accout.credit = data.credit
-              userReputation = data.reputation
-              if isRecharge
-                $.ajax
-                  url: "/recharge/generate_order"
-                  type: "POST"
-                  dataType: "json"
-                  data:{credit: user_accout.credit}
-                  success: (data, textStatus, xhr) ->
-                    $("#order_number").html data.order_id
-                    $("#order_credit").text "您要支付的金额为："+(parseInt($("#question_credit").val(),10)-data.order_credit)+"元"
-                    $("#alipay_form").html data.html
-              $("#dialog_payment").dialog(question_paymentDlg)
-              $("#dialog_payment").dialog('open')
-          isSubmit = false
       unless checkNum($("#question_reputation").val())
         $("#question_reputation").closest('.clearfix').addClass('error')
         $("#question_reputation").addClass("xlarge error")
         $("#reputation_tips").text("请输入正确的数值")
         $("#question_reputation").addClass("xlarge error")
         isSubmit = false
-      if(parseInt($("#question_reputation").val()) > userReputation)
+      if(parseInt($("#question_reputation").val()) > user_accout.reputation)
         $("#question_reputation").closest('.clearfix').addClass('error')
         $("#question_reputation").addClass("xlarge error")
-        needReputation = parseInt($("#question_reputation").val()) - userReputation
+        needReputation = parseInt($("#question_reputation").val()) - user_accout.reputation
         $("#reputation_tips").text("您的积分不足，缺少"+needReputation+"积分")
         isSubmit = false
-       false unless isSubmit
+    false unless isSubmit
+
+    
   $("#question_title").bind "keydown",()->
     numCountDown($('#question_title'),$('#titleCount'),70)
   $('.nicEdit-main').bind "keydown",()->

@@ -15,6 +15,8 @@ gem 'uuidtools'
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 
+gem 'uuidtools'
+
 gem 'enumerate_it'
 
 gem 'settingslogic'

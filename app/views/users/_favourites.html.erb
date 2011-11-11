@@ -1,0 +1,7 @@
+<div class="question favourite">
+  <h3 class="title"><a href="/questions/<%= question.id %>"><%= question.title %></a></h3>
+  <div class="ops">
+    <a href="/questions/<%= question.id %>"><%= question.answers_count %>回答</a>
+    <span class="timestamp"><%= time_ago_in_words question.created_at %></span>
+  </div>
+</div>

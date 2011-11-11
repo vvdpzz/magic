@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
   has_many :recharge_records
   has_many :reputation_transactions
   has_many :credit_transactions
+  has_many :favorite_questions, :class_name => "FavoriteQuestion", :foreign_key => "user_id", :conditions => {:status => true}
+  has_many :followed_questions, :class_name => "FollowedQuestion", :foreign_key => "user_id", :conditions => {:status => true}
   has_many :followers, :class_name => "FollowedUser", :foreign_key => "user_id"
   has_many :following, :class_name => "FollowedUser", :foreign_key => "follower_id"
   
@@ -62,6 +64,24 @@ class User < ActiveRecord::Base
   
   def has_relationship_db(user_id,follower_id)
     FollowedUser.where(:user_id => user_id, :follower_id => follower_id, :flag => true)
+  end
+  
+  def followers_inredis
+    uids = $redis.smembers("users:#{self.id}.follower_users")
+    users = User.find(uids)
+  end
+  
+  def followings_inredis
+    uids = $redis.smembers("users:#{self._id}.following_users")
+    users = User.find(uids)
+  end
+  
+  def followings_count
+    $redis.scard("users:#{self.id}.following_users")
+  end
+  
+  def followers_count
+    $redis.scard("users:#{self.id}.follower_users")
   end
   
 end

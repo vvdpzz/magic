@@ -1,9 +1,15 @@
 Magic::Application.routes.draw do
   get '/cash' => "users#cash"
   resources :questions do
+    collection do
+      get :free
+      get :paid
+    end
     member do
       put :vote_for
       put :vote_against
+      put :follow
+      put :favorite
     end
     get 'page/:page', :action => :index, :on => :collection
   end
@@ -24,6 +30,11 @@ Magic::Application.routes.draw do
       put :follow
       get :myquestions
       get :myanswers
+      get :winquestions
+      get :favourites
+      get :watches
+      get :followings
+      get :followers
     end
   end
   

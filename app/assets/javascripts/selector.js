@@ -515,7 +515,7 @@ Selector = function(options) {
 
       superClass.onSelect = function(idx) {
         var obj = superClass.list[idx];
-        alert(obj['value']+"("+obj['indexer']+")");
+        // alert(obj['value']+"("+obj['indexer']+")");
       }
 
       return superClass;

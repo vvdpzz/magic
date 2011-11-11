@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <% if @question.not_free? and @question.correct_answer_id == 0 and current_user.reputation < Settings.answer_price %>
 <h2>回答悬赏问题需要支付<%= Settings.answer_price %>积分，您当前只有<%= current_user.reputation %>，所以您不能回答该问题。</h2>
 <% elsif @question.could_answer_by? current_user.id %>
@@ -9,6 +10,17 @@
 </div>
 <%= f.submit '回答', :class => "btn primary" %>
 <% end %>
+=======
+<% if @question.could_answer_by? current_user.id %>
+  <h3 class="answer-title">添加答案</h3>
+  <%= form_for(Answer.new) do |f| %>
+    <%= f.hidden_field :question_id, :value => @question.id %>
+    <div class="clearfix">
+      <%= f.text_area :content, :class => "span12", :rows => 7 %>
+    </div>
+    <%= f.submit '回答', :class => "btn primary" %>
+  <% end %>
+>>>>>>> a647f67b08db535144895a7e7d2e3c207b3ca2b9
 <% end %>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {

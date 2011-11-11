@@ -2,9 +2,26 @@ class QuestionsController < ApplicationController
   before_filter :vote_init, :only => [:vote_for, :vote_against]
   
   def index
-    @questions = Question.page(params[:page]).per(Settings.questions_per_page)
+    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
+    @url = "/questions"
     respond_to do |format|
       format.html
+      format.js
+    end
+  end
+  
+  def paid
+    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
+    respond_to do |format|
+      format.html {render :layout => false}
+      format.js
+    end
+  end
+  
+  def free
+    @questions = Question.free.page(params[:page]).per(Settings.questions_per_page)
+    respond_to do |format|
+      format.html {render :layout => false}
       format.js
     end
   end
@@ -76,6 +93,42 @@ class QuestionsController < ApplicationController
         render json: {:id => @question.id, :votes_count => @question.plusminus}, status: :ok
       end
     end
+  end
+  
+  def follow
+    question = Question.find params[:id]
+    status = true
+    if question
+      records = FollowedQuestion.where(:user_id => current_user.id, :question_id => question.id)
+      if records.empty?
+        current_user.followed_questions.create(:question_id => question.id)
+      else
+        record = records.first
+        status = record.status if record.update_attribute(:status, !record.status)
+      end
+      render :json => {:status => status}
+    end
+  end
+  
+  def favorite
+    question = Question.find params[:id]
+    status = true
+    if question
+      records = FavoriteQuestion.where(:user_id => current_user.id, :question_id => question.id)
+      if records.empty?
+        current_user.favorite_questions.create(:question_id => question.id)
+      else
+        record = records.first
+        status = record.status if record.update_attribute(:status, !record.status)
+      end
+      render :json => {:status => status}
+    end
+  end
+  
+  def watch
+    l = "list:#{current_user.id}:watched"
+    items = $redis.lrange(l, 0, -1)
+    @list = items.collect{ |item| $redis.lrange(item, 0, -1) }
   end
   
   protected
