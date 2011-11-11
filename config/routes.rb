@@ -4,6 +4,10 @@ Magic::Application.routes.draw do
   match 'pusher/auth' => "pusher#auth"
   
   resources :questions do
+    collection do
+      get :free
+      get :paid
+    end
     member do
       put :vote_for
       put :vote_against
@@ -18,7 +22,9 @@ Magic::Application.routes.draw do
       put :vote_against
     end
   end
+  
   devise_for :users
+  
   resources :users do
     collection do
       put :update_attribute_on_the_spot
@@ -29,6 +35,7 @@ Magic::Application.routes.draw do
       get :myanswers
       get :winquestions
       get :favourites
+      get :watches
       get :followings
       get :followers
     end

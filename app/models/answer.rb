@@ -14,7 +14,8 @@ class Answer < ActiveRecord::Base
   def order_reputation
     ReputationTransaction.create(
       :user_id => self.user.id,
-      :magic_id => self.id,
+      :question_id => self.question.id,
+      :answer_id => self.id,
       :value => Settings.answer_price,
       :trade_type => TradeType::ANSWER,
       :trade_status => TradeStatus::NORMAL

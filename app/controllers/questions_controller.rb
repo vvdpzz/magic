@@ -2,9 +2,26 @@ class QuestionsController < ApplicationController
   before_filter :vote_init, :only => [:vote_for, :vote_against]
   
   def index
-    @questions = Question.page(params[:page]).per(Settings.questions_per_page)
+    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
+    @url = "/questions"
     respond_to do |format|
       format.html
+      format.js
+    end
+  end
+  
+  def paid
+    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
+    respond_to do |format|
+      format.html {render :layout => false}
+      format.js
+    end
+  end
+  
+  def free
+    @questions = Question.free.page(params[:page]).per(Settings.questions_per_page)
+    respond_to do |format|
+      format.html {render :layout => false}
       format.js
     end
   end

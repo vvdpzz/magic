@@ -4,7 +4,8 @@ class Question < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   has_many :comments, :class_name => "Comment", :foreign_key => "magic_id", :dependent => :destroy
   default_scope order("created_at DESC")
-  
+  scope :free, lambda { where(["reputation = 0 AND credit = 0.00"]) }
+  scope :paid, lambda { where(["reputation <> 0 OR credit <> 0.00"])}
   acts_as_voteable
   
   def not_free?
@@ -24,7 +25,7 @@ class Question < ActiveRecord::Base
       if self.send(name) > 0
         "#{name}_transaction".classify.constantize.create(
           :user_id => self.user.id,
-          :magic_id => self.id,
+          :question_id => self.id,
           :value => self.send(name),
           :trade_type => TradeType::ASK,
           :trade_status => TradeStatus::NORMAL
@@ -39,7 +40,7 @@ class Question < ActiveRecord::Base
   end
 
   def could_answer_by?(user_id)
-    self.answers.select('user_id').where(:user_id => user_id).empty?
+     user_id != self.user_id  and not answered_by?(user_id)
   end
   
   def answered_by?(user_id)

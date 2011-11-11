@@ -1,0 +1,28 @@
+<section id="forms">
+  <div class="page-header">
+    <h1>欢迎 <%= resource.name %></h1>
+  </div>
+  <div class="row">
+    <%= form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
+      <%= devise_error_messages! %>
+      <%= f.hidden_field :invitation_token %>
+    <fieldset>
+      <div class="clearfix">
+        <label for="text_field">请输入密码</label>
+        <div class="input">
+          <%= f.password_field :password %>
+        </div>
+      </div>
+      <div class="clearfix">
+        <label for="text_field">重复输入密码</label>
+        <div class="input">
+          <%= f.password_field :password_confirmation %>
+        </div>
+      </div>
+      <div class="actions blank">
+        <%= f.submit '注册', :class => "btn primary" %>
+      </div>
+    </fieldset>
+    <% end %>
+  </div>
+</section>
