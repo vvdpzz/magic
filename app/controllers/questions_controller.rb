@@ -3,9 +3,9 @@ class QuestionsController < ApplicationController
   
   def index
     @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
-    @top_prize_questions = top_prize_questions()
-    @hot_questions = hot_questions()
-    @recent_winners = recent_winners()
+    @top_prize_questions = Question.find_by_sql("select * from questions order by credit desc, created_at DESC").first(5)
+    @hot_questions = Question.find_by_sql("select * from questions order by answers_count desc, created_at DESC").first(5)
+    @recent_winners = CreditTransaction.where("winner_id != 0").order("updated_at desc").first(5)
     respond_to do |format|
       format.html
       format.js
@@ -131,18 +131,6 @@ class QuestionsController < ApplicationController
     l = "list:#{current_user.id}:watched"
     items = $redis.lrange(l, 0, -1)
     @list = items.collect{ |item| $redis.lrange(item, 0, -1) }
-  end
-  
-  def top_prize_questions
-    top_prize_questions = Question.order("credit desc").first(5)
-  end
-  
-  def hot_questions
-    hot_questions = Question.order("answers_count desc").first(5)
-  end
-  
-  def recent_winners
-    recent_winners = CreditTransaction.where("winner_id != 0").order("updated_at desc").first(5)
   end
   
   protected
