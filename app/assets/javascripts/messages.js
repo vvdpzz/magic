@@ -62,7 +62,7 @@ var loadMessages = function(friend_token, friend_name) {
     var elem = constructMessageBox(message);
     elem.prependTo('#messages-items');
   });
-  $('.tweet-box-title h2').html('给 ' + friend_name + ' 发信息');
+  $('.twtf-box-title h2').html('给 ' + friend_name + ' 发私信');
   messageFriendToken = friend_token;
 }
 var constructMessageBox = function(data) {
@@ -113,7 +113,7 @@ var showNewMessage = function(messageText) {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : '/users/' + viewer.id,
-    time_created : '1 秒钟前',
+    time_created : dateFormat(new Date()),
     text : messageText
   };
   var e = constructMessageBox(message);
@@ -202,10 +202,8 @@ var submitMessage = function() {
     'text' : messageText
   }, function(res){
     if (res.rc) {
-      // ce6.notifyBar(res.msg, 'error');
       sendButtonDisabled = false;
     } else {
-      // ce6.notifyBar('The message has been sent successfully', 'success');
       var cb = $('#dlg-send-message').data('successCallback');
       if (cb)
         cb(recipientToken, messageText);
@@ -239,10 +237,8 @@ var submitMessage = function() {
     'text' : messageText
   }, function(res){
     if (res.rc) {
-      // ce6.notifyBar(res.msg, 'error');
       sendButtonDisabled = false;
     } else {
-      // ce6.notifyBar('The message has been sent successfully', 'success');
       var cb = $('#dlg-send-message').data('successCallback');
       if (cb)
       cb(recipientToken, messageText);
@@ -255,7 +251,6 @@ var loadUserConnectionList = function(profileOwner) {
   ajaxJsonGet('/messages/load_contact_list', {
   }, function(data) {	
     userList = data.contact_list;
-    // alert(JSON.stringify(data));
     if (profileOwner) {
       var isOwnerInList = false;
       for (var i = 0; i < data.contact_list.length; i++)
@@ -311,7 +306,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : 'users/' + viewer.id,
-    time_created : '1 秒钟前',
+    time_created : dateFormat(new Date()),
     text : htmlEscape(messageText)
   }
   if (box.length == 1) {
@@ -330,7 +325,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
       'friend_picture' : friend.avatar,
       'friend_name' : friend.name,
       'unread_message_count' : 0,
-      'last_update' : '1 second ago',
+      'last_update' : dateFormat(new Date()),
       'messages' : messages
     }
     box = constructConversationBox(conversation);

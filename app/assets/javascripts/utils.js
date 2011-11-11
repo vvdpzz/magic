@@ -6,10 +6,14 @@ var htmlEscape = function(txt) {
 }
 
 var stringutil = {
-	cut: function(text, maxLength) {
-		if (text.length < maxLength)
-			return text;
-		else
-			return text.slice(0, maxLength - 3) + '...';
-	}
+  cut: function(text, maxLength) {
+    if (text.length < maxLength)
+    return text;
+    else
+    return text.slice(0, maxLength - 3) + '...';
+  }
+}
+
+var dateFormat = function(date) {
+  return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
 }

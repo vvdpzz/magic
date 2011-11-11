@@ -16,6 +16,8 @@ class MessagesController < ApplicationController
         hash[:messages] = load_messages(conver_id)
         data << hash
       end
+      $redis.del("messages:#{current_user.id}:unread_messages")
+      $redis.del("messages:#{current_user.id}:unreadcount")
       render :json => data
     end
   
@@ -32,7 +34,7 @@ class MessagesController < ApplicationController
           hash[:friend_picture] = last_message["receiver_avatar"]
         end
         hash[:friend_token]   = conver_id
-        hash[:last_update]    = time_ago_in_words(Time.parse last_message["created_at"]) + " ago"
+        hash[:last_update]    = last_message["created_at"]
         
         return hash
     end
@@ -58,7 +60,7 @@ class MessagesController < ApplicationController
         message[:owner_picture]     = message_redis_hash["sender_avatar"]
         message[:owner_profile_url] = "/users/" + message_redis_hash["sender_id"].to_s
         message[:text]              = message_redis_hash["text"]
-        message[:time_created]      = time_ago_in_words(Time.parse message_redis_hash["created_at"]) + " ago"
+        message[:time_created]      = message_redis_hash["created_at"]
         message[:owner_name]        = message_redis_hash["sender_name"]
         message_list << message
       end
@@ -76,14 +78,14 @@ class MessagesController < ApplicationController
     receiver  = User.basic(params[:recipient_token])
     
     hash = {}
-    hash[:created_at]     = Time.now
+    hash[:created_at]     = Time.now.strftime("%Y-%m-%d %H:%M:%S")
     hash[:text]           = params[:text]
     hash[:sender_id]      = sender.id.to_s
     hash[:sender_name]    = sender.name
     
     # add to user's unread message list
     $redis.rpush("messages:#{receiver.id}:unread_messages", MultiJson.encode(hash))
-    # Pusher["presence-messages_#{receiver.id}"].trigger('message_created', MultiJson.encode(hash))
+    Pusher["presence-messages_#{receiver.id}"].trigger('message_created', MultiJson.encode(hash))
     
     hash[:sender_avatar]    = sender.gavatar
     hash[:receiver_avatar]  = receiver.gavatar

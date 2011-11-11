@@ -89,7 +89,7 @@ text-shadow: 0 1px 0 white;
   -wekbit-box-shadow: 0 1px 0 #F8F8F8;
   box-shadow: 0 1px 0 #F8F8F8;
 }  
-.tweet-button {
+.twtf-button {
   font-weight: 300;
   font-size: 15px;
   padding: 6px 9px;
@@ -144,7 +144,7 @@ text-shadow: 0 1px 0 white;
 .messages-main-content .stream-item {
   min-height: 40px;
 }
-.stream .stream-item:first-child, .stream .hovered-stream-item:first-child, .related-tweets .stream-item:first-child:hover {
+.stream .stream-item:first-child, .stream .hovered-stream-item:first-child, .related-twtfs .stream-item:first-child:hover {
   border-top: none;
 }
 .message, .message-thread-preview {
@@ -288,11 +288,11 @@ div.pane-toolbar {
   font-family: 'Helvetica Neue',Helvetica,Arial,Sans-serif;
   margin-bottom: 6px;
 }
-.tweet-box-title {
+.twtf-box-title {
   overflow: hidden;
   padding: 1px 0;
 }
-.tweet-box h2 {
+.twtf-box h2 {
   font: bold 18px Helvetica Neue,Helvetica,sans-serif;
   text-shadow: 0 1px 0 white;
   margin: 0 0 6px 0;
@@ -307,7 +307,7 @@ div.pane-toolbar {
   position: relative;
   margin-bottom: 10px;
 }
-.tweet-box .twitter-anywhere-tweet-box-editor, .proxy-editor {
+.twtf-box .twitter-anywhere-twtf-box-editor, .proxy-editor {
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -326,7 +326,7 @@ div.pane-toolbar {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-.tweet-box textarea {
+.twtf-box textarea {
   resize: vertical;
 }
 //input, input[type="password"], input[type="search"], isindex {
@@ -389,17 +389,17 @@ div.pane-toolbar {
 //  -webkit-margin-end: 0px;
 //  -webkit-padding-start: 40px;
 //}
-.tweet-button-container {
+.twtf-button-container {
   position: relative;
   text-align: right;
   margin: 5px 0 3px 0;
   height: 29px;
   z-index: 3;
 }
-.tweet-button-sub-container {
+.twtf-button-sub-container {
   display: inline-block;
 }
-.tweet-counter {
+.twtf-counter {
   background-color: transparent;
   color: #999;
   display: inline-block;
@@ -544,7 +544,7 @@ border-top: none;
 }
 .ui-dialog .ui-dialog-buttonpane {
 text-align: left;
-background: url(../../../js/jquery-ui-1.8.7/css/custom-theme/images/ui-bg_highlight-soft_50_dddddd_1x100.png) 50% 50% repeat-x;
+background: url(/assets/ui-bg_highlight-soft_50_dddddd_1x100.png) 50% 50% repeat-x;
 margin: .5em 0 0 0;
 padding: .3em 3em .5em .4em;
 border-bottom-left-radius: 8px 8px;
@@ -561,7 +561,7 @@ position: absolute;
 border: 1px solid #999;
 min-width: 135px;
 }
-.ce6-sel-table {
+.sel-table {
 list-style-type: none;
 background-color: white;
 margin-left: 0;
@@ -611,4 +611,21 @@ cursor: default;
 font-weight: normal;
 color: #909090;
 width: 100%;
+}
+
+
+#notification-new-num, #nav-msg-new-num, #nav-contest-new-num {
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+background: #C11314;
+border: 1px solid #7E0C0D;
+border-radius: 4px;
+color: white;
+font-size: 9px;
+float: right;
+font-weight: bold;
+line-height: 12px;
+padding: 0 4px;
+margin: 0px 1px 0 2px;
+display: none;
 }

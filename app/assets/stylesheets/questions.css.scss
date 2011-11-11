@@ -89,7 +89,7 @@ $text_gray: #ababab;
 .vote-area{
   text-align:center;
 }
-.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-off,.star-on{
+.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-off,.star-on,.vote-accepted-off, .vote-accepted-on{
   background-image: url(/assets/sprites.png);
   background-repeat: no-repeat;
   overflow: hidden;
@@ -101,10 +101,10 @@ $text_gray: #ababab;
   width: 41px;
   height: 25px;
 }
-.vote-up-off,.vote-down-off{
+.vote-up-off,.vote-down-off,.vote-accepted-off{
   cursor: pointer;
 }
-.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on{
+.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.vote-accepted-off, .vote-accepted-on{
   text-indent: -9999em;
   font-size: 1px;
 }
@@ -149,6 +149,17 @@ $text_gray: #ababab;
     font-size:14px;
     line-height:1.6;
   }
+}
+
+.vote-accepted-off, .vote-accepted-on, .vote-accepted-bounty {
+background-position: 0px -560px;
+width: 39px;
+height: 40px;
+display: block;
+margin: 0 auto;
+}
+.vote-accepted-on {
+background-position: 0px -460px;
 }
 
 //passport

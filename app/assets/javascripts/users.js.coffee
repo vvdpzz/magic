@@ -38,3 +38,6 @@ jQuery ->
         else
           link.addClass('success').html "添加关注"
     false
+    
+  $('#profile-send-message').click ->
+    sendPrivateMessage(profileOwner)

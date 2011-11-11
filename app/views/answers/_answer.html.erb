@@ -3,6 +3,11 @@
   <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
   <span class="vote-count-post" id="<%= answer.id %>"><%= answer.votes_count %></span>
   <a class="vote-down-off" href="/answers/<%= answer.id %>/vote_against">down vote</a>
+  <% if answer.question.user_id == current_user.id and answer.question.correct_answer_id == 0 %>
+  <a id="vote-accepted-<%= answer.id %>" class="vote-accepted-off" href="/questions/<%= answer.question_id %>/answers/<%= answer.id %>/accept">accept</a>
+  <% elsif answer.is_correct %>
+  <a id="vote-accepted-<%= answer.id %>" class="vote-accepted-off vote-accepted-on">accept</a>
+  <% end %>
 </div>
 <div class="post">
   <div class="content">

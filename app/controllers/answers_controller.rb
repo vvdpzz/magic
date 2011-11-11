@@ -22,11 +22,11 @@ class AnswersController < ApplicationController
   
   def vote_for
     if current_user.reputation < Settings.vote_for_limit
-      render json: {errors: "Reputation not enough"}, status: :unprocessable_entity
+      render json: {errors: "Reputation not enough", rc: 1}, status: :unprocessable_entity
       return
     end
     if @voted
-      render json: {errors: "Already vote for"}, status: :unprocessable_entity
+      render json: {errors: "Already vote for", rc: 2}, status: :unprocessable_entity
       return
     end
     if @voted == nil
@@ -44,11 +44,11 @@ class AnswersController < ApplicationController
 
   def vote_against
     if current_user.reputation < Settings.vote_against_limit
-      render json: {errors: "Reputation not enough"}, status: :unprocessable_entity
+      render json: {errors: "Reputation not enough", rc: 3}, status: :unprocessable_entity
       return
     end
     if @voted == false
-      render json: {errors: "Already vote against"}, status: :unprocessable_entity
+      render json: {errors: "Already vote against", rc: 2}, status: :unprocessable_entity
       return
     end
     if @voted == nil
@@ -62,6 +62,64 @@ class AnswersController < ApplicationController
         render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
       end
     end
+  end
+  
+  def accept
+    question = Question.find params[:question_id]
+    answer = question.answers.find params[:id]
+    if question and answer and current_user.id == question.user_id and question.correct_answer_id == 0
+      question.update_attribute(:correct_answer_id, answer.id)
+      answer.update_attribute(:is_correct, true)
+      if question.not_free?
+        if question.reputation > 0
+          answer.user.update_attribute(:reputation, answer.user.reputation + question.reputation)
+          order = ReputationTransaction.new(
+            :user_id => answer.user.id,
+            :question_id => question.id,
+            :answer_id => answer.id,
+            :value => question.credit,
+            :payment => false,
+            :trade_type => TradeType::ACCEPT,
+            :trade_status => TradeStatus::SUCCESS
+          )
+          order.save
+          
+          # change question user's order status from normal to success
+          orders = current_user.reputation_transactions.where(:question_id => question.id, :trade_type => TradeType::ASK)
+          orders.each do |order|
+            order.update_attributes(
+              :trade_status => TradeStatus::SUCCESS,
+              :answer_id => answer.id,
+              :winner_id => answer.user.id
+            )
+          end
+        end
+        if question.credit > 0
+          answer.user.update_attribute(:credit , answer.user.credit  + question.credit )
+          order = CreditTransaction.new(
+            :user_id => answer.user.id,
+            :question_id => question.id,
+            :answer_id => answer.id,
+            :value => question.credit,
+            :payment => false,
+            :trade_type => TradeType::ACCEPT,
+            :trade_status => TradeStatus::SUCCESS
+          )
+          order.save
+          
+          # change question user's order status from normal to success
+          orders = current_user.credit_transactions.where(:question_id => question.id, :trade_type => TradeType::ASK)
+          orders.each do |order|
+            order.update_attributes(
+              :trade_status => TradeStatus::SUCCESS,
+              :answer_id => answer.id,
+              :winner_id => answer.user.id
+              )
+          end
+        end
+      end
+    end
+    redirect_to question
   end
   
   protected
