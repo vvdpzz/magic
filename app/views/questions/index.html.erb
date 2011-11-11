@@ -16,7 +16,8 @@
   <div class="items">
     <% @top_prize_questions.each do |question| %>
       <div class="item">
-        <%= link_to truncate(question.title, :length => 35), question %>
+        <div class="bounty-indicator">¥ <%= question.credit %></div>
+        <%= link_to question.title, question %>
       </div>
     <% end %>
   </div>
@@ -26,7 +27,8 @@
   <div class="items">
     <% @hot_questions.each do |question| %>
       <div class="item">
-        <%= link_to truncate(question.title, :length => 35), question %>
+        <div class="bounty-indicator">¥ <%= question.credit %></div>
+        <%= link_to question.title, question %>
       </div>
     <% end %>
   </div>
@@ -34,10 +36,9 @@
     <li class="active"><a href="#">最近获胜</a></li>
   </ul>
   <div class="items">
-    <% User.all.first(5).each do |user| %>
-    <% question = Question.first %>
+    <% @recent_winners.each do |redit_trans| %>
       <div class="item">
-        <%= link_to user.name, user %> 在 <%= link_to truncate(question.title, :length => 20), question %> 问题中赢得了 10元。
+        <%= link_to redit_trans.winner.name, redit_trans.winner %> 在 <%= link_to truncate(redit_trans.question.title, :length => 20), redit_trans.question %> 问题中赢得了 <%= redit_trans.payment %> 元。
       </div>
     <% end %>
   </div>

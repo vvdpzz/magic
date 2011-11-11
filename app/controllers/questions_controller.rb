@@ -5,6 +5,7 @@ class QuestionsController < ApplicationController
     @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
     @top_prize_questions = top_prize_questions()
     @hot_questions = hot_questions()
+    @recent_winners = recent_winners()
     respond_to do |format|
       format.html
       format.js
@@ -138,6 +139,10 @@ class QuestionsController < ApplicationController
   
   def hot_questions
     hot_questions = Question.order("answers_count").first(5)
+  end
+  
+  def recent_winners
+    recent_winners = CreditTransaction.where("winner_id is not null").order("updated_at").first(5)
   end
   
   protected
