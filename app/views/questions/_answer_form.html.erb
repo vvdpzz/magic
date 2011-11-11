@@ -15,9 +15,10 @@ $(document).ready(function() {
   }
   
   $('#answer-form').live('ajax:success', function(xhr, data, status){
-     $('#answers-header h2').text(parseInt($('#answers-header h2').text())+1);
+     $('#answers-header .subheader').html("<h2>"+data.answers_count + " 个答案</h2>");
      $(this).fadeOut();
      $('.answer-title').fadeOut();
+     $("#answers").append(data.html);
   })
 });
 </script>

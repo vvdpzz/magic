@@ -14,7 +14,7 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.build(params[:answer])
     if @answer.save
       question.not_free? and question.correct_answer_id == 0 and @answer.deduct_reputation and @answer.order_reputation
-      render json: {:answer => @answer, :status => :ok}
+      render json: {answers_count: question.answers_count+1, html: render_to_string(partial: 'answer', locals: {answer: @answer}), status: :ok}
     else
       render json: {:errors => "Oops! Some errors happened."}
     end

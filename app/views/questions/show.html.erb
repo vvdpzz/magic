@@ -70,7 +70,7 @@
       </div>
     </div>
     <% answers.each do |answer| %>
-      <% if answer.user_id == current_user.id then next end %>
+      <% # if answer.user_id == current_user.id then next end %>
       <%= div_for(answer, :class => "clearfix") do %>
         <div class="vote-area">
           <a class="vote-up-off" href="/answers/<%= answer.id %>/vote_for">up vote</a>
@@ -121,7 +121,3 @@
       }
   });
 </script>
-
-
-
-
