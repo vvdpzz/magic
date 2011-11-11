@@ -68,9 +68,9 @@ Selector = function(options) {
   *	 display class - CSS style class
   *                   has a default value but can be replaced.
   */
-  var DEFAULT_CSS_DROPDOWN = 'ce6-sel-dropdown';
-  var DEFAULT_CSS_TABLE = 'ce6-sel-table';
-  var DEFAULT_CSS_ROW = 'ce6-sel-row';
+  var DEFAULT_CSS_DROPDOWN = 'sel-dropdown';
+  var DEFAULT_CSS_TABLE = 'sel-table';
+  var DEFAULT_CSS_ROW = 'sel-row';
 
   // display classes
   var _cssDropd = DEFAULT_CSS_DROPDOWN;
@@ -244,7 +244,7 @@ Selector = function(options) {
   * private functions 
   ***************************/
   var getId = function() {
-    return 'ce6-selector-' + parseInt(Math.random() * 1000000);
+    return 'selector-' + parseInt(Math.random() * 1000000);
   };
 
   var addRow = function(row) {
@@ -462,13 +462,13 @@ Selector = function(options) {
   searchSelector = function(options) {
     var superClass = new Selector({
       inputElem: "#test_input",
-      dropdownClass: "ce6-search-dropdown",
-      rowClass: "ce6-search-row",
+      dropdownClass: "search-dropdown",
+      rowClass: "search-row",
       timeout: 500
     });
 
     superClass.constructRow = function(idx, rowObj) {
-      var row = "<div class='ce6-search-row' index=" + idx + ">";
+      var row = "<div class='search-row' index=" + idx + ">";
       row += "<span class='row-val'>" + rowObj.value + "</span>";
       row += "<span class='row-type'>(" + rowObj.indexer + ")</span>";
       row += "</div>";

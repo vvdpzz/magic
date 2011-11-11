@@ -49,14 +49,14 @@ class UsersController < ApplicationController
     render partial: "myquestion", :collection => @questions, :as => :question, layout: false
   end
   
-  def favourites
-    @questions = @user.favorite_questions
-    render partial: "myquestion", :collection => @questions, :as => :question, layout: false
+  def favorites
+    @questions = @questions = Question.find_by_sql("select * from questions where id in (select question_id from favorite_questions where user_id = #{@user.id} and status = true)")
+    render partial: "favorites", :collection => @questions, :as => :question, layout: false
   end
   
   def watches
-    @questions = @user.followed_questions
-    render partial: "favourites", :collection => @questions, :as => :question, layout: false
+    @questions = @questions = Question.find_by_sql("select * from questions where id in (select question_id from followed_questions where user_id = #{@user.id} and status = true)")
+    render partial: "watches", :collection => @questions, :as => :question, layout: false
   end
   
   def followings
