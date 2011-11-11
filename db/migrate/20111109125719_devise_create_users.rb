@@ -18,6 +18,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.integer :questions_count, :default => 0
       t.integer :answers_count, :default  => 0
       t.integer :comments_count, :default => 0
+      t.integer :followed_questions_count, :default => 0
 
       # t.encryptable
       # t.confirmable
