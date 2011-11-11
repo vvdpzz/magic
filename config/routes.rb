@@ -39,7 +39,7 @@ Magic::Application.routes.draw do
       get :myquestions
       get :myanswers
       get :winquestions
-      get :favourites
+      get :favorites
       get :watches
       get :followings
       get :followers

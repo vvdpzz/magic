@@ -3,6 +3,7 @@ class Question < ActiveRecord::Base
   belongs_to :user, :counter_cache => true  
   has_many :answers, :dependent => :destroy
   has_many :comments, :class_name => "Comment", :foreign_key => "magic_id", :dependent => :destroy
+  has_many :followed_questions, :class_name => "FollowedQuestion", :foreign_key => "question_id", :conditions => {:status => true}
   default_scope order("created_at DESC")
   scope :free, lambda { where(["reputation = 0 AND credit = 0.00"]) }
   scope :paid, lambda { where(["reputation <> 0 OR credit <> 0.00"])}
