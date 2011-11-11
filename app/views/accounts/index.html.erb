@@ -26,7 +26,7 @@
     </thead>
     <tbody>
       <% if @user.recharge_records.empty? %>
-      <tr><td colspan="4"><div class="table-info">暂时没有充值记录</div></td></tr>
+      <tr><td colspan="6"><div class="table-info">暂时没有充值记录</div></td></tr>
       <% else %>
       <% @user.recharge_records.each do |record| %>
       <tr>
@@ -51,7 +51,7 @@
     </thead>
     <tbody>
       <% if @user.credit_transactions.empty? %>
-      <tr><td colspan="4"><div class="table-info">暂时没有现金流水记录</div></td></tr>
+      <tr><td colspan="5"><div class="table-info">暂时没有现金流水记录</div></td></tr>
       <% else %>
       <% @user.credit_transactions.each do |record| %>
       <tr>
@@ -75,7 +75,7 @@
     </thead>
     <tbody>
       <% if @user.reputation_transactions.empty? %>
-      <tr><td colspan="4"><div class="table-info">暂时没有积分流水记录</div></td></tr>
+      <tr><td colspan="5"><div class="table-info">暂时没有积分流水记录</div></td></tr>
       <% else %>
       <% @user.reputation_transactions.each do |record| %>
       <tr>

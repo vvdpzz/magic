@@ -134,7 +134,7 @@ class QuestionsController < ApplicationController
   end
   
   def top_prize_questions
-    top_prize_questions = Question.order("credit desc").first(5)
+    top_prize_questions = Question.order("credit desc").last(5)
   end
   
   def hot_questions
