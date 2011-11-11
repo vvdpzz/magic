@@ -15,8 +15,9 @@ $(document).ready(function() {
   }
   
   $('#answer-form').live('ajax:success', function(xhr, data, status){
-     data
+     $('#answers-header h2').text(parseInt($('#answers-header h2').text())+1);
      $(this).fadeOut();
+     $('.answer-title').fadeOut();
   })
 });
 </script>

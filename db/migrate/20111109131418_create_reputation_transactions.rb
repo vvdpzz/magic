@@ -3,7 +3,8 @@ class CreateReputationTransactions < ActiveRecord::Migration
     create_table :reputation_transactions do |t|
       t.integer :user_id, :limit => 8, :null => false
       t.integer :winner_id, :limit => 8, :default => 0
-      t.integer :magic_id, :limit => 8, :null => false
+      t.integer :question_id, :limit => 8, :null => false
+      t.integer :answer_id, :limit => 8, :null => false
       t.integer :value, :null => false, :default => 0
       t.boolean :payment, :default => true
       t.integer :trade_type, :default => 0
@@ -12,6 +13,7 @@ class CreateReputationTransactions < ActiveRecord::Migration
     end
     add_index :reputation_transactions, :user_id
     add_index :reputation_transactions, :winner_id
-    add_index :reputation_transactions, :magic_id
+    add_index :reputation_transactions, :question_id
+    add_index :reputation_transactions, :answer_id
   end
 end

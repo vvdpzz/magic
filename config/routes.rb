@@ -19,7 +19,9 @@ Magic::Application.routes.draw do
       put :vote_against
     end
   end
+  
   devise_for :users
+  
   resources :users do
     collection do
       put :update_attribute_on_the_spot

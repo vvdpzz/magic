@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   include Extensions::UUID
   # Include default devise modules. Others available are:
-  # :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :token_authenticatable, :database_authenticatable, :registerable,
+  # :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable, :registerable,
+  devise :invitable, :token_authenticatable, :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
@@ -21,6 +21,28 @@ class User < ActiveRecord::Base
   has_many :following, :class_name => "FollowedUser", :foreign_key => "follower_id"
   
   has_one :photo
+  
+  attr_writer :invitation_instructions
+
+  def deliver_invitation
+    if @invitation_instructions
+      ::Devise.mailer.send(@invitation_instructions, self).deliver
+    else
+      super
+    end
+  end
+
+  def self.invite_guest!(attributes={}, invited_by=nil)
+    self.invite!(attributes, invited_by) do |invitable|
+      invitable.invitation_instructions = :guest_invitation_instructions
+    end
+  end
+
+  def self.invite_friend!(attributes={}, invited_by=nil)
+    self.invite!(attributes, invited_by) do |invitable|
+      invitable.invitation_instructions = :friend_invitation_instructions
+    end
+  end
   
   def gavatar
     if self.avatar == ""
