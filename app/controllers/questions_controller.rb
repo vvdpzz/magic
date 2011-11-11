@@ -134,15 +134,15 @@ class QuestionsController < ApplicationController
   end
   
   def top_prize_questions
-    top_prize_questions = Question.order("credit").first(5)
+    top_prize_questions = Question.order("credit desc").first(5)
   end
   
   def hot_questions
-    hot_questions = Question.order("answers_count").first(5)
+    hot_questions = Question.order("answers_count desc").first(5)
   end
   
   def recent_winners
-    recent_winners = CreditTransaction.where("winner_id != 0").order("updated_at").first(5)
+    recent_winners = CreditTransaction.where("winner_id != 0").order("updated_at desc").first(5)
   end
   
   protected
