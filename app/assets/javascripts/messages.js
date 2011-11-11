@@ -62,7 +62,7 @@ var loadMessages = function(friend_token, friend_name) {
     var elem = constructMessageBox(message);
     elem.prependTo('#messages-items');
   });
-  $('.tweet-box-title h2').html('给 ' + friend_name + ' 发信息');
+  $('.tweet-box-title h2').html('给 ' + friend_name + ' 发私信');
   messageFriendToken = friend_token;
 }
 var constructMessageBox = function(data) {
