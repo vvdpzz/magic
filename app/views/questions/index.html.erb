@@ -11,22 +11,22 @@
 </div>
 <div id="sidebar" class="span4">
   <ul class="tabs right-tabs">
-    <li class="active"><a href="#">最高奖项</a></li>
+    <li class="active"><a href="#">最高悬赏</a></li>
   </ul>
   <div class="items">
-    <% @questions.first(5).each do |question| %>
+    <% @top_prize_questions.each do |question| %>
       <div class="item">
-        <%= link_to truncate(question.title, :length => 20), question %>
+        <%= link_to truncate(question.title, :length => 35), question %>
       </div>
     <% end %>
   </div>
   <ul class="tabs right-tabs">
-    <li class="active"><a href="#">热门问题</a></li>
+    <li class="active"><a href="#">最热问题</a></li>
   </ul>
   <div class="items">
-    <% @questions.first(5).each do |question| %>
+    <% @hot_questions.each do |question| %>
       <div class="item">
-        <%= link_to truncate(question.title, :length => 20), question %>
+        <%= link_to truncate(question.title, :length => 35), question %>
       </div>
     <% end %>
   </div>

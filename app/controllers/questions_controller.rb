@@ -3,6 +3,8 @@ class QuestionsController < ApplicationController
   
   def index
     @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
+    @top_prize_questions = top_prize_questions()
+    @hot_questions = hot_questions()
     respond_to do |format|
       format.html
       format.js
@@ -128,6 +130,14 @@ class QuestionsController < ApplicationController
     l = "list:#{current_user.id}:watched"
     items = $redis.lrange(l, 0, -1)
     @list = items.collect{ |item| $redis.lrange(item, 0, -1) }
+  end
+  
+  def top_prize_questions
+    top_prize_questions = Question.order("credit").first(5)
+  end
+  
+  def hot_questions
+    hot_questions = Question.order("answers_count").first(5)
   end
   
   protected
