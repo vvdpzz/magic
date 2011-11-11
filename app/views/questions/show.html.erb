@@ -11,7 +11,7 @@
   </div>
   <div class="question_info">
       <h4>问题状态</h4>
-      <p>关注者<span class="blueBlod"><%= @question.votes_count %></span>人</p>
+      <p>关注者<span class="blueBlod"><%= @question.followed_questions_count %></span>人</p>
       <% @question.followed_users.each do |user|%>
         <a title="<%= user.name %>" href="../users/<%= user.id %>"><img src="<%= user.gavatar %>" class='user_head'/></a>
       <% end %> 
