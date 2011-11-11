@@ -1,6 +1,6 @@
 <% if @question.could_answer_by? current_user.id %>
 <h3 class="answer-title">添加答案</h3>
-<%= form_for(Answer.new) do |f| %>
+<%= form_for(Answer.new,:remote=>true, :html => { 'data-type' => :json , :id => "answer-form"}) do |f| %>
 <%= f.hidden_field :question_id, :value => @question.id %>
 <div class="clearfix">
   <%= f.text_area :content, :class => "span12", :rows => 7 %>
@@ -13,5 +13,10 @@ $(document).ready(function() {
   if($("#answer_content").length > 0){
     new nicEditor({buttonList: ['bold','italic','underline', 'strikethrough', 'ol', 'ul', 'hr']}).panelInstance('answer_content');
   }
+  
+  $('#answer-form').live('ajax:success', function(data){
+     alert(data)
+  });
+  
 });
 </script>
