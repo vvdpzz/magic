@@ -30,27 +30,27 @@
 #   ]
 # )
 # 
-# user = User.first
-# 
-# user.questions.create(
-#   [
-#     {
-#       title: "Ultra simplistic and minimally styled pagination inspired by Rdio"
-#     },
-#     {
-#       title: "Breadcrumb navigation is used as a way to show users where they are within an app or a site"
-#     },
-#     {
-#       title: "Put the shorthand form within the tag and set a title for the complete name"
-#     },
-#     {
-#       title: "What are the most creative euphemisms for layoffs?"
-#     },
-#     {
-#       title: "What are all of the hidden emoticons on HipChat?"
-#     }
-#   ]
-# )
+user = User.first
+
+user.questions.create(
+  [
+    {
+      title: "Ultra simplistic and minimally styled pagination inspired by Rdio"
+    },
+    {
+      title: "Breadcrumb navigation is used as a way to show users where they are within an app or a site"
+    },
+    {
+      title: "Put the shorthand form within the tag and set a title for the complete name"
+    },
+    {
+      title: "What are the most creative euphemisms for layoffs?"
+    },
+    {
+      title: "What are all of the hidden emoticons on HipChat?"
+    }
+  ]
+)
 
 User.select("id,name,avatar").find(:all).each do |user|
   hash = user.serializable_hash

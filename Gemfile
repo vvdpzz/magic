@@ -8,6 +8,9 @@ gem 'rails', '3.1.1'
 gem 'mysql2'
 
 gem 'devise'
+gem 'devise_invitable'
+
+gem 'uuidtools'
 
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]

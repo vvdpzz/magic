@@ -1,4 +1,6 @@
-<% if @question.could_answer_by? current_user.id %>
+<% if @question.not_free? and @question.correct_answer_id == 0 and current_user.reputation < Settings.answer_price %>
+<h2>回答悬赏问题需要支付<%= Settings.answer_price %>积分，您当前只有<%= current_user.reputation %>，所以您不能回答该问题。</h2>
+<% elsif @question.could_answer_by? current_user.id %>
 <h3 class="answer-title">添加答案</h3>
 <%= form_for(Answer.new) do |f| %>
 <%= f.hidden_field :question_id, :value => @question.id %>
