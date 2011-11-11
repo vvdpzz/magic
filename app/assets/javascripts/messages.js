@@ -113,7 +113,7 @@ var showNewMessage = function(messageText) {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : '/users/' + viewer.id,
-    time_created : '1 秒钟前',
+    time_created : dateFormat(new Date()),
     text : messageText
   };
   var e = constructMessageBox(message);
@@ -311,7 +311,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : 'users/' + viewer.id,
-    time_created : '1 秒钟前',
+    time_created : dateFormat(new Date()),
     text : htmlEscape(messageText)
   }
   if (box.length == 1) {
@@ -330,7 +330,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
       'friend_picture' : friend.avatar,
       'friend_name' : friend.name,
       'unread_message_count' : 0,
-      'last_update' : '1 second ago',
+      'last_update' : dateFormat(new Date()),
       'messages' : messages
     }
     box = constructConversationBox(conversation);

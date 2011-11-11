@@ -9,6 +9,8 @@ gem 'mysql2'
 
 gem 'devise'
 
+gem 'pusher'
+
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 

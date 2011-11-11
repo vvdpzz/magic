@@ -612,3 +612,20 @@ font-weight: normal;
 color: #909090;
 width: 100%;
 }
+
+
+#notification-new-num, #nav-msg-new-num, #nav-contest-new-num {
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+background: #C11314;
+border: 1px solid #7E0C0D;
+border-radius: 4px;
+color: white;
+font-size: 9px;
+float: right;
+font-weight: bold;
+line-height: 12px;
+padding: 0 4px;
+margin: 0px 1px 0 2px;
+display: none;
+}
