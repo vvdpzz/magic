@@ -142,7 +142,7 @@ class QuestionsController < ApplicationController
   end
   
   def recent_winners
-    recent_winners = CreditTransaction.where("winner_id is not null").order("updated_at").first(5)
+    recent_winners = CreditTransaction.where("winner_id != 0").order("updated_at").first(5)
   end
   
   protected
