@@ -250,3 +250,19 @@ background-position: 0px -460px;
   }
 }
 
+
+.bounty-indicator, .bounty-award {
+  height: 25px;
+  margin-top: 3px;
+
+  padding: 5px 10px 1px 10px;
+  float: left;
+  color: white !important;
+  background-color: #07D;
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 5px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}

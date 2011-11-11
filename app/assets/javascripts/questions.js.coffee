@@ -72,16 +72,11 @@ $(->
       $("#contentCount").closest('.clearfix').addClass('error')
       $("#contentCount").addClass("xlarge error")
       isSubmit = false
-    unless ($("#question_credit").val() is "0.0")
-      unless checkNum($("#question_credit").val())
-        $("#question_credit").closest('.clearfix').addClass('error')
-        $("#question_credit").addClass("xlarge error")
-        $("#credit_tips").text("请输入正确金额")
-        isSubmit = false
-        #get init userCredit
+    #get init userCredit
     $.get "/cash", (data, textStatus, xhr) ->
       user_accout.credit = data.credit
       user_accout.reputation = data.reputation
+
       if(parseInt($("#question_credit").val()) > user_accout.credit)
         $("#question_credit").closest('.clearfix').addClass('error')
         $("#question_credit").addClass("xlarge error")
@@ -117,7 +112,7 @@ $(->
         needReputation = parseInt($("#question_reputation").val()) - user_accout.reputation
         $("#reputation_tips").text("您的积分不足，缺少"+needReputation+"积分")
         isSubmit = false
-    false unless isSubmit
+    isSubmit
 
     
   $("#question_title").bind "keydown",()->
@@ -140,7 +135,11 @@ numCountDown = (input,num,len)->
     numDiv.text length
 
 checkNum = (str)->
+<<<<<<< HEAD
   /^\d+$/.test str
+=======
+   str
+>>>>>>> 838f3729f9a91093fe0a7a7451a3b8b34d705d96
 
 
 
