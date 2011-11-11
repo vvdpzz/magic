@@ -132,7 +132,7 @@ class QuestionsController < ApplicationController
     items = $redis.lrange(l, 0, -1)
     @list = items.collect{ |item| $redis.lrange(item, 0, -1) }
   end
-  
+
   protected
     def vote_init
       @question = Question.select("id").find_by_id(params[:id])
