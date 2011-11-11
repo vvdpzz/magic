@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
   
   def create
     question = Question.find params[:answer][:question_id]
-    if question.could_answer_by? current_user.id
+    if not question.could_answer_by?(current_user.id)
       render json: {:errors => "You've already answered this question"}, :status => :unprocessable_entity
       return
     end

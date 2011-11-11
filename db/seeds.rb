@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 
 User.create(
   [
@@ -7,11 +7,11 @@ User.create(
       email: 'xxd@gmail.com',
       password: 'xxdxxd'
     },
-    # {
-    #   name: '陈政宇',
-    #   email: 'vvdpzz@gmail.com',
-    #   password: 'vvdpzz'
-    # },
+    {
+      name: '陈政宇',
+      email: 'vvdpzz@gmail.com',
+      password: 'vvdpzz'
+    },
     {
       name: '黄飞平',
       email: 'feipinghuang@gmail.com',
