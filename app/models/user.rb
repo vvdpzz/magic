@@ -20,6 +20,9 @@ class User < ActiveRecord::Base
   has_many :followers, :class_name => "FollowedUser", :foreign_key => "user_id"
   has_many :following, :class_name => "FollowedUser", :foreign_key => "follower_id"
   
+  has_many :credit_winners, :class_name => "CreditTransaction", :foreign_key => "winner_id"
+  has_many :reputation_winners, :class_name => "ReputationTransaction", :foreign_key => "winner_id"
+  
   has_one :photo
   
   attr_writer :invitation_instructions

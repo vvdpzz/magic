@@ -140,8 +140,7 @@ numCountDown = (input,num,len)->
     numDiv.text length
 
 checkNum = (str)->
-  reg = /\d+/
-  reg.test str
+  /^\d+$/.test str
 
 
 
