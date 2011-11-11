@@ -1,4 +1,6 @@
 <div class="record-table">
+      <a class="primary btn" id="recharge-button">充值</a>
+      <input id="input-credit" maxlength="10" name="credit" size="10" type="text">
   <h1>帐户基本信息</h1>
   <table class="bordered-table">
     <thead>
@@ -20,7 +22,7 @@
   <h1>充值流水</h1>
   <table class="bordered-table zebra-striped">
     <thead>
-      <tr><th>日期</th><th>概述</th><th>类型</th><th>收支</th></tr>
+      <tr><th>日期</th><th>单号</th><th>概述</th><th>类型</th><th>金额</th><th>状态</th></tr>
     </thead>
     <tbody>
       <% if @user.recharge_records.empty? %>
@@ -29,9 +31,11 @@
       <% @user.recharge_records.each do |record| %>
       <tr>
         <td><%= record.created_at.strftime("%Y/%m/%d") %></td>
+        <td><%= record.id %></td>
         <td>充值</td>
         <td>收入</td>
         <td><%= record.credit %></td>
+        <td><% if record.trade_status == 0 %>等待付款<% else %>充值成功<% end %></td>
       </tr>
       <% end %>
       <% end %>
@@ -43,7 +47,7 @@
   <h1>现金帐户流水</h1>
   <table class="bordered-table zebra-striped">
     <thead>
-      <tr><th>日期</th><th>概述</th><th>类型</th><th>收支</th></tr>
+      <tr><th>日期</th><th>概述</th><th>类型</th><th>金额</th><th>状态</th></tr>
     </thead>
     <tbody>
       <% if @user.credit_transactions.empty? %>
@@ -52,9 +56,10 @@
       <% @user.credit_transactions.each do |record| %>
       <tr>
         <td><%= record.created_at.strftime("%Y/%m/%d") %></td>
-        <td>答题</td>
+        <td><% if record.question_id and record.answer_id == nil %>提问：<%= link_to record.question.title, record.question %> <% end %></td>
         <td><% if record.payment %>支出<% else %>收入<% end %></td>
         <td><%= record.value %></td>
+        <td><% if record.trade_status == 0 %>答题中<% else %>成功<% end %></td>
       </tr>
       <% end %>
       <% end %>
@@ -66,7 +71,7 @@
   <h1>积分帐户流水</h1>
   <table class="bordered-table zebra-striped">
     <thead>
-      <tr><th>日期</th><th>概述</th><th>类型</th><th>收支</th></tr>
+      <tr><th>日期</th><th>概述</th><th>类型</th><th>数额</th><th>状态</th></tr>
     </thead>
     <tbody>
       <% if @user.reputation_transactions.empty? %>
@@ -75,12 +80,56 @@
       <% @user.reputation_transactions.each do |record| %>
       <tr>
         <td><%= record.created_at.strftime("%Y/%m/%d") %></td>
-        <td>答题</td>
+        <td>
+        <% if record.question_id and record.answer_id == nil %>
+        提问：<%= link_to record.question.title, record.question %>
+        <% elsif record.answer_id %>
+        回答：<%= link_to record.question.title, record.question %>
+        <% end %>
+        </td>
         <td><% if record.payment %>支出<% else %>收入<% end %></td>
         <td><%= record.value %></td>
+        <td><% if record.trade_status == 0 %>答题中<% else %>成功<% end %></td>
       </tr>
       <% end %>
       <% end %>
     </tbody>
   </table>
 </div>
+<div id="dlg-recharge">
+</div>
+<script type="text/javascript" charset="utf-8">
+  jQuery(document).ready(function($) {
+    var rechargeDialog = {
+      autoOpen: false,
+      modal: true,
+      width: 500,
+      height: 285,
+      resizable: false,
+      title: '充值',
+      draggable: false,
+      buttons: {
+        "确认充值": function() {
+          $($("#payment-form").get(0).utf8).remove()
+          url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
+          window.open( url, "_blank")
+        },
+        "取消": function() {
+          $(this).dialog("close");
+        }
+      }
+    }
+    $('#dlg-recharge').dialog(rechargeDialog);
+    $("#recharge-button").click(function(){
+      $.post("/recharge/generate_order",
+        {credit: $('#input-credit').val()},
+        function(data){
+          $id = $("<div/>").append("订单号：" + data.order_id);
+          $credit = $("<div/>").append("充值金额：" + data.order_credit)
+          $('#dlg-recharge').html($("<div/>").append($id).append($credit).append(data.html))
+          $('#dlg-recharge').dialog("open");
+        }
+      );
+    });
+  });
+</script>

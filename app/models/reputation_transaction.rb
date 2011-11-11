@@ -5,4 +5,5 @@ class ReputationTransaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :question
   belongs_to :answer
+  belongs_to :winner, :class_name => "User", :foreign_key => "winner_id"
 end

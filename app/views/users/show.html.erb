@@ -55,7 +55,7 @@
     <li><a href="#followers">关注者<span class="label notice"><%=@user.followers_count %></span></a></li>
   </ul>
   <div id="tab-content">
-    <%= render partial: "myquestion", :collection => @user.questions %>
+    <%= render partial: "myquestion", :collection => @user.questions, :as => :question %>
   </div>
 </div>
 <div id="loading" class="span12" style="display:none"></div>

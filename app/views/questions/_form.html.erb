@@ -55,7 +55,7 @@
     <div class="clearfix">
       <label for="question_credit">金钱</label>
       <div class="input">
-        <%= select_tag "question_credit","<option selected='selected' value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option>".html_safe%>元
+        <%= f.select :credit, 11.times.collect{|i| [i, i]}, {}, {:class => 'medium'} %> 元
         <span class="help-inline">当前金额为：<%= current_user.credit %></span>
         <div id="reCharge">
           <a class="btn primary" id="into_recharge" style="display:none">进入充值</a>
