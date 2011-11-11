@@ -14,9 +14,9 @@ $(document).ready(function() {
     new nicEditor({buttonList: ['bold','italic','underline', 'strikethrough', 'ol', 'ul', 'hr']}).panelInstance('answer_content');
   }
   
-  $('#answer-form').live('ajax:success', function(data){
-     alert(data)
-  });
-  
+  $('#answer-form').live('ajax:success', function(xhr, data, status){
+     data
+     $(this).fadeOut();
+  })
 });
 </script>

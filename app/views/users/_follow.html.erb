@@ -1,5 +1,5 @@
 <div class="follower">
-  <a href="/users/<%=follow.id%>"><img src="<%=follow.gavatar%>" class=""/></a>
-  <h4><a href="/users/<%=follow.id%>"><%=follow.name%></a></h4>
-  <p><%=follow.about_me%></p>
+  <a href="/users/<%= user.id %>"><img src="<%= user.gavatar %>" class=""/></a>
+  <h4><a href="/users/<%= user.id %>"><%= user.name%></a></h4>
+  <p><%= user.about_me %></p>
 </div>

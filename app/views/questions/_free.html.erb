@@ -1,0 +1,10 @@
+<%= div_for question do %>
+  <div class="status">
+    <div class="square"><div class="count"><%= question.votes_count %></div>投票</div>
+    <div class="square"><div class="count"><%= question.answers_count %></div>答案</div>
+  </div>
+  <div class="summary">
+    <div class="excerpt"><h5><a href="/questions/<%= question.id %>"><%= question.title %></a></h5></div>
+    <div class="timestamp"><%= time_ago_in_words question.created_at %></div>
+  </div>
+<% end %>

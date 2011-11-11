@@ -1,5 +1,4 @@
-<% if not @questions.empty? %>
-$("#questions").append('<%= j(render "index", :questions => @questions) %>');
-<% else %>
-$("#load-more").remove();
-<% end %>
+$("#load-more").remove()
+$("#questions")
+  .append('<%= j(render :partial => "index", :question => @questions, :as => :question) %>')
+  .append('<%= j(render '/partials/load_more') %>')

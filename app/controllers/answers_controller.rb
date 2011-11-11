@@ -2,14 +2,13 @@ class AnswersController < ApplicationController
   before_filter :vote_init, :only => [:vote_for, :vote_against]
   
   def create
-    # question = Question.find params[:answer][:question_id]
-    #    if question.could_answer_by? current_user.id
-    #      @answer = current_user.answers.build(params[:answer])
-    #      if @answer.save and question.correct_answer_id == 0 and @answer.deduct_reputation and @answer.order_reputation
-    #        redirect_to question
-    #      end
-    #    end
-    render json: "hello"
+    question = Question.find params[:answer][:question_id]
+    if question.could_answer_by? current_user.id
+      @answer = current_user.answers.build(params[:answer])
+      if @answer.save and question.correct_answer_id == 0 and @answer.deduct_reputation and @answer.order_reputation
+        redirect_to question
+      end
+    end
   end
   
   def vote_for

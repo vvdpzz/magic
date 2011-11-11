@@ -54,11 +54,12 @@ class User < ActiveRecord::Base
     users = User.find(uids)
   end
   
+  def followings_count
+    $redis.scard("users:#{self.id}.following_users")
+  end
+  
   def followers_count
     $redis.scard("users:#{self.id}.follower_users")
   end
   
-  def followings_count
-    $redis.scard("users:#{self.id}.following_users")
-  end
 end
