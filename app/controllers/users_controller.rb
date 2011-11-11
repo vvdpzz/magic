@@ -46,7 +46,7 @@ class UsersController < ApplicationController
   
   def winquestions
     @questions = @user.questions
-    render partial: "myquestion", :collection => @questions, :as => :question, layout: false
+    render partial: "winquestions", :collection => @questions, :as => :question, layout: false
   end
   
   def favorites
