@@ -71,10 +71,9 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
   add_index "favorite_questions", ["user_id"], :name => "index_favorite_questions_on_user_id"
 
   create_table "followed_questions", :force => true do |t|
-    t.integer  "user_id",                   :limit => 8,                   :null => false
-    t.integer  "question_id",               :limit => 8,                   :null => false
-    t.boolean  "status",                                 :default => true
-    t.integer  "following_questions_count",              :default => 0
+    t.integer  "user_id",     :limit => 8,                   :null => false
+    t.integer  "question_id", :limit => 8,                   :null => false
+    t.boolean  "status",                   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -155,28 +154,29 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
   add_index "reputation_transactions", ["winner_id"], :name => "index_reputation_transactions_on_winner_id"
 
   create_table "users", :primary_key => "email", :force => true do |t|
-    t.integer  "id",                     :limit => 8
-    t.string   "name",                                                                :default => ""
-    t.string   "avatar",                                                              :default => ""
-    t.string   "about_me",                                                            :default => ""
-    t.string   "encrypted_password",     :limit => 128,                               :default => ""
+    t.integer  "id",                       :limit => 8
+    t.string   "name",                                                                  :default => ""
+    t.string   "avatar",                                                                :default => ""
+    t.string   "about_me",                                                              :default => ""
+    t.string   "encrypted_password",       :limit => 128,                               :default => ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                                                       :default => 0
+    t.integer  "sign_in_count",                                                         :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.decimal  "credit",                                :precision => 8, :scale => 2, :default => 0.0
-    t.integer  "reputation",                                                          :default => 0
-    t.integer  "questions_count",                                                     :default => 0
-    t.integer  "answers_count",                                                       :default => 0
-    t.integer  "comments_count",                                                      :default => 0
+    t.decimal  "credit",                                  :precision => 8, :scale => 2, :default => 0.0
+    t.integer  "reputation",                                                            :default => 0
+    t.integer  "questions_count",                                                       :default => 0
+    t.integer  "answers_count",                                                         :default => 0
+    t.integer  "comments_count",                                                        :default => 0
+    t.integer  "followed_questions_count",                                              :default => 0
     t.string   "authentication_token"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "invitation_token",       :limit => 60
+    t.string   "invitation_token",         :limit => 60
     t.datetime "invitation_sent_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"

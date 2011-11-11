@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
   can_edit_on_the_spot
-  before_filter :build_user
+  before_filter :build_user, :except => [:cash]
   def show
-    @user = User.find params[:id]
   end
   
   def cash

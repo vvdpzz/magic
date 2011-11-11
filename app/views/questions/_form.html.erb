@@ -14,7 +14,7 @@
       <div class="input">
         <%= f.text_area :content, :class => "xxlarge", :rows => 10 %>
         <span class="help-block">在文本框中完成你对问题的描述</span>
-        <span id="contentCount"></span>
+        <span class="help-block" id="contentCount"></span>
       </div>
     </div>
     <!-- rules_list -->
@@ -68,8 +68,10 @@
       <label for="question_reputation">积分</label>
       <div class="input">
         <%= f.text_field :reputation, :class => "span5", :size => 70, :maxlength => 70 %>分
-        <span class="help-inline">当前积分为：<%= current_user.reputation %></span>
-        <span id='reputation_tips' class="help-inline"></span>
+        <div>
+          <span class="help-inline">当前积分为：<%= current_user.reputation %></span>
+          <span id='reputation_tips' class="help-inline"></span>          
+        </div>
       </div>
     </div>
     <!-- actions -->
