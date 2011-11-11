@@ -11,7 +11,7 @@
   </div>
   <div class="question_info">
       <h4>问题状态</h4>
-      <p>关注者<span class="blueBlod"><%= @question.votes_count %></span>人</p>
+      <p>关注者<span class="blueBlod"><%= @question.followed_questions_count %></span>人</p>
       <% @question.followed_users.each do |user|%>
         <a title="<%= user.name %>" href="../users/<%= user.id %>"><img src="<%= user.gavatar %>" class='user_head'/></a>
       <% end %> 
@@ -70,8 +70,15 @@
         success: function(data, textStatus, xhr) {
           $("#"+data.id).html(data.votes_count);
         },
-        error: function(xhr, textStatus, errorThrown) {
-          showAjaxError($(dom).closest(".vote-area"),"不能重复投票")
+        error: function(xhr,textStatus, errorThrown) {
+          var errorText = "";
+          var errorRc = JSON.parse(xhr.responseText).rc
+          switch(errorRc){
+            case 1:errorText = "低于10分不能投正票";break;
+            case 2:errorText = "您已经投过了";break;
+            case 3:errorText = "低于125分不能投负票";break;
+          }
+          showAjaxError($(dom).closest(".vote-area"),errorText)
         }
       });
     });

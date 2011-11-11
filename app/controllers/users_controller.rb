@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
   can_edit_on_the_spot
-  before_filter :build_user
+  before_filter :build_user, :except => [:cash]
   def show
-    @user = User.find params[:id]
   end
   
   def cash
@@ -46,17 +45,17 @@ class UsersController < ApplicationController
   
   def winquestions
     @questions = @user.questions
-    render partial: "myquestion", :collection => @questions, :as => :question, layout: false
+    render partial: "winquestions", :collection => @questions, :as => :question, layout: false
   end
   
-  def favourites
-    @questions = @user.favorite_questions
-    render partial: "myquestion", :collection => @questions, :as => :question, layout: false
+  def favorites
+    @questions = @questions = Question.find_by_sql("select * from questions where id in (select question_id from favorite_questions where user_id = #{@user.id} and status = true)")
+    render partial: "favorites", :collection => @questions, :as => :question, layout: false
   end
   
   def watches
-    @questions = @user.followed_questions
-    render partial: "favourites", :collection => @questions, :as => :question, layout: false
+    @questions = @questions = Question.find_by_sql("select * from questions where id in (select question_id from followed_questions where user_id = #{@user.id} and status = true)")
+    render partial: "watches", :collection => @questions, :as => :question, layout: false
   end
   
   def followings

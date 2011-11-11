@@ -19,7 +19,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.integer :answers_count, :default  => 0
       t.integer :comments_count, :default => 0
       t.integer :followed_questions_count, :default => 0
-
+      t.integer :favorite_questions_count, :default =>0
       # t.encryptable
       # t.confirmable
       # t.lockable :lock_strategy => :failed_attempts, :unlock_strategy => :both

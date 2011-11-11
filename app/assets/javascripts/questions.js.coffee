@@ -68,7 +68,9 @@ $(->
       $('#titleCount').text('请输入标题')
       isSubmit = false
     unless $(".nicEdit-main").text().length
-      $("#contentCount").text('请完善内容')
+      $("#contentCount").text('请完善内容').show()
+      $("#contentCount").closest('.clearfix').addClass('error')
+      $("#contentCount").addClass("xlarge error")
       isSubmit = false
     unless ($("#question_credit").val() is "0.0")
       unless checkNum($("#question_credit").val())
@@ -138,13 +140,8 @@ numCountDown = (input,num,len)->
     numDiv.text length
 
 checkNum = (str)->
-  mynumber="0123456789"; 
-  i = 0
-  if(str.length is 0)
-    return false
-  while i < str.length
-    c=str.charAt(i)
-    if(mynumber.indexOf(c) is -1) 
-      return false
-    i++        
-  return true
+  reg = /\d+/
+  reg.test str
+
+
+

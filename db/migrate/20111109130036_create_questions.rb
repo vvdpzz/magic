@@ -20,7 +20,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.integer :answers_count, :default  => 0
       t.integer :comments_count, :default => 0
       t.integer :correct_answer_id, :limit => 8, :default => 0
-
+      t.integer :followed_questisons_count, :default => 0
       t.timestamps
     end
     add_index :questions, :user_id
