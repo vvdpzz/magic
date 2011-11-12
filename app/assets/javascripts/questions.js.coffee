@@ -16,7 +16,7 @@ $(->
           user_accout.reputation = data.reputation
           needRecharge = parseInt($("#question_credit").val())-user_accout.credit
           if needRecharge > 0
-            $("#credit_tips").text("您余额不足，请充值"+user_accout.needCredit+"元")
+            $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
           else
             $("#credit_tips,#into_recharge").fadeOut()
             $("#question_credit").closest('.clearfix').removeClass('error')
@@ -101,7 +101,7 @@ $(->
               data:     {credit: user_accout.needCredit}
               success:  (data, textStatus, xhr) ->
                 $("#order_number").html data.order_id
-                $("#order_credit").text "您要支付的金额为："+(parseInt($("#question_credit").val(),10)-data.order_credit)+"元"
+                $("#order_credit").text "您要支付的金额为："+user_accout.needCredit+"元"
                 $("#alipay_form").html data.html
         $("#dialog_payment").dialog(question_paymentDlg)
         $("#dialog_payment").dialog('open')
