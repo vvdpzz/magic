@@ -87,6 +87,7 @@ $(->
       $("#question_credit").addClass("xlarge error")
       needRecharge = parseInt($("#question_credit").val(),10)-user_accout.credit
       $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
+      user_accout.needCredit = needRecharge
       isRecharge = true
       $("#into_recharge").fadeIn()
       $("#into_recharge").bind "click",->
@@ -97,7 +98,7 @@ $(->
               url:      "/recharge/generate_order"
               type:     "POST"
               dataType: "json"
-              data:     {credit: parseInt($("#question_credit").val(),10) - user_accout.credit}
+              data:     {credit: user_accout.needCredit}
               success:  (data, textStatus, xhr) ->
                 $("#order_number").html data.order_id
                 $("#order_credit").text "您要支付的金额为："+(parseInt($("#question_credit").val(),10)-data.order_credit)+"元"

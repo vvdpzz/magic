@@ -95,7 +95,8 @@ $(document).ready(function() {
   $("#create-question-page").addClass('active');
   user_accout = {
     credit : "",
-    reputation : ""
+    reputation : "",
+    needCredit:""
   }
   $.get("/cash", function(data, textStatus, xhr) {
     user_accout.credit = data.credit;
