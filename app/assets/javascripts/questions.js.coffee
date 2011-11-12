@@ -16,7 +16,7 @@ $(->
           user_accout.reputation = data.reputation
           needRecharge = parseInt($("#question_credit").val())-user_accout.credit
           if needRecharge > 0
-            $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
+            $("#credit_tips").text("您余额不足，请充值"+user_accout.needCredit+"元")
           else
             $("#credit_tips,#into_recharge").fadeOut()
             $("#question_credit").closest('.clearfix').removeClass('error')
