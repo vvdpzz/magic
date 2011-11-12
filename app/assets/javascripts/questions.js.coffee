@@ -105,7 +105,7 @@ $(->
         $("#dialog_payment").dialog(question_paymentDlg)
         $("#dialog_payment").dialog('open')
       isSubmit = false
-    return isSubmit
+    isSubmit
     
   $("#question_title").bind "keydown",()->
     numCountDown($('#question_title'),$('#titleCount'),70)
@@ -126,5 +126,7 @@ numCountDown = (input,num,len)->
   else
     numDiv.text length
 
+checkNum = (str)->
+  /^\d+$/.test(str)
 
 
