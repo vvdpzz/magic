@@ -97,7 +97,7 @@ $(->
               url:      "/recharge/generate_order"
               type:     "POST"
               dataType: "json"
-              data:     {credit: user_accout.credit}
+              data:     {credit: needRecharge}
               success:  (data, textStatus, xhr) ->
                 $("#order_number").html data.order_id
                 $("#order_credit").text "您要支付的金额为："+(parseInt($("#question_credit").val(),10)-data.order_credit)+"元"
