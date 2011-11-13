@@ -127,9 +127,10 @@
     $('#dlg-recharge').dialog(rechargeDialog);
     $("#recharge-button").click(function(){
       $('#recharge-tips').text('').fadeOut();
-      if(checkNum($('#input-credit').val())){
+      var inputCredit = $('#input-credit').val().trim();
+      if(checkNum(inputCredit)&&inputCredit!='0'){
        $.post("/recharge/generate_order",
-         {credit: $('#input-credit').val()},
+         {credit: inputCredit},
          function(data){
            $id = $("<div/>").append("订单号：" + data.order_id);
            $credit = $("<div/>").append("充值金额：" + data.order_credit)
