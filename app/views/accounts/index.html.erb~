@@ -3,7 +3,7 @@
       <div class="clearfix">
         <div class="input">      
           <input id="input-credit" maxlength="10" name="credit" size="10" type="text">  
-          <span id="recharge-tips"></span>
+          <span id="recharge-tips" class="help-inline"></span>
         </div>
       </div>
   <h1>帐户基本信息</h1>

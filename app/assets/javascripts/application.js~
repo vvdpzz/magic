@@ -32,5 +32,5 @@ function showAjaxError(a,d){
     setTimeout(c,4000)
 }
 function checkNum(str){
-  return(/^\d+$/.test(str))
+  renturn(/^\d+$/.test(str))
 }

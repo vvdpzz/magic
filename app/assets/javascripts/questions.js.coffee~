@@ -127,4 +127,7 @@ numCountDown = (input,num,len)->
   else
     numDiv.text length
 
+checkNum = (str)->
+  /^\d+$/.test(str)
+
 
