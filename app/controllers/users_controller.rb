@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   can_edit_on_the_spot
-  before_filter :build_user, :except => [:cash]
+  before_filter :build_user, :except => [:cash, :update_attribute_on_the_spot]
   def show
   end
   
