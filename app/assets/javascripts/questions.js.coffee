@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $(->
+  $loadingImg = $("<img/>").attr('src', '/assets/loading.gif')
   question_paymentDlg = {
     title : "赏金支付",
     autoOpen: false,
@@ -10,115 +11,126 @@ $(->
     height: 435,
     resizable: false,
     buttons: 
-      '取消': ()-> 
-        $.get "/cash", (data, textStatus, xhr) ->
-          user_accout.credit = data.credit
-          user_accout.reputation = data.reputation
-          needRecharge = parseInt($("#question_credit").val())-user_accout.credit
-          if needRecharge > 0
-            $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
-          else
-            $("#credit_tips,#into_recharge").fadeOut()
-            $("#question_credit").closest('.clearfix').removeClass('error')
-            $("#question_credit").removeClass("xlarge error")
-        $(this).dialog("close")
       '充值':()->
         $($("#payment-form").get(0).utf8).remove()
         url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
         window.open url, "_blank"
         $(this).dialog("option",question_paymentDlg_reTry)
+      '取消': ()-> 
+        $(this).dialog("close")
   }
   question_paymentDlg_reTry = {
     buttons:
       '完成':()->
-        $.get "/cash", (data, textStatus, xhr) ->
-          user_accout.credit = data.credit
-          if $('#question_credit').val() <= user_accout.credit
+        console.log 1
+        getUserCredit ()->
+          console.log 2
+          console.log user_accout.credit
+          console.log $('#select_credit').val()
+          if parseInt($('#select_credit').val(),10) <= user_accout.credit
+            console.log 3
             $("#reCharge").fadeOut()
-            $("#question_credit").closest('.clearfix').removeClass('error')
-            $("#question_credit").removeClass("xlarge error")
           else
-            needRecharge = parseInt($("#question_credit").val())-user_accout.credit
-            $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
-        $(this).dialog("close")
-      '重试':()->
-        url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
-        window.open url, "_blank"
+            console.log 4
+            user_accout.needCredit = parseInt($("#select_credit").val(),10) - user_accout.credit
+            $("#currentUserAccount").text("您当前金额为#{user_accout.credit}元")
+            $("#credit_tips").text("还需充值"+user_accout.needCredit+"元")
+          console.log 5
+          $('#dialog_payment').dialog("close")
+        
+      '遇到困难':()->
+          
   }
+  $("#new_question").submit -> 
+    #jquery object constant
+    $contentTips = $("#contentTips")
+    $question_credit = $("#select_credit")
+    $question_title = $("#question_title")
+    $titleCount = $('#titleCount')
+    $question_reputation = $("#question_reputation")
+    $reputation_tips = $("#reputation_tips")
+    $credit_tips = $("#credit_tips")
+    $recharge = $("#recharge")
+    #condition bool
+    isSubmit = true
+    #init element style
+    removeDomError($question_title,$contentTips,$question_reputation,$question_credit)
+    $reputation_tips.fadeOut()
+    $recharge.hide()
+    #into condition block
+    unless $question_title.val().length
+      $titleCount.text('请输入标题')
+      addDomError($titleCount)
+      isSubmit = false
+    unless $(".nicEdit-main").text().length
+      addDomError($contentTips)
+      isSubmit = false
+    #get init userAccount
+    unless checkNum($question_reputation.val())||$question_reputation.val()==""
+      addDomError($question_reputation)
+      $reputation_tips.text("请输入正确的数值")
+      isSubmit = false
+    if parseInt($question_reputation.val()) > user_accout.reputation
+      addDomError($question_reputation)
+      needReputation = parseInt($question_reputation.val()) - user_accout.reputation
+      $reputation_tips.text("缺少"+needReputation+"积分").fadeIn()
+      isSubmit = false
+  #credit importpart
+    if $question_credit.val()!='0'
+      $credit_tips.append($loadingImg)
+      getUserCredit( ()->
+        user_accout.needCredit = needRecharge = parseInt($question_credit.val(),10) - user_accout.credit
+        if parseInt($question_credit.val(),10) > user_accout.credit
+          addDomError($question_credit)
+          $recharge.show()
+          $credit_tips.text("请充值"+needRecharge+"元")
+          $("#into_recharge").fadeIn()
+        $credit_tips.remove($loadingImg)
+      )
+      isSubmit = false
+    isSubmit
+    
+    
+  #bind event
+  $("#question_title").bind "keyup",()->
+    $titleCount = $("#titleCount")
+    numCountDown($(this),$titleCount,70)
+    if $(this).val()
+      removeDomError($titleCount)
+
   $('#addedRule').bind 'mouseup',->
     if $('#additional_rule').css('display') is 'none'
       $('#additional_rule').slideDown(200)
     else
       $('#additional_rule').slideUp(300)
-  $("#new_question").submit -> 
-    isSubmit = true
-    isRecharge = false
-    #init element style
-    $("#contentCount").hide();
-    $("#question_credit").closest('.clearfix').removeClass('error')
-    $("#question_credit").removeClass("xlarge error")
-    $("#question_credit").closest('.clearfix').removeClass('error')
-    $("#question_credit").removeClass("xlarge error")
-    #into judge block
-    unless $("#question_title").val().length
-      $('#titleCount').text('请输入标题')
-      isSubmit = false
-    unless $(".nicEdit-main").text().length
-      $("#contentCount").text('请完善内容').show()
-      $("#contentCount").closest('.clearfix').addClass('error')
-      $("#contentCount").addClass("xlarge error")
-      isSubmit = false
-    #get init userAccount
-    unless checkNum($("#question_reputation").val())
-      $("#question_reputation").closest('.clearfix').addClass('error')
-      $("#question_reputation").addClass("xlarge error")
-      $("#reputation_tips").text("请输入正确的数值")
-      $("#question_reputation").addClass("xlarge error")
-      isSubmit = false
-    if(parseInt($("#question_reputation").val()) > user_accout.reputation)
-      $("#question_reputation").closest('.clearfix').addClass('error')
-      $("#question_reputation").addClass("xlarge error")
-      needReputation = parseInt($("#question_reputation").val()) - user_accout.reputation
-      $("#reputation_tips").text("您的积分不足，缺少"+needReputation+"积分")
-      isSubmit = false
-  #credit importpart
-    if(parseInt($("#question_credit").val()) > user_accout.credit)
-      $("#question_credit").closest('.clearfix').addClass('error')
-      $("#question_credit").addClass("xlarge error")
-      needRecharge = parseInt($("#question_credit").val(),10)-user_accout.credit
-      $("#credit_tips").text("您余额不足，请充值"+needRecharge+"元")
-      user_accout.needCredit = needRecharge
-      isRecharge = true
-      $("#into_recharge").fadeIn()
-      $("#into_recharge").bind "click",->
-        $.get "/cash", (data, textStatus, xhr) ->
-          user_accout.credit = data.credit
-          if isRecharge
-            $.ajax
-              url:      "/recharge/generate_order"
-              type:     "POST"
-              dataType: "json"
-              data:     {credit: user_accout.needCredit}
-              success:  (data, textStatus, xhr) ->
-                $("#order_number").html data.order_id
-                $("#order_credit").text "您要支付的金额为："+user_accout.needCredit+"元"
-                $("#alipay_form").html data.html
-        $("#dialog_payment").dialog(question_paymentDlg)
-        $("#dialog_payment").dialog('open')
-      isSubmit = false
-    isSubmit
-    
-  $("#question_title").bind "keydown",()->
-    numCountDown($('#question_title'),$('#titleCount'),70)
-  $('.nicEdit-main').bind "keydown",()->
-    numCountDown($('.nicEdit-main'),$('#contentCount'),1000)
+
+  $("#into_recharge").bind "click",->
+    getUserCredit ->
+      if(parseInt($('#select_credit').val(),10) > user_accout.credit)
+        $('#dialog_payment').append($loadingImg)
+        user_accout.needCredit = parseInt($('#select_credit').val(),10) - user_accout.credit
+        $.ajax
+          url:      "/recharge/generate_order"
+          type:     "POST"
+          dataType: "json"
+          data:     {credit: user_accout.needCredit}
+          success:  (data, textStatus, xhr) ->
+            $("#order_number").html data.order_id
+            $("#order_credit").text "您要支付的金额为："+user_accout.needCredit+"元"
+            $("#alipay_form").html data.html
+          complete: (xhr, textStatus)->
+            $loadingImg.remove()
+        $('#dialog_payment').dialog(question_paymentDlg)
+        $('#dialog_payment').dialog('open')
+      else
+        $("#recharge").fadeOut()
+        $("#currentUserAccount").text("您当前金额为#{user_accout.credit}元")
+        removeDomError($("#credit_tips"))
 )
 
 numCountDown = (input,num,len)->
   input = input.val()
-  numDiv = num
-  length = len
-  inputCount = input.length
+  [numDiv,length,inputCount] = [num,len,input.length]
   if input
     inputCount = length - inputCount
     if inputCount < 0
@@ -127,4 +139,16 @@ numCountDown = (input,num,len)->
   else
     numDiv.text length
 
-
+#ajax to get the accout credit 
+getUserCredit = (callback)->
+  $.get "/cash", (data, textStatus, xhr) ->
+    user_accout.credit = data.credit
+    user_accout.reputation = data.reputation
+    callback() if callback
+    
+# add error style
+addDomError = (div...)->
+  el.addClass("error").closest('.clearfix').addClass('error') for el in div
+removeDomError = (div...)->
+  el.removeClass("error").closest('.clearfix').removeClass('error') for el in div
+  
