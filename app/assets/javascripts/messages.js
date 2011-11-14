@@ -23,15 +23,14 @@ var loadConversations = function() {
   $.get('/messages/load_conversations', {},
     function(data) {
       if (data.length > 0){
-        $('#messagebox-and-messages').show();
         $.each(data, function(idx, conversation) {
           conversations[conversation.friend_token] = conversation;
           var elem = constructConversationBox(conversation);
           elem.prependTo('#stream-items');
         });
-        con = data[data.length-1];
-        loadMessages(con.friend_token, con.friend_name);
-        isFirst = false;
+        // con = data[data.length-1];
+        // loadMessages(con.friend_token, con.friend_name);
+        // isFirst = false;
       }
     }
   );
@@ -41,14 +40,34 @@ var constructConversationBox = function(data) {
             .attr('id', 'stream-item-' + data.friend_token)
             .data('friendToken', data.friend_token)
             .click(function() {
+              setUnreadCount(data.friend_token, data.friend_name, data.unread_message_count);
               loadMessages(data.friend_token, data.friend_name);
             });
   box.find('.message-inner img').attr('src', data.friend_picture);
-  box.find('.user-name strong').html(data.friend_name);
+  friendName = data.friend_name;
+  if (data.unread_message_count > 0)
+  	friendName += ' (' + data.unread_message_count + ')';
+  box.find('.user-name strong').html(friendName);
   box.find('.created-at ._timestamp').html(data.last_update);
   return box;
 };
+var setUnreadCount = function(friend_token, friend_name, unread_count) {
+  $("#stream-item-"+friend_token).find('.user-name strong').html(friend_name);
+  var count = 0;
+  if($('#nav-msg-new-num').text().trim() != '')
+		count = parseInt($('#nav-msg-new-num').text().trim());
+	if(count - unread_count > 0) {
+	  $('#nav-msg-new-num').text(count - unread_count).show();
+	} else {
+    $('#nav-msg-new-num').text('').hide();
+	}
+  $.post('/messages/set_unread_count', {'friend_id' : friend_token});
+}
 var loadMessages = function(friend_token, friend_name) {
+  if( isFirst ) {
+    $('#messagebox-and-messages').show();
+    isFirst = false;
+  }
   // add focus style to the conversation itme clicked at left
   $('#stream-item-' + friend_token).addClass('focused-stream-item').siblings().removeClass('focused-stream-item');
   
@@ -334,7 +353,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
     if (isFirst){
       $('#messagebox-and-messages').show();
       loadMessages(friendToken, friend.name);
-      isFirst = false;
+      // isFirst = false;
     }  
   }
   // $('#conversations-empty').hide();
@@ -348,7 +367,7 @@ msgUserSelector = function() {
   var superClass = new Selector({
     dropdownClass: "user-selector-list",
     rowClass: "user-entry-item",
-    defaultMsg : "输入您关注的人..."
+    defaultMsg : "输入您已关注的人..."
   });
 
   superClass.userList = [];

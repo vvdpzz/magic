@@ -20,6 +20,9 @@
           <li id="messages-page">
             <a href="/messages">私信<span id="nav-msg-new-num" style="display: none; "></span></a>   
           </li>
+          <li id="messages-page">
+            <a href="/notifications">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>   
+          </li>
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle"><%= current_user.name %></a>
             <ul class="dropdown-menu">
@@ -50,7 +53,7 @@
   message_channel.bind('message_created', function(message) {
     count = 1;
     if($('#nav-msg-new-num').text().trim() != '')
-    count = parseInt($('#nav-msg-new-num').text().trim()) + 1;
+      count = parseInt($('#nav-msg-new-num').text().trim()) + 1;
     $('#nav-msg-new-num').text(count).show();
   });
   $(function(){
