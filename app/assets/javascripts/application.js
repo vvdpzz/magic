@@ -31,3 +31,6 @@ function showAjaxError(a,d){
     e.fadeIn("fast");
     setTimeout(c,4000)
 }
+function checkNum(str){
+  return(/^\d+$/.test(str))
+}

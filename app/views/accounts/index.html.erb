@@ -1,6 +1,11 @@
 <div class="record-table">
       <a class="primary btn" id="recharge-button">充值</a>
-      <input id="input-credit" maxlength="10" name="credit" size="10" type="text">
+      <div class="clearfix">
+        <div class="input">      
+          <input id="input-credit" maxlength="10" name="credit" size="10" type="text">  
+          <span id="recharge-tips"></span>
+        </div>
+      </div>
   <h1>帐户基本信息</h1>
   <table class="bordered-table">
     <thead>
@@ -121,15 +126,21 @@
     }
     $('#dlg-recharge').dialog(rechargeDialog);
     $("#recharge-button").click(function(){
-      $.post("/recharge/generate_order",
-        {credit: $('#input-credit').val()},
-        function(data){
-          $id = $("<div/>").append("订单号：" + data.order_id);
-          $credit = $("<div/>").append("充值金额：" + data.order_credit)
-          $('#dlg-recharge').html($("<div/>").append($id).append($credit).append(data.html))
-          $('#dlg-recharge').dialog("open");
-        }
-      );
-    });
+      $('#recharge-tips').text('').fadeOut();
+      var inputCredit = $('#input-credit').val().trim();
+      if(checkNum(inputCredit)&&inputCredit!='0'){
+       $.post("/recharge/generate_order",
+         {credit: inputCredit},
+         function(data){
+           $id = $("<div/>").append("订单号：" + data.order_id);
+           $credit = $("<div/>").append("充值金额：" + data.order_credit)
+           $('#dlg-recharge').html($("<div/>").append($id).append($credit).append(data.html))
+           $('#dlg-recharge').dialog("open");
+         });
+      }else{
+        $('#recharge-tips').text('请输入正确的充值金额').fadeIn().addClass('error-tips');
+        return false;      
+      }
+     });
   });
 </script>
