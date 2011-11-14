@@ -13,22 +13,20 @@ class QuestionsController < ApplicationController
   end
   
   def paid
-    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
-    data = @questions.collect{ |question| question.serializable_hash }
+    @questions = Question.paid
     respond_to do |format|
       format.html {render :layout => false}
       format.js
-      format.json { render :json => data, :status => :ok }
+      format.json { render :json => @questions, :status => :ok }
     end
   end
   
   def free
     @questions = Question.free.page(params[:page]).per(Settings.questions_per_page)
-    data = @questions.collect{ |question| question.serializable_hash }
     respond_to do |format|
       format.html {render :layout => false}
       format.js
-      format.json { render :json => data, :status => :ok }
+      format.json { render :json => @questions, :status => :ok } 
     end
   end
 
