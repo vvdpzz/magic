@@ -20,7 +20,7 @@
           <li id="messages-page">
             <a href="/messages">私信<span id="nav-msg-new-num" style="display: none; "></span></a>   
           </li>
-          <li id="messages-page">
+          <li id="notify-page">
             <a href="javascript:void(0)">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>   
           </li>
           <li class="dropdown" data-dropdown="dropdown">
@@ -76,14 +76,24 @@
   });
   $(function(){
     initNav();
-    $("#messages-page a").bind('click',function(){
+    $("#notify-page a").bind('click',function(){
       msg_warpper_init()
     })
   });
   function msg_warpper_init(){
-    $("#msg_warpper").slideDown()
+    $("#msg_warpper").slideDown();
+    $(document).mouseup(function(event){  
+        if($(event.target).parents("#msg_warpper").length==0){  
+          $("#msg_warpper").slideUp()
+        }  
+    }).keyup(function(event){
+          if(event.keyCode == 27)
+            $("#msg_warpper").slideUp()
+        });
     $("#msg_warpper_head .msg_warpper_close,#msg_warpper_close").bind("click",function(){
-      $("#msg_warpper").slideUp()
-    })
+        $("#msg_warpper").slideUp()
+      })
+    // $(document.body)
+
   }
 </script>
