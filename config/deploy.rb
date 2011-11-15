@@ -2,7 +2,7 @@
 set :rails_env, :production
 set :application, "magic"
 set :scm, :git
-set :branch, "master"                   
+set :branch, "production"                   
 set :deploy_via, :remote_cache       
 set :repository,  "git://github.com/vvdpzz/magic.git"
 default_run_options[:pty] = true   
