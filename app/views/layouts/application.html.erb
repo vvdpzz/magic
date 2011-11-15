@@ -83,8 +83,6 @@
   });
   function msg_warpper_init(){
     $(document).mouseup(function(event){
-        console.log($(event.target).parents("#msg_warpper").length)
-        console.log($(event.target).parents('#notify-page').length)
         if($(event.target).parents("#msg_warpper").length==0){
           if($("#msg_warpper").css('display')=='block'&&$(event.target).parent('#notify-page').length != 0)
             return false
