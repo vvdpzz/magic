@@ -3,9 +3,9 @@
     <!-- title -->
     <div class="clearfix">
       <label for="question_title">标题</label>
-      <div class="input">
-        <%= f.text_field :title, :class => "xxlarge", :size => 70, :maxlength => 70 %>
-        <span id="titleCount">70</span>
+      <div class="input title_block">
+        <%= f.text_field :title, :class => "xxlarge", :size => 70, :maxlength => 70 ,:placeholder => "输入您的问题的标题"%>
+        <span id="titleCount" class="help-inline">70</span>
       </div>
     </div>
     <!-- content -->
@@ -13,8 +13,7 @@
       <label for="question_content"></label>
       <div class="input">
         <%= f.text_area :content, :class => "xxlarge", :rows => 10 %>
-        <span class="help-block">在文本框中完成你对问题的描述</span>
-        <span class="help-block" id="contentCount"></span>
+        <span id="contentTips" class="help-block">在文本框中完成你对问题的描述</span>
       </div>
     </div>
     <!-- rules_list -->
@@ -35,7 +34,7 @@
               <input type="checkbox" name="customized" value="0">
               <span>额外的规则</span>
             </label>
-            <textarea id="additional_rule" style="display:none" name="question[customized_rule]" class="xxlarge" row=3></textarea>
+            <textarea id="additional_rule" style="display:none" name="question[customized_rule]" class="xxlarge" row=3 placeholder="输入您自定义的规则"></textarea>
           </li>
         </ul>
         <span class="help-block"><strong>提示:</strong> 点击上面的选择框输入更多的竞标规则</span>
@@ -45,23 +44,21 @@
     <div class="clearfix">
       <label for="question_credit">金钱</label>
       <div class="input">
-        <%= f.select :credit, 11.times.collect{|i| [i, i]}, {}, {:class => 'medium'} %> 元
-        <span class="help-inline">当前金额为：<%= current_user.credit %></span>
-        <div id="reCharge">
-          <a class="btn primary" id="into_recharge" style="display:none">进入充值</a>
+        <%= f.select :credit, 11.times.collect{|i| [i, i]}, {}, {:class => 'medium',:id => 'select_credit'} %> 元
+        <span id="currentUserAccount" class="help-inline">您当前余额为:<%= current_user.credit %></span>
+        <span id="recharge">
           <span id='credit_tips' class="help-inline"></span>
-        </div>
+          <a class="btn primary" id="into_recharge" style="display:none">充值</a>
+        </span>
       </div>
     </div>
     <!-- reputation -->
     <div class="clearfix">
       <label for="question_reputation">积分</label>
       <div class="input">
-        <%= f.text_field :reputation, :class => "span5", :size => 70, :maxlength => 70 %>分
-        <div>
-          <span class="help-inline">当前积分为：<%= current_user.reputation %></span>
-          <span id='reputation_tips' class="help-inline"></span>          
-        </div>
+          <%= f.text_field :reputation, :class => "medium", :size => 70, :maxlength => 70 ,:placeholder => "0",:value => ''%>分
+          <span class="help-inline">您当前积分为:<%= current_user.reputation %></span>
+          <span id='reputation_tips' class="help-inline"></span>
       </div>
     </div>
     <!-- actions -->
@@ -88,10 +85,7 @@ $(document).ready(function() {
     reputation : "",
     needCredit:""
   }
-  $.get("/cash", function(data, textStatus, xhr) {
-    user_accout.credit = data.credit;
-    user_accout.reputation = data.reputation;
-  });
+  user_accout.credit = <%= current_user.credit %>;
 });
 
 </script>
