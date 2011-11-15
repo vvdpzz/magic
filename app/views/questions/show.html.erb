@@ -3,11 +3,12 @@
 </div>
 <div class="question_detail">
   <div class="current_question_contorl">
-    <% if @question.followed_dy? current_user.id %>
-      <a class="btn" id="followed_question" href="/questions/<%= @question.id %>/follow">已关注</a>
-    <% else %>
-      <a class="btn success" id="followed_question" href="/questions/<%= @question.id %>/follow">关注问题</a>
-    <% end %>    
+    <% followed =  @question.followed_dy? current_user.id 
+       favorited =  @question.favorite_dy? current_user.id %>
+      <a class="btn <%= followed ? '' : 'success' %>" id="followed-question" href="/questions/<%= @question.id %>/follow">
+        <%= followed ? "取消关注" : "关注问题"  %></a>
+      <a class="btn <%= favorited ? '' : 'success' %>" id="favorited-question" href="/questions/<%= @question.id %>/favorite">
+      <%= favorited ? "取消收藏" : "收藏问题"  %></a>
   </div>
   <div class="question_info">
       <h4>问题状态</h4>
@@ -23,26 +24,25 @@
     <a class="vote-up-off" href="/questions/<%= @question.id %>/vote_for">up vote</a>
     <span class="vote-count-post" id="<%= @question.id %>"><%= @question.votes_count %></span>
     <a class="vote-down-off" href="/questions/<%= @question.id %>/vote_against">down vote</a>
-    <a class="star-off" id="favorite-question" href="#" title="This is a favorite question (click again to undo)">favorite</a>
-    <div class="favoritecount">
-      <span>1</span>
     </div>
   </div>
   <div class="post">
     <div class="content">
       <%= @question.content.html_safe %>
     </div>
-    <div class='submission-rules'>
-      <div>竞赛规则</div>
-      <ul>
-        <% @question.rules_list[1..-2].split(", ").each do |item| %>
-           <li><%= Settings.send("r"+item) %></li>
-        <% end %>
-        <% if @question.customized_rule.present? %>
-           <li><%= @question.customized_rule %></li>
-        <% end %>
-      </ul>
-    </div>
+    <% if (@question.rules_list.present? and (rules = @question.rules_list[1..-2]).present?) or @question.customized_rule.present? %>
+      <div class='submission-rules'>
+        <div>竞赛规则</div>
+        <ul>
+          <% rules.split(", ").each do |item| %>
+             <li><%= Settings.send("r"+item) %></li>
+          <% end %>
+          <% if @question.customized_rule.present? %>
+             <li><%= @question.customized_rule %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     <%= render "/partials/passport", :user => @question.user %>
   </div>
   <% end %>

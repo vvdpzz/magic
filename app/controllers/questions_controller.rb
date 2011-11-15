@@ -13,7 +13,7 @@ class QuestionsController < ApplicationController
   end
   
   def paid
-    @questions = Question.paid
+    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
     respond_to do |format|
       format.html {render :layout => false}
       format.js
@@ -104,11 +104,21 @@ class QuestionsController < ApplicationController
     question = Question.find params[:id]
     status = true
     if question
-      records = FollowedQuestion.where(:user_id => current_user.id, :question_id => question.id)
-      if records.empty?
+      record = FollowedQuestion.where(:user_id => current_user.id, :question_id => question.id).first
+      of_count = current_user.followed_questions_count
+      oq_count = question.followed_questions_count
+      if record.blank?
         current_user.followed_questions.create(:question_id => question.id)
+        current_user.update_attribute(:followed_questions_count, of_count+1)
+        question.update_attribute(:followed_questions_count, oq_count+1)
       else
-        record = records.first
+        if record.status
+           current_user.update_attribute(:followed_questions_count, of_count-1)
+           question.update_attribute(:followed_questions_count, oq_count-1)
+         else
+           current_user.update_attribute(:followed_questions_count, of_count+1)
+           question.update_attribute(:followed_questions_count, oq_count+1)
+         end
         status = record.status if record.update_attribute(:status, !record.status)
       end
       render :json => {:status => status}
@@ -119,11 +129,19 @@ class QuestionsController < ApplicationController
     question = Question.find params[:id]
     status = true
     if question
-      records = FavoriteQuestion.where(:user_id => current_user.id, :question_id => question.id)
-      if records.empty?
+      record = FavoriteQuestion.where(:user_id => current_user.id, :question_id => question.id).first
+      of_count = current_user.favorite_questions_count
+      oq_count = question.favorite_questions_count
+      if record.blank?
         current_user.favorite_questions.create(:question_id => question.id)
       else
-        record = records.first
+        if record.status
+           current_user.update_attribute(:favorite_questions_count, of_count-1)
+           question.update_attribute(:favorite_questions_count, oq_count-1)
+         else
+           current_user.update_attribute(:favorite_questions_count, of_count+1)
+           question.update_attribute(:favorite_questions_count, oq_count+1)
+         end
         status = record.status if record.update_attribute(:status, !record.status)
       end
       render :json => {:status => status}
