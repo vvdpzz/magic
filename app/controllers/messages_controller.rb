@@ -4,65 +4,16 @@ class MessagesController < ApplicationController
   def index
     
   end
-  def conversations
-    
-  end
   
   def load_conversations
-      conversation_list = $redis.zrange("messages:#{current_user.id}", 0, -1)
-      data = []
-      conversation_list.each do |conver_id|
-        hash = load_conversation(conver_id)
-        hash[:messages] = load_messages(conver_id)
-        data << hash
-      end
-      render :json => data
+    conversation_list = $redis.zrange("messages:#{current_user.id}", 0, -1)
+    data = []
+    conversation_list.each do |conver_id|
+      hash = load_conversation(conver_id)
+      hash[:messages] = load_messages(conver_id)
+      data << hash
     end
-  
-  def load_conversation(conver_id)
-        key = "messages:#{current_user.id}:#{conver_id}"
-        last_message = MultiJson.decode($redis.lrange(key, -1, -1)[0])
-        hash = {}
-        hash[:unread_message_count] = $redis.get(key + ":unreadcount")
-        if conver_id == last_message["sender_id"]
-          hash[:friend_name]    = last_message["sender_name"]
-          hash[:friend_picture] = last_message["sender_avatar"]
-        else
-          hash[:friend_name]    = last_message["receiver_name"]
-          hash[:friend_picture] = last_message["receiver_avatar"]
-        end
-        hash[:friend_token]   = conver_id
-        hash[:last_update]    = last_message["created_at"]
-        
-        return hash
-    end
-  
-  def remove_conversation
-    friend_id = params[:friend_token]
-    $redis.del("messages:#{current_user.id}:#{friend_id}:unreadcount")
-    $redis.del("messages:#{current_user.id}:#{friend_id}")
-    $redis.zrem("messages:#{current_user.id}", friend_id)
-    render :json => { :rc => 0 }
-  end
-  
-  def messages
-    @friend = User.select("name").find_by_id params[:friend_token]
-  end
-  
-  def load_messages(friend_id)
-      message_list = []
-      message_list_redis = $redis.lrange("messages:#{current_user.id}:#{friend_id}", 0, -1)
-      message_list_redis.each do |message_redis|
-        message_redis_hash = MultiJson.decode(message_redis)
-        message = {}
-        message[:owner_picture]     = message_redis_hash["sender_avatar"]
-        message[:owner_profile_url] = "/users/" + message_redis_hash["sender_id"].to_s
-        message[:text]              = message_redis_hash["text"]
-        message[:time_created]      = message_redis_hash["created_at"]
-        message[:owner_name]        = message_redis_hash["sender_name"]
-        message_list << message
-      end
-      return message_list
+    render :json => data
   end
   
   def set_unreadcount
@@ -107,10 +58,6 @@ class MessagesController < ApplicationController
     render :json => { :outgoing => "", :rc => 0 }   
   end
   
-  def remove_message
-    
-  end
-  
   def update_last_viewed
     $redis.del("messages:#{current_user.id}:unread_messages")
     $redis.set("messages:#{current_user.id}:unreadcount", 0)
@@ -143,4 +90,39 @@ class MessagesController < ApplicationController
     $redis.set("messages:#{current_user.id}:unreadcount", (all_unread_count-conver_unread_count))
     render :json => { :rc => 0 }
   end
+  
+  protected
+    def load_conversation(conver_id)
+      key = "messages:#{current_user.id}:#{conver_id}"
+      last_message = MultiJson.decode($redis.lrange(key, -1, -1)[0])
+      hash = {}
+      hash[:unread_message_count] = $redis.get(key + ":unreadcount")
+      if conver_id == last_message["sender_id"]
+        hash[:friend_name]    = last_message["sender_name"]
+        hash[:friend_picture] = last_message["sender_avatar"]
+      else
+        hash[:friend_name]    = last_message["receiver_name"]
+        hash[:friend_picture] = last_message["receiver_avatar"]
+      end
+      hash[:friend_token]   = conver_id
+      hash[:last_update]    = last_message["created_at"]
+  
+      return hash
+    end
+  
+    def load_messages(friend_id)
+        message_list = []
+        message_list_redis = $redis.lrange("messages:#{current_user.id}:#{friend_id}", 0, -1)
+        message_list_redis.each do |message_redis|
+          message_redis_hash = MultiJson.decode(message_redis)
+          message = {}
+          message[:owner_picture]     = message_redis_hash["sender_avatar"]
+          message[:owner_profile_url] = "/users/" + message_redis_hash["sender_id"].to_s
+          message[:text]              = message_redis_hash["text"]
+          message[:time_created]      = message_redis_hash["created_at"]
+          message[:owner_name]        = message_redis_hash["sender_name"]
+          message_list << message
+        end
+        return message_list
+    end
 end

@@ -14,6 +14,10 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.build(params[:answer])
     if @answer.save
       question.not_free? and question.correct_answer_id == 0 and @answer.deduct_reputation and @answer.order_reputation
+      # add notification to db and pusher
+      html = "<a href=\"/users/#{current_user.id}\">#{current_user.name}</a> 回答了你的问题 <a href=\"/questions/#{question.id}\">#{question.title}</a> 。"
+      Notification.create(:user_id => question.user_id, :content => html)
+      Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', html)
       render json: {answers_count: question.answers_count+1, html: render_to_string(partial: 'answer', locals: {answer: @answer}), status: :ok}
     else
       render json: {:errors => "Oops! Some errors happened."}
@@ -84,6 +88,11 @@ class AnswersController < ApplicationController
           )
           order.save
           
+          # add notification to db and pusher
+          html = "<a href=\"/users/#{question.user_id}\">#{question.user.name}</a>采纳了您对 <a href=\"/questions/#{question.id}\">#{question.title}</a> 的回答 。"
+          Notification.create(:user_id => @user.id, :content => html)
+          Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', html)
+          
           # change question user's order status from normal to success
           orders = current_user.reputation_transactions.where(:question_id => question.id, :trade_type => TradeType::ASK)
           orders.each do |order|
@@ -106,6 +115,11 @@ class AnswersController < ApplicationController
             :trade_status => TradeStatus::SUCCESS
           )
           order.save
+          
+          # add notification to db and pusher
+          html = "<a href=\"/users/#{question.user_id}\">#{question.user.name}</a>采纳了您对 <a href=\"/questions/#{question.id}\">#{question.title}</a> 的回答 。"
+          Notification.create(:user_id => @user.id, :content => html)
+          Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', html)
           
           # change question user's order status from normal to success
           orders = current_user.credit_transactions.where(:question_id => question.id, :trade_type => TradeType::ASK)

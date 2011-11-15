@@ -1,0 +1,36 @@
+<div class="page-left">
+	<span class="page-left-header">
+		<span class="ui-icons ui-icons-position" id="all-notification-icon"></span>
+		<span class="ui-icons-title">通知</span>
+	</span>
+	
+	<% if @has_notification%>
+	  <div class="notification-feed">
+		<% if @first.created_at.strftime("%Y-%m-%d") == Time.now.strftime("%Y-%m-%d") %>
+			<div class="notification-date">今天</div>
+		<% else%>
+			<div class="notification-date"><%= @first.created_at.strftime("%Y-%m-%d") %></div>
+		<% end %>
+		<% @notification_list.each do |notification| %>
+			<% if notification.created_at.strftime("%Y-%m-%d") != @first.created_at.strftime("%Y-%m-%d") %>
+				</div>
+				<div class="notification-feed">
+				<div class="notification-date"><%= notification.created_at.strftime("%Y-%m-%d") %></div>
+				<% @first = notification %>
+			<% end %>
+		
+			<div class="notification-detail"> 
+				<%= notification.content.html_safe %>
+				<span class="timeago"><%= notification.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
+			</div>
+		<% end %>
+		</div>
+	<% end %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	
+</script>
+	
+	
+	
