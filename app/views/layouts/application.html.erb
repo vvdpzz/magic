@@ -20,8 +20,8 @@
           <li>
             <a href="/messages">私信<span id="nav-msg-new-num" style="display: none; "></span></a>   
           </li>
-          <li>
-            <a href="/notifications">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>   
+          <li id="messages-page">
+            <a href="javascript:void(0)">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>  
           </li>
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle"><%= current_user.name %></a>
@@ -42,6 +42,24 @@
       </div>
     </div>
   </div>
+  <div style="z-index: 1000; ">
+    <div id="msg_warpper" style="position: absolute;display:none;">
+      <div id="msg_warpper_head">
+        <a href="#">我是通知</a>
+        <a class="msg_warpper_close" href="#">x</a>
+      </div>
+      <div id="msg_warpper_nav">
+        <ul id="msg_warpper_links">
+          <li><a href="javascript:void(0)" class="currentChose">我是选项A</a></li>
+          <li><a href="javascript:void(0)">我是选项B</a></li>
+        </ul>
+      </div>
+      <div id="msg_warpper_container"></div>
+      <div id="msg_warpper_footer">
+        <a id="msg_warpper_close">关了我吧</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
 
@@ -58,5 +76,14 @@
   });
   $(function(){
     initNav();
+    $("#messages-page a").bind('click',function(){
+      msg_warpper_init()
+    })
   });
+  function msg_warpper_init(){
+    $("#msg_warpper").slideDown()
+    $("#msg_warpper_head .msg_warpper_close,#msg_warpper_close").bind("click",function(){
+      $("#msg_warpper").slideUp()
+    })
+  }
 </script>

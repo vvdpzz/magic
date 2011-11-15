@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   has_many :comments, :class_name => "Comment", :foreign_key => "magic_id", :dependent => :destroy
   has_many :followed_questions, :class_name => "FollowedQuestion", :foreign_key => "question_id", :conditions => {:status => true}
+  has_many :favorite_questions, :class_name => "FavoriteQuestion", :foreign_key => "question_id", :conditions => {:status => true}
   default_scope order("created_at DESC")
   scope :free, lambda { where(["reputation = 0 AND credit = 0.00"]) }
   scope :paid, lambda { where(["reputation <> 0 OR credit <> 0.00"])}
@@ -19,7 +20,7 @@ class Question < ActiveRecord::Base
     end
     
     define_method "deduct_#{name}" do
-      self.user.update_attribute(name.to_sym, self.user.send(name) - self.send(name)) if self.send(name) > 0
+      self.user.update_attribute(name.to_sym, self.user.send(name) - self.send(name)) if self.send(name).to_i > 0
     end
     
     define_method "order_#{name}" do
@@ -50,6 +51,11 @@ class Question < ActiveRecord::Base
 
   def followed_dy?(user_id)
     records = FollowedQuestion.where(:user_id => user_id, :question_id => self.id)
+    records.empty? ? false : records.first.status
+  end
+  
+  def favorite_dy?(user_id)
+    records = FavoriteQuestion.where(:user_id => user_id, :question_id => self.id)
     records.empty? ? false : records.first.status
   end
   

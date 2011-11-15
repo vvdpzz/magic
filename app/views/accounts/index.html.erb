@@ -1,8 +1,9 @@
 <div class="record-table">
       <a class="primary btn" id="recharge-button">充值</a>
+      <!-- <a class="primary btn" id=""> -->
       <div class="clearfix">
         <div class="input">      
-          <input id="input-credit" maxlength="10" name="credit" size="10" type="text">  
+          <input id="input-credit" maxlength="10" name="credit" size="10" type="text" placeholder="请输入要充值的数目">  
           <span id="recharge-tips"></span>
         </div>
       </div>
@@ -16,8 +17,8 @@
     </thead>
     <tbody>
       <tr>
-        <th>¥ <%= @user.credit %></th>
-        <td># <%= @user.reputation %></td>
+        <td id="credit">¥ <%= @user.credit %></td>
+        <td id="reputation"># <%= @user.reputation %></td>
       </tr>
     </tbody>
   </table>
@@ -118,12 +119,28 @@
           $($("#payment-form").get(0).utf8).remove()
           url = "https://www.alipay.com/cooperate/gateway.do?" + $("#payment-form").serialize()
           window.open( url, "_blank")
+          $(this).dialog('option',callbackDialog);
         },
         "取消": function() {
           $(this).dialog("close");
         }
       }
-    }
+    },
+    callbackDialog = {
+      buttons: {
+        "完成": function() {
+          $.get('/cash', function(data, textStatus, xhr){
+            $('#credit').text(data.credit);
+            $('#reputation').text(data.reputation);
+            $('#input-credit').val("");
+            $('#dlg-recharge').dialog("close");
+          });
+        },
+        "遇到困难": function() {
+          $(this).dialog("close");
+        }
+      }
+    };
     $('#dlg-recharge').dialog(rechargeDialog);
     $("#recharge-button").click(function(){
       $('#recharge-tips').text('').fadeOut();
