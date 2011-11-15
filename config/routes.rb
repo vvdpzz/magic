@@ -71,6 +71,7 @@ Magic::Application.routes.draw do
   resources :notifications do
     collection do
       get :load_notifications_on_navbar
+      post :set_unread_count
     end
   end
 

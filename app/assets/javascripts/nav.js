@@ -20,7 +20,7 @@ var loadNotificationsOnNav = function() {
 					var elem = contructNotificationItem(notification);
 					$('#msg_warpper_container').append(elem);
 				});
-				if(data.count != null){
+				if(data.count > 0){
           $('#nav-ntf-new-num').text(data.count).show();
 				}
       }
@@ -31,6 +31,6 @@ var loadNotificationsOnNav = function() {
 var contructNotificationItem = function(notification) {
 	var item = $('#itemBox').clone().show().removeAttr('id');
 	item.find('p').html(notification.content);
-	item.find('.notification-time').html(notification.created_at);
+	item.find('.notification-time').html(dateFormat(new Date(notification.created_at)));
 	return item;
 }

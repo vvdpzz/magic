@@ -16,12 +16,6 @@ class MessagesController < ApplicationController
     render :json => data
   end
   
-  def set_unreadcount
-    friend_id = params[:friend_token]
-    $redis.set("messages:#{current_user.id}:#{friend_id}:unreadcount", 0)
-    render :json => { :rc => 0 }
-  end
-  
   def send_message
     sender    = User.basic(current_user.id)
     receiver  = User.basic(params[:recipient_token])
@@ -56,12 +50,6 @@ class MessagesController < ApplicationController
     $redis.incr("messages:#{receiver.id}:unreadcount")
     
     render :json => { :outgoing => "", :rc => 0 }   
-  end
-  
-  def update_last_viewed
-    $redis.del("messages:#{current_user.id}:unread_messages")
-    $redis.set("messages:#{current_user.id}:unreadcount", 0)
-    render :json => { :rc => 0 }
   end
   
   def load_messages_on_navbar

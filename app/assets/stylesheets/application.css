@@ -194,8 +194,9 @@ body{
 }
 #msg_warpper_footer{
   background-color: #AAA;
-  text-align: right;
-  font-size: 10px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
 }
 #msg_warpper_close{
   color:#fff;
