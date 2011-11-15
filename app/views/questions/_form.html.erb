@@ -21,27 +21,17 @@
       <label>竞标规则</label>
       <div class="input" id="rules_list">
         <ul class="inputs-list">
-          <li>
-            <label>
-              <input type="checkbox" name="question[rules_list]" id="rules_1" value="1">
-              <span>相似答案，先答为胜</span>
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="checkbox" name="question[rules_list]" id="rules_2" value="2">
-              <span>答案需要包含图片</span>
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="checkbox" name="question[rules_list]" id="rules_3" value="3">
-              <span>答案不能少于200字</span>
-            </label>
-          </li>
+          <% [1, 2, 3].each  do |i| %>
+            <li>
+               <label>
+                 <%= f.check_box 'rules_list', {:multiple => true}, i, nil %>
+                 <span><%= Settings.send("r#{i}") %></span>
+               </label>
+            </li>
+          <% end %>
           <li>
             <label id="addedRule">
-              <input type="checkbox" name="question[rules_list]" id="rules_0" value="0">
+              <input type="checkbox" name="customized" value="0">
               <span>额外的规则</span>
             </label>
             <textarea id="additional_rule" style="display:none" name="question[customized_rule]" class="xxlarge" row=3 placeholder="输入您自定义的规则"></textarea>

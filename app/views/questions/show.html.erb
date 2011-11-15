@@ -32,6 +32,17 @@
     <div class="content">
       <%= @question.content.html_safe %>
     </div>
+    <div class='submission-rules'>
+      <div>竞赛规则</div>
+      <ul>
+        <% @question.rules_list[1..-2].split(", ").each do |item| %>
+           <li><%= Settings.send("r"+item) %></li>
+        <% end %>
+        <% if @question.customized_rule.present? %>
+           <li><%= @question.customized_rule %></li>
+        <% end %>
+      </ul>
+    </div>
     <%= render "/partials/passport", :user => @question.user %>
   </div>
   <% end %>

@@ -10,6 +10,10 @@ defaults: &defaults
   questions_per_page: 3
   answer_accept: 10
   question_accept_answer: 2
+  r0: ""
+  r1: "相似答案，先答为胜"
+  r2: "答案需要包含图片"
+  r3: "答案不能少于200字"
 
 development:
   <<: *defaults
