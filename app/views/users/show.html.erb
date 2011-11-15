@@ -21,8 +21,8 @@
     </div>
     <div class="profile-detail">
       <% if @user.id == current_user.id %>
-      <h2><%= on_the_spot_edit @user, :name %></h2>
-      <p><%= on_the_spot_edit @user, :about_me %></p>
+      <h2 class="user_edit"><%= on_the_spot_edit @user, :name %></h2>
+      <p class="user_edit"><%= on_the_spot_edit @user, :about_me , :type => :textarea, :rows => 4, :tooltip => "点此编辑个人简介..." %></p>
       <% else %>
       <h2><%= @user.name %></h2>
       <p><%= @user.about_me %></p>

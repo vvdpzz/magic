@@ -13,7 +13,7 @@ class QuestionsController < ApplicationController
   end
   
   def paid
-    @questions = Question.paid
+    @questions = Question.paid.page(params[:page]).per(Settings.questions_per_page)
     respond_to do |format|
       format.html {render :layout => false}
       format.js
