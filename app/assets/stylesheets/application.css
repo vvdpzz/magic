@@ -201,5 +201,15 @@ body{
   color:#fff;
   font-weight:bold;
 }
-
+.itemBox {
+width: 430px;
+border-bottom: 1px solid #E7E7E7;
+float: left;
+margin: 3px 3px 0;
+padding: 3px 4px;
+}
+.notification-time {
+  color: #909090;
+  font-size: 11px;
+}
 

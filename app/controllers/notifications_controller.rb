@@ -9,9 +9,9 @@ class NotificationsController < ApplicationController
     end
   end
   
-  def load_notifications
-    @notifications = Notification.where(:user_id => current_user.id, :id_read => true )
-    render :json => { :notification_list => @notifications }
+  def load_notifications_on_navbar
+    @notifications = Notification.where(:user_id => current_user.id, :is_read => true )
+    render :json => { :notifications => @notifications }
     
   end
 
