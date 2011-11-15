@@ -16,8 +16,6 @@ class MessagesController < ApplicationController
         hash[:messages] = load_messages(conver_id)
         data << hash
       end
-      $redis.del("messages:#{current_user.id}:unread_messages")
-      $redis.del("messages:#{current_user.id}:unreadcount")
       render :json => data
     end
   
@@ -84,7 +82,7 @@ class MessagesController < ApplicationController
     hash[:sender_name]    = sender.name
     
     # add to user's unread message list
-    $redis.rpush("messages:#{receiver.id}:unread_messages", MultiJson.encode(hash))
+    # $redis.rpush("messages:#{receiver.id}:unread_messages", MultiJson.encode(hash))
     Pusher["presence-messages_#{receiver.id}"].trigger('message_created', MultiJson.encode(hash))
     
     hash[:sender_avatar]    = sender.gavatar
@@ -115,7 +113,7 @@ class MessagesController < ApplicationController
   
   def update_last_viewed
     $redis.del("messages:#{current_user.id}:unread_messages")
-    $redis.del("messages:#{current_user.id}:unreadcount")
+    $redis.set("messages:#{current_user.id}:unreadcount", 0)
     render :json => { :rc => 0 }
   end
   
@@ -135,5 +133,14 @@ class MessagesController < ApplicationController
       contact_list << MultiJson.decode($redis.hget("users_info", user_id))
     end
     render :json => { :contact_list => contact_list }
+  end
+  
+  def set_unread_count
+    friend_id = params[:friend_id]
+    conver_unread_count = $redis.get("messages:#{current_user.id}:#{friend_id}:unreadcount").to_i
+    all_unread_count = $redis.get("messages:#{current_user.id}:unreadcount").to_i
+    $redis.set("messages:#{current_user.id}:#{friend_id}:unreadcount", 0)
+    $redis.set("messages:#{current_user.id}:unreadcount", (all_unread_count-conver_unread_count))
+    render :json => { :rc => 0 }
   end
 end

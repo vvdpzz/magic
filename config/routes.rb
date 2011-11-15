@@ -65,6 +65,7 @@ Magic::Application.routes.draw do
       get :load_messages_on_navbar
       post :send_message
       post :update_last_viewed
+      post :set_unread_count
     end
   end
 

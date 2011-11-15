@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111110135952) do
+ActiveRecord::Schema.define(:version => 20111115072855) do
 
   create_table "answers", :id => false, :force => true do |t|
     t.integer  "id",             :limit => 8
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
     t.integer  "followed_questions_count",                                            :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "favorite_questions_count"
   end
 
   add_index "questions", ["user_id"], :name => "index_questions_on_user_id"
