@@ -76,16 +76,20 @@
   });
   $(function(){
     initNav();
+    msg_warpper_init()
     $("#notify-page a").bind('click',function(){
-      msg_warpper_init()
+      $("#msg_warpper").slideToggle();
     })
   });
   function msg_warpper_init(){
-    $("#msg_warpper").slideDown();
-    $(document).mouseup(function(event){  
-        if($(event.target).parents("#msg_warpper").length==0){  
+    $(document).mouseup(function(event){
+        console.log($(event.target).parents("#msg_warpper").length)
+        console.log($(event.target).parents('#notify-page').length)
+        if($(event.target).parents("#msg_warpper").length==0){
+          if($("#msg_warpper").css('display')=='block'&&$(event.target).parent('#notify-page').length != 0)
+            return false
           $("#msg_warpper").slideUp()
-        }  
+        }
     }).keyup(function(event){
           if(event.keyCode == 27)
             $("#msg_warpper").slideUp()
