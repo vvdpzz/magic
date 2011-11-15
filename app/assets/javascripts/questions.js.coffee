@@ -22,20 +22,14 @@ $(->
   question_paymentDlg_reTry = {
     buttons:
       '完成':()->
-        console.log 1
         getUserCredit ()->
-          console.log 2
-          console.log user_accout.credit
-          console.log $('#select_credit').val()
           if parseInt($('#select_credit').val(),10) <= user_accout.credit
-            console.log 3
-            $("#reCharge").fadeOut()
+            $("#recharge").fadeOut()
+            removeDomError($("#select_credit"))
           else
-            console.log 4
             user_accout.needCredit = parseInt($("#select_credit").val(),10) - user_accout.credit
             $("#currentUserAccount").text("您当前金额为#{user_accout.credit}元")
             $("#credit_tips").text("还需充值"+user_accout.needCredit+"元")
-          console.log 5
           $('#dialog_payment').dialog("close")
         
       '遇到困难':()->
@@ -65,16 +59,6 @@ $(->
     unless $(".nicEdit-main").text().length
       addDomError($contentTips)
       isSubmit = false
-    #get init userAccount
-    unless checkNum($question_reputation.val())||$question_reputation.val()==""
-      addDomError($question_reputation)
-      $reputation_tips.text("请输入正确的数值")
-      isSubmit = false
-    if parseInt($question_reputation.val()) > user_accout.reputation
-      addDomError($question_reputation)
-      needReputation = parseInt($question_reputation.val()) - user_accout.reputation
-      $reputation_tips.text("缺少"+needReputation+"积分").fadeIn()
-      isSubmit = false
   #credit importpart
     if $question_credit.val()!='0'
       $credit_tips.append($loadingImg)
@@ -83,10 +67,21 @@ $(->
         if parseInt($question_credit.val(),10) > user_accout.credit
           addDomError($question_credit)
           $recharge.show()
+          $("#currentUserAccount").text("您当前金额为#{user_accout.credit}元")          
           $credit_tips.text("请充值"+needRecharge+"元")
           $("#into_recharge").fadeIn()
-        $credit_tips.remove($loadingImg)
+          isSubmit = false
+        $loadingImg.remove()
       )
+      #get init userAccount
+    unless checkNum($question_reputation.val())||$question_reputation.val()==""
+      addDomError($question_reputation)
+      $reputation_tips.text("请输入正确的数值")
+      isSubmit = false
+    if parseInt($question_reputation.val()) > user_accout.reputation
+      addDomError($question_reputation)
+      needReputation = parseInt($question_reputation.val(),10) - user_accout.reputation
+      $reputation_tips.text("缺少"+needReputation+"积分").fadeIn()
       isSubmit = false
     isSubmit
     
@@ -98,7 +93,7 @@ $(->
     if $(this).val()
       removeDomError($titleCount)
 
-  $('#addedRule').bind 'mouseup',->
+  $('#addedRule').bind 'change',->
     if $('#additional_rule').css('display') is 'none'
       $('#additional_rule').slideDown(200)
     else

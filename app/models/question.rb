@@ -19,7 +19,7 @@ class Question < ActiveRecord::Base
     end
     
     define_method "deduct_#{name}" do
-      self.user.update_attribute(name.to_sym, self.user.send(name) - self.send(name)) if self.send(name) > 0
+      self.user.update_attribute(name.to_sym, self.user.send(name) - self.send(name)) if self.send(name).to_i > 0
     end
     
     define_method "order_#{name}" do
