@@ -14,10 +14,10 @@ role :web,   "106.187.43.141"                         # Your HTTP server, Apache
 role :app,   "106.187.43.141"                         # This may be the same as your `Web` server
 role :db,    "106.187.43.141", :primary => true       # This is where Rails migrations will run
 role :db,    "106.187.43.141"                         #slave db
-set :deploy_to, "/etc/dev/#{application}"
+set :deploy_to, "/root/dev/#{application}"
 set :application_path, "#{deploy_to}/current"
-set :user, "wwwdev"
-set :password, "wwwdev"
+set :user, ""
+set :password, ""
 
 #Unicorn
 set :unicorn_binary, "/usr/local/rvm/gems/ruby-1.9.2-p290/bin/unicorn"
