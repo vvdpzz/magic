@@ -4,11 +4,8 @@ class RequestInvitationsController < ApplicationController
   # GET /request_invitations
   # GET /request_invitations.json
   def index
-    @request_invitations = RequestInvitation.all
-
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @request_invitations }
     end
   end
 
@@ -46,7 +43,7 @@ class RequestInvitationsController < ApplicationController
 
     respond_to do |format|
       if @request_invitation.save
-        format.html { redirect_to @request_invitation, notice: 'Request invitation was successfully created.' }
+        format.html { redirect_to request_invitations_url, notice: 'Request invitation was successfully created.' }
         format.json { render json: @request_invitation, status: :created, location: @request_invitation }
       else
         format.html { render action: "new" }
