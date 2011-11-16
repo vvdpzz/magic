@@ -24,15 +24,6 @@
             <a href="javascript:void(0)">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>
           </li>
           <li class="dropdown" data-dropdown="dropdown">
-            <a href="#" class="dropdown-toggle">通知</a>
-            <ul class="dropdown-menu" id="notification-container">
-              <li id="notification-item" style="display: none">
-                <p class="notification-content">啊啊</p>
-                <span class="notification-time">222222</span>
-              </li>
-            </ul>
-          </li>
-          <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle"><%= current_user.name %></a>
             <ul class="dropdown-menu">
               <li><a href="/accounts">帐户流水</a></li>
@@ -57,8 +48,8 @@
     </div>
     <div id="msg_warpper_container">
       <div id="itemBox" class="itemBox" style="display:none;">
-          <p class="notification-content"></p>
-          <span class="notification-time"></span>
+        <p class="notification-content"></p>
+        <span class="notification-time"></span>
       </div>
     </div>
     <div class="msg_warpper_footer">
@@ -93,10 +84,15 @@
     $('#nav-ntf-new-num').text(count).show();
   });
   
+  
   $(function(){
     initNav();
     msg_warpper_init()
     $("#notify-page a").bind('click',function(){
+      if($("#msg_warpper").css('display')=="none")
+        $("#notify-page a").addClass('notify_active')
+      else
+        $("#notify-page a").removeClass('notify_active')
       $("#msg_warpper").slideToggle();
       $.post('/notifications/set_unread_count');
       $('#nav-ntf-new-num').text('').hide();
@@ -108,13 +104,16 @@
           if($("#msg_warpper").css('display')=='block'&&$(event.target).parent('#notify-page').length != 0)
             return false
           $("#msg_warpper").slideUp()
+          $("#notify-page a").removeClass('notify_active')
         }
     }).keyup(function(event){
           if(event.keyCode == 27)
             $("#msg_warpper").slideUp()
+            $("#notify-page a").removeClass('notify_active')
         });
     $("#msg_warpper_head .msg_warpper_close,#msg_warpper_close").bind("click",function(){
       $("#msg_warpper").slideUp()
+      $("#notify-page a").removeClass('notify_active')
     })
   }
 </script>
