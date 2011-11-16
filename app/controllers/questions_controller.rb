@@ -37,9 +37,10 @@ class QuestionsController < ApplicationController
   def create
     params[:question][:rules_list] = params[:question][:rules_list].reject(&:blank?).to_param
     @question = current_user.questions.build params[:question]
+    @question.id = UUIDList.pop
     respond_to do |format|
-      if @question.save
-        @question.save and @question.deduct_credit and @question.order_credit and @question.deduct_reputation and @question.order_reputation
+      if @question.valid?
+        @question.strong_create_question
         format.html { redirect_to @question, :notice => 'Question was successfully created.' }
         format.json { render :json => @question, :status => :ok, :location => @question }
       else
@@ -51,6 +52,15 @@ class QuestionsController < ApplicationController
   
   def show
     @question = Question.find params[:id]
+    q_hash = @question.serializable_hash
+    q_data = q_hash.merge! User.basic_hash @question.user_id
+    answers = Answer.where(:question_id => params[:id])
+    a_hash = answers.collect{ |answer| answer.serializable_hash.merge!(User.basic_hash answer.user_id)}
+    q_data = q_data.merge!({:answers => a_hash})
+    respond_to do |format|
+      format.html
+      format.json { render :json => q_data, :status => :ok } 
+    end
   end
 
   def destroy
@@ -153,7 +163,7 @@ class QuestionsController < ApplicationController
     items = $redis.lrange(l, 0, -1)
     @list = items.collect{ |item| $redis.lrange(item, 0, -1) }
   end
-
+  
   protected
     def vote_init
       @question = Question.select("id").find_by_id(params[:id])

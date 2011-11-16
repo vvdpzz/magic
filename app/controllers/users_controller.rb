@@ -19,10 +19,7 @@ class UsersController < ApplicationController
         $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
         
         # add notification to db and pusher
-        html = "<a href='/users/#{current_user.id}'>#{current_user.name}</a> 关注了你。"
-        notification = Notification.create(:user_id => @user.id, :content => html)
-        $redis.incr("notifications:#{@user.id}:unreadcount")
-        Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', MultiJson.encode(notification))
+        Notification.create_and_push(current_user, 1, @user)
       else
         record = records.first
         if record.flag
@@ -33,10 +30,7 @@ class UsersController < ApplicationController
           $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
           
           # add notification to db and pusher
-          html = "<a href='/users/#{current_user.id}'>#{current_user.name}</a> 关注了你。"
-          notification = Notification.create(:user_id => @user.id, :content => html)
-          $redis.incr("notifications:#{@user.id}:unreadcount")
-          Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', MultiJson.encode(notification))
+          Notification.create_and_push(current_user, 1, @user)
         end
         flag = record.flag if record.update_attribute(:flag, !record.flag)
       end
