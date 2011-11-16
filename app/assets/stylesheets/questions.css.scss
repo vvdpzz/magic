@@ -84,7 +84,13 @@ $text_gray: #ababab;
   font-size: 17px;
   margin-bottom: 1.2em;
 }
-
+#question_datepicker{
+  cursor: pointer;
+  height: 25px;
+  width: 152px;
+  font-size: 15px;
+  background: url(/assets/calendar-icon.png) no-repeat 135px 6px white
+}
 //vote
 .vote-area{
   text-align:center;
