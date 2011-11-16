@@ -1,7 +1,12 @@
 Magic::Application.routes.draw do
+  resources :request_invitations
+
   get '/cash' => "users#cash"
   
   match 'pusher/auth' => "pusher#auth"
+  
+  match "syncs/:type/new" => "syncs#new", :as => :sync_new
+  match "syncs/:type/callback" => "syncs#callback", :as => :sync_callback
   
   resources :questions do
     collection do

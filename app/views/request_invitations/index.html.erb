@@ -1,0 +1,27 @@
+<h1>Listing request_invitations</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Email</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @request_invitations.each do |request_invitation| %>
+  <tr>
+    <td><%= request_invitation.name %></td>
+    <td><%= request_invitation.description %></td>
+    <td><%= request_invitation.email %></td>
+    <td><%= link_to 'Show', request_invitation %></td>
+    <td><%= link_to 'Edit', edit_request_invitation_path(request_invitation) %></td>
+    <td><%= link_to 'Destroy', request_invitation, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Request invitation', new_request_invitation_path %>

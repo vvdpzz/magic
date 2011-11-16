@@ -1,0 +1,5 @@
+development:
+  key:    "387025192"
+  secret: "d84b8481e6f268a679d3fc1139f920c0"
+  url:    "http://beta.luexiao.com"
+  callback: "http://beta.luexiao.com/syncs/sina/callback"
