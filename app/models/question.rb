@@ -68,7 +68,7 @@ class Question < ActiveRecord::Base
   end
   
   def strong_create_question
-    ActiveRecord::Base.connection.execute("call sp_deduct_credit_and_money(#{self.id},#{self.user_id},'#{self.title}','#{self.content}',#{self.reputation},#{self.credit},#{self.is_free})")
+    ActiveRecord::Base.connection.execute("call sp_deduct_credit_and_money(#{self.id},#{self.user_id},'#{self.title}','#{self.content}',#{self.reputation.to_i},#{self.credit},#{self.is_free},'#{self.rules_list}','#{self.customized_rule}')")
   end
   
   def watched_user

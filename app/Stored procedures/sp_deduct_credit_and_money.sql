@@ -15,17 +15,20 @@ CREATE PROCEDURE sp_deduct_credit_and_money (
 	in content text,
 	in deduct_reputation int,
 	in deduct_credit DECIMAL(8,2),
-	in is_community boolean)
+	in is_community boolean,
+	in rules_list varchar(20),
+	in customized_rule varchar(100))
 BEGIN
-IF  is_community THEN
+IF deduct_reputation = 0 AND deduct_credit =0.00 THEN
 	START TRANSACTION;
-	INSERT INTO questions (id, content, created_at, title, updated_at, user_id) 
-	VALUES (uuid, content, NOW(), title, NOW(), user_id);
+	INSERT INTO questions (id, content, created_at, title, updated_at, user_id, rules_list, customized_rule) 
+	VALUES (uuid, content, NOW(), title, NOW(), user_id, rules_list, customized_rule);
 	COMMIT;
 ELSE IF deduct_reputation > 0 AND deduct_credit =0.00 THEN
 	START TRANSACTION;
  	/* Create a new question */
-	INSERT INTO questions (id, content, created_at, reputation, title, updated_at, user_id) VALUES (uuid, content, NOW(), deduct_reputation, title, NOW(), user_id);
+	INSERT INTO questions (id, content, created_at, reputation, title, updated_at, user_id, rules_list, customized_rule) 
+	     VALUES (uuid, content, NOW(), deduct_reputation, title, NOW(), user_id, rules_list, customized_rule);
 
 	/* update user info*/
 	UPDATE users
@@ -41,7 +44,8 @@ ELSE IF deduct_reputation > 0 AND deduct_credit =0.00 THEN
 ELSE IF deduct_reputation = 0 AND deduct_credit > 0.00 THEN
 	START TRANSACTION;
  	/* Create a new question */
-	INSERT INTO questions (id, content, created_at, credit, title, updated_at, user_id) VALUES (uuid, content, NOW(), deduct_credit, title, NOW(), user_id);
+	INSERT INTO questions (id, content, created_at, credit, title, updated_at, user_id, rules_list, customized_rule)
+	     VALUES (uuid, content, NOW(), deduct_credit, title, NOW(), user_id, rules_list, customized_rule);
 
 	/* update user info*/
 	UPDATE users
@@ -57,8 +61,8 @@ ELSE IF deduct_reputation = 0 AND deduct_credit > 0.00 THEN
 ELSE IF deduct_reputation > 0 AND deduct_credit > 0.00 THEN
 	START TRANSACTION;
  	/* Create a new question */
-	INSERT INTO questions (id, content, created_at, reputation, credit, title, updated_at, user_id) 
-		 VALUES (uuid, content, NOW(), deduct_reputation, deduct_credit, title, NOW(), user_id);
+	INSERT INTO questions (id, content, created_at, reputation, credit, title, updated_at, user_id, rules_list, customized_rule) 
+		 VALUES (uuid, content, NOW(), deduct_reputation, deduct_credit, title, NOW(), user_id, rules_list, customized_rule);
 	
 	/* update user info*/
 	UPDATE users
