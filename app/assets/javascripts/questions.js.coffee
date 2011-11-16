@@ -3,7 +3,6 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $(->
   $loadingImg = $("<img/>").attr('src', '/assets/loading.gif')
-
   #datepicker init
   datepickerOptions = {
     minDate: 3,
@@ -96,9 +95,14 @@ $(->
       needReputation = parseInt($question_reputation.val(),10) - user_accout.reputation
       $reputation_tips.text("缺少"+needReputation+"积分").fadeIn()
       isSubmit = false
-    # if isSubmit
-    
-    
+    return isSubmit unless isSubmit
+    $('#new_question').bind('ajax:success', (xhr, data, status)->
+      location.href = "/questions/#{data.id}"
+    )
+    $('#new_question').bind('ajax:error',(xhr,textStatus, errorThrown)->
+      alert '我错了'
+    )
+
   #bind event
   $("#question_title").bind "keyup",()->
     $titleCount = $("#titleCount")

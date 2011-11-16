@@ -39,6 +39,8 @@ class QuestionsController < ApplicationController
     @question = current_user.questions.build params[:question]
     @question.id = UUIDList.pop
     respond_to do |format|
+      puts @question.reputation
+      puts @question.credit
       if @question.valid?
         @question.strong_create_question
         format.html { redirect_to @question, :notice => 'Question was successfully created.' }
