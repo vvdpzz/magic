@@ -83,7 +83,7 @@ $(->
       needReputation = parseInt($question_reputation.val(),10) - user_accout.reputation
       $reputation_tips.text("缺少"+needReputation+"积分").fadeIn()
       isSubmit = false
-    isSubmit
+    # if isSubmit
     
     
   #bind event

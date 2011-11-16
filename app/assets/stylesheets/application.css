@@ -135,8 +135,8 @@ body{
   -webkit-box-shadow: 4px 4px 7px #ababab;
   box-shadow: 4px 4px 7px #ababab;
   z-index: 999;
-  top: 50px!important;
-  left:60%;
+  top: 40px!important;
+  left:50%;
   opacity:0.9;
 }
 .msg_warpper_head{
