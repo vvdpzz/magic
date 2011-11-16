@@ -1,0 +1,22 @@
+.notification-feed {
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  border: 1px solid #CCC;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.notification-date {
+  background-color: #EAEAEA;
+  padding: 5px 12px;
+  font-weight: 500;
+}
+.notification-detail {
+  border-top: 1px solid #CCC;
+  background-color: white;
+  padding: 5px 12px;
+  min-height: 25px;
+}
+.timeago {
+  color: #909090;
+  font-size: 11px;
+}

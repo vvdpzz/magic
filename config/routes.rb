@@ -64,7 +64,13 @@ Magic::Application.routes.draw do
       get :load_contact_list
       get :load_messages_on_navbar
       post :send_message
-      post :update_last_viewed
+      post :set_unread_count
+    end
+  end
+  
+  resources :notifications do
+    collection do
+      get :load_notifications_on_navbar
       post :set_unread_count
     end
   end

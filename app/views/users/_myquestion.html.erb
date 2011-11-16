@@ -1,7 +1,6 @@
 <div class="question created">
   <h3 class="title"><a href="/questions/<%= question.id %>"><%= question.title %></a></h3>
   <div class="ops">
-    <a href="/questions/<%= question.id %>"><%= question.answers_count %>回答</a>
-    <div class="timestamp"><%= time_ago_in_words question.created_at %></div>
+    <div class="timestamp"><%= question.answers_count %>回答, <%= time_ago_in_words question.created_at %></div>
   </div>
 </div>

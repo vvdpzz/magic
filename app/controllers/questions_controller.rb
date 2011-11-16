@@ -35,7 +35,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    params[:question][:rules_list] = params[:question][:rules_list].reject(&:blank?).map{|i| i.to_i}.to_s
+    params[:question][:rules_list] = params[:question][:rules_list].reject(&:blank?).to_param
     @question = current_user.questions.build params[:question]
     respond_to do |format|
       #if @question.valid?
