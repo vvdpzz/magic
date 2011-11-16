@@ -21,7 +21,7 @@
             <a href="/messages">私信<span id="nav-msg-new-num" style="display: none; "></span></a>   
           </li>
           <li id="notify-page">
-            <a href="javascript:void(0)">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>   
+            <a href="javascript:void(0)">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>
           </li>
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle">通知</a>
@@ -55,21 +55,19 @@
       </div>
     </div>
   </div>
-  <div style="z-index: 1000; ">
-    <div id="msg_warpper" style="position: absolute;display:none;">
-      <div id="msg_warpper_head">
-        通知
+  <div id="msg_warpper" style="position:absolute;display:none;">
+    <div class="msg_warpper_head">
+      <a href="#">通知</a>
+    </div>
+    <div id="msg_warpper_container">
+      <div id="itemBox" class="itemBox" style="display:none;">
+          <p class="notification-content"></p>
+          <span class="notification-time"></span>
       </div>
-      <div id="msg_warpper_container">
-        <div id="itemBox" class="itemBox" style="display:none;">
-            <p class="notification-content"></p>
-            <span class="notification-time"></span>
-        </div>
-      </div>
-      <div id="msg_warpper_footer">
-        <a href="/notifications" style="text-align:middle">查看所有通知</a>
-        <a id="msg_warpper_close" style="float:right">关闭</a>
-      </div>
+    </div>
+    <div class="msg_warpper_footer">
+      <a href="/notifications" style="text-align:middle">查看所有通知</a>
+      <a id="msg_warpper_close" style="float:right">关闭</a>
     </div>
   </div>
 </body>
@@ -98,7 +96,6 @@
     count = parseInt($('#nav-ntf-new-num').text().trim()) + 1;
     $('#nav-ntf-new-num').text(count).show();
   });
-  
   
   $(function(){
     initNav();

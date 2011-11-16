@@ -41,7 +41,13 @@
         <td>充值</td>
         <td>收入</td>
         <td><%= record.credit %></td>
-        <td><% if record.trade_status == 0 %>等待付款<% else %>充值成功<% end %></td>
+        <td>
+          <% if record.trade_status == 0 %>
+             等待付款 <%= link_to "充值", recharge_url(record.id) %>
+          <% else %>
+            充值成功
+          <% end %>
+        </td>
       </tr>
       <% end %>
       <% end %>
