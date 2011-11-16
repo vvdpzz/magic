@@ -15,10 +15,8 @@ class AnswersController < ApplicationController
     if @answer.save
       question.not_free? and question.correct_answer_id == 0 and @answer.deduct_reputation and @answer.order_reputation
       # add notification to db and pusher
-      html = "<a href=\"/users/#{current_user.id}\">#{current_user.name}</a> 回答了你的问题 <a href=\"/questions/#{question.id}\">#{question.title}</a> 。"
-      notification = Notification.create(:user_id => question.user_id, :content => html)
-      $redis.incr("notifications:#{question.user_id}:unreadcount")
-      Pusher["presence-notifications_#{question.user_id}"].trigger('notification_created', MultiJson.encode(notification))
+      Notification.create_and_push(current_user, 2, nil, question)
+      
       render json: {answers_count: question.answers_count+1, html: render_to_string(partial: 'answer', locals: {answer: @answer}), status: :ok}
     else
       render json: {:errors => "Oops! Some errors happened."}
@@ -37,11 +35,17 @@ class AnswersController < ApplicationController
     if @voted == nil
       if current_user.vote_for @answer
         @answer.update_attribute(:votes_count, @answer.plusminus)
+        # add notification to db and pusher
+        Notification.create_and_push(current_user, 4, nil, nil, @answer)
+        
         render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
       end
     else
       if current_user.vote_exclusively_for @answer
         @answer.update_attribute(:votes_count, @answer.plusminus)
+        # add notification to db and pusher
+        Notification.create_and_push(current_user, 4, nil, nil, @answer)
+        
         render json: {:id => @answer.id, :votes_count => @answer.plusminus}, status: :ok
       end
     end
@@ -75,6 +79,10 @@ class AnswersController < ApplicationController
     if question and answer and current_user.id == question.user_id and question.correct_answer_id == 0
       question.update_attribute(:correct_answer_id, answer.id)
       answer.update_attribute(:is_correct, true)
+      
+      # add notification to db and pusher
+      Notification.create_and_push(current_user, 3, nil, nil, answer)
+      
       if question.not_free?
         if question.reputation > 0
           answer.user.update_attribute(:reputation, answer.user.reputation + question.reputation)
@@ -88,12 +96,6 @@ class AnswersController < ApplicationController
             :trade_status => TradeStatus::SUCCESS
           )
           order.save
-          
-          # add notification to db and pusher
-          html = "<a href=\"/users/#{question.user_id}\">#{question.user.name}</a>采纳了您对 <a href=\"/questions/#{question.id}\">#{question.title}</a> 的回答 。"
-          notification = Notification.create(:user_id => answer.user_id, :content => html)
-          $redis.incr("notifications:#{answer.user_id}:unreadcount")
-          Pusher["presence-notifications_#{answer.user_id}"].trigger('notification_created', MultiJson.encode(notification))
           
           # change question user's order status from normal to success
           orders = current_user.reputation_transactions.where(:question_id => question.id, :trade_type => TradeType::ASK)
@@ -118,12 +120,6 @@ class AnswersController < ApplicationController
           )
           order.save
           
-          # add notification to db and pusher
-          html = "<a href=\"/users/#{question.user_id}\">#{question.user.name}</a>采纳了您对 <a href=\"/questions/#{question.id}\">#{question.title}</a> 的回答 。"
-          notification = Notification.create(:user_id => answer.user_id, :content => html)
-          $redis.incr("notifications:#{answer.user_id}:unreadcount")
-          Pusher["presence-notifications_#{answer.user_id}"].trigger('notification_created', MultiJson.encode(notification))
-          
           # change question user's order status from normal to success
           orders = current_user.credit_transactions.where(:question_id => question.id, :trade_type => TradeType::ASK)
           orders.each do |order|
@@ -141,7 +137,7 @@ class AnswersController < ApplicationController
   
   protected
     def vote_init
-      @answer = Answer.select("id").find_by_id(params[:id])
+      @answer = Answer.select("id, user_id, question_id").find_by_id(params[:id])
       @voted = @answer.trivalent_voted_by? current_user
     end
 end

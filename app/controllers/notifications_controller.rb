@@ -3,6 +3,7 @@ class NotificationsController < ApplicationController
   def index
     @notification_list = current_user.notifications
     $redis.set("notifications:#{current_user.id}:unreadcount", 0)
+    Notification.sql_update_is_read
     @has_notification = false
     if @notification_list.length > 0
       @first = @notification_list.first

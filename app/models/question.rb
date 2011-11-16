@@ -10,6 +10,10 @@ class Question < ActiveRecord::Base
   scope :paid, lambda { where(["reputation <> 0 OR credit <> 0.00"])}
   acts_as_voteable
   
+  def star(*value)
+    puts value
+  end
+  
   def not_free?
     self.credit != 0 or self.reputation != 0
   end
@@ -61,6 +65,10 @@ class Question < ActiveRecord::Base
   
   def answer_for(user_id)
     self.answers.find_by_user_id(user_id)
+  end
+  
+  def strong_create_question
+    ActiveRecord::Base.connection.execute("call sp_deduct_credit_and_money(#{self.id},#{self.user_id},'#{self.title}','#{self.content}',#{self.reputation.to_i},#{self.credit},#{self.is_free},'#{self.rules_list}','#{self.customized_rule}')")
   end
   
   def watched_user
