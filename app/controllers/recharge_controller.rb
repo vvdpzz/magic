@@ -46,6 +46,6 @@ class RechargeController < ApplicationController
       @order.update_attribute(:trade_status, 1)
       @order.user.update_attribute(:credit, @order.user.credit + r.amount.to_f)
     end
-    redirect_to recharge_index_url
+    redirect_to account_index_url
   end
 end
