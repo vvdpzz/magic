@@ -197,6 +197,7 @@ ActiveRecord::Schema.define(:version => 20111116112210) do
     t.string   "last_sign_in_ip"
     t.decimal  "credit",                                  :precision => 8, :scale => 2, :default => 0.0
     t.integer  "reputation",                                                            :default => 0
+    t.integer  "notifications_count",                                                   :default => 0
     t.integer  "questions_count",                                                       :default => 0
     t.integer  "answers_count",                                                         :default => 0
     t.integer  "comments_count",                                                        :default => 0
