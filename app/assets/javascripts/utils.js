@@ -1,8 +1,8 @@
 var htmlEscape = function(txt) {
-  return txt.replace(/&/g,'&amp;').                                         
-  replace(/>/g,'&gt;').                                           
-  replace(/</g,'&lt;').                                           
-  replace(/"/g,'&quot;')              
+  return txt.replace(/&/g,'&amp;').
+  replace(/>/g,'&gt;').
+  replace(/</g,'&lt;').
+  replace(/"/g,'&quot;')
 }
 
 var stringutil = {

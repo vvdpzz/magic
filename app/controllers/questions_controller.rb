@@ -139,7 +139,7 @@ class QuestionsController < ApplicationController
            current_user.update_attribute(:favorite_questions_count, of_count-1)
            question.update_attribute(:favorite_questions_count, oq_count-1)
          else
-           current_user.update_attribute(:favorite_questions_count, of_count+1)
+           current_user.update_attribute(:favorite_questions_count, of_countunt+1)
            question.update_attribute(:favorite_questions_count, oq_count+1)
          end
         status = record.status if record.update_attribute(:status, !record.status)
