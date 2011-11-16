@@ -21,16 +21,7 @@
             <a href="/messages">私信<span id="nav-msg-new-num" style="display: none; "></span></a>   
           </li>
           <li id="notify-page">
-            <a href="javascript:void(0)" class="dropdown-toggle">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>
-          </li>
-          <li class="dropdown" data-dropdown="dropdown">
-            <a href="#" class="dropdown-toggle">通知</a>
-            <ul class="dropdown-menu" id="notification-container">
-              <li id="notification-item" style="display: none">
-                <p class="notification-content">啊啊</p>
-                <span class="notification-time">222222</span>
-              </li>
-            </ul>
+            <a href="javascript:void(0)">通知<span id="nav-ntf-new-num" style="display: none; "></span></a>
           </li>
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle"><%= current_user.name %></a>
@@ -57,8 +48,8 @@
     </div>
     <div id="msg_warpper_container">
       <div id="itemBox" class="itemBox" style="display:none;">
-          <p class="notification-content"></p>
-          <span class="notification-time"></span>
+        <p class="notification-content"></p>
+        <span class="notification-time"></span>
       </div>
     </div>
     <div class="msg_warpper_footer">
@@ -92,6 +83,7 @@
     count = parseInt($('#nav-ntf-new-num').text().trim()) + 1;
     $('#nav-ntf-new-num').text(count).show();
   });
+  
   
   $(function(){
     initNav();

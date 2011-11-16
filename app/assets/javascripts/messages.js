@@ -132,7 +132,7 @@ var showNewMessage = function(messageText) {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : '/users/' + viewer.id,
-    time_created : dateFormat(new Date()),
+    time_created : (new Date()).format(),
     text : messageText
   };
   var e = constructMessageBox(message);
@@ -325,7 +325,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
     owner_name : viewer.name,
     owner_picture : viewer.avatar,
     owner_profile_url : 'users/' + viewer.id,
-    time_created : dateFormat(new Date()),
+    time_created : (new Date()).format(),
     text : htmlEscape(messageText)
   }
   if (box.length == 1) {
@@ -344,7 +344,7 @@ var addNewMessageToConversation = function(friendToken, messageText) {
       'friend_picture' : friend.avatar,
       'friend_name' : friend.name,
       'unread_message_count' : 0,
-      'last_update' : dateFormat(new Date()),
+      'last_update' : (new Date()).format(),
       'messages' : messages
     }
     box = constructConversationBox(conversation);

@@ -11,19 +11,19 @@ class Question < ActiveRecord::Base
   acts_as_voteable
   
   # validations
-  validates_numericality_of :money, :message => "is not a number", :greater_than_or_equal_to => 0
+  validates_numericality_of :reputation, :message => "is not a number", :greater_than_or_equal_to => 0
   validates_numericality_of :credit, :message => "is not a number", :greater_than_or_equal_to => 0
   validates_presence_of :title, :message => "can't be blank"
   
   validate :enough_credit_to_pay
-  validate :enough_money_to_pay
+  validate :enough_reputation_to_pay
   
   def enough_credit_to_pay
     errors.add(:credit, "you do not have enough credit to pay.") if self.user.credit < self.credit
   end
   
-  def enough_money_to_pay
-    errors.add(:money, "you do not have enough money to pay.") if self.user.money < self.money
+  def enough_reputation_to_pay
+    errors.add(:reputation, "you do not have enough reputation to pay.") if self.user.reputation < self.reputation
   end
   
   def not_free?
