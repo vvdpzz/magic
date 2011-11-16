@@ -10,8 +10,20 @@ class Question < ActiveRecord::Base
   scope :paid, lambda { where(["reputation <> 0 OR credit <> 0.00"])}
   acts_as_voteable
   
-  def star(*value)
-    puts value
+  # validations
+  validates_numericality_of :reputation, :message => "is not a number", :greater_than_or_equal_to => 0
+  validates_numericality_of :credit, :message => "is not a number", :greater_than_or_equal_to => 0
+  validates_presence_of :title, :message => "can't be blank"
+  
+  validate :enough_credit_to_pay
+  validate :enough_reputation_to_pay
+  
+  def enough_credit_to_pay
+    errors.add(:credit, "you do not have enough credit to pay.") if self.user.credit < self.credit
+  end
+  
+  def enough_reputation_to_pay
+    errors.add(:reputation, "you do not have enough reputation to pay.") if self.user.reputation < self.reputation
   end
   
   def not_free?

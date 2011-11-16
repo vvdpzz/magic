@@ -3,6 +3,18 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $(->
   $loadingImg = $("<img/>").attr('src', '/assets/loading.gif')
+  #datepicker init
+  datepickerOptions = {
+    minDate: 3,
+    maxDate: 30
+    dateFormat: 'yy-mm-dd'
+  }
+  defaultEndDate = 3
+  $("#question_datepicker").datepicker(datepickerOptions);
+  today = new Date();
+  endDate = new Date(today.getTime() + defaultEndDate * 86400 * 1000);
+  $('#question_datepicker').datepicker('setDate', endDate);
+
   question_paymentDlg = {
     title : "赏金支付",
     autoOpen: false,
@@ -35,7 +47,7 @@ $(->
       '遇到困难':()->
           
   }
-  $("#new_question").submit -> 
+  $("#new_question").submit ->
     #jquery object constant
     $contentTips = $("#contentTips")
     $question_credit = $("#select_credit")
@@ -83,9 +95,14 @@ $(->
       needReputation = parseInt($question_reputation.val(),10) - user_accout.reputation
       $reputation_tips.text("缺少"+needReputation+"积分").fadeIn()
       isSubmit = false
-    # if isSubmit
-    
-    
+    return isSubmit unless isSubmit
+    $('#new_question').bind('ajax:success', (xhr, data, status)->
+      location.href = "/questions/#{data.id}"
+    )
+    $('#new_question').bind('ajax:error',(xhr,textStatus, errorThrown)->
+      alert '我错了'
+    )
+
   #bind event
   $("#question_title").bind "keyup",()->
     $titleCount = $("#titleCount")

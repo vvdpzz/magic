@@ -1,80 +1,86 @@
 
-<%= form_for @question, remote: true,  do |f| %>
-  <fieldset>
-    <!-- title -->
-    <div class="clearfix">
-      <label for="question_title">标题</label>
-      <div class="input title_block">
-        <%= f.text_field :title, :class => "xxlarge", :size => 70, :maxlength => 70 ,:placeholder => "输入您的问题的标题"%>
-        <span id="titleCount" class="help-inline">70</span>
-      </div>
-    </div>
-    <!-- content -->
-    <div class="clearfix">
-      <label for="question_content"></label>
-      <div class="input">
-        <%= f.text_area :content, :class => "xxlarge", :rows => 10 %>
-        <span id="contentTips" class="help-block">在文本框中完成你对问题的描述</span>
-      </div>
-    </div>
-    <!-- rules_list -->
-    <div class="clearfix">
-      <label>竞标规则</label>
-      <div class="input" id="rules_list">
-        <ul class="inputs-list">
-          <% [1, 2, 3].each  do |i| %>
-            <li>
-               <label>
-                 <%= f.check_box 'rules_list', {:multiple => true}, i, nil %>
-                 <span><%= Settings.send("r#{i}") %></span>
-               </label>
-            </li>
-          <% end %>
-          <li>
-            <label id="addedRule">
-              <input type="checkbox" name="customized" value="0">
-              <span>额外的规则</span>
-            </label>
-            <textarea id="additional_rule" style="display:none" name="question[customized_rule]" class="xxlarge" row=3 placeholder="输入您自定义的规则"></textarea>
-          </li>
-        </ul>
-        <span class="help-block"><strong>提示:</strong> 点击上面的选择框输入更多的竞标规则</span>
-      </div>
-    </div>
-    <!-- credit -->
-    <div class="clearfix">
-      <label for="question_credit">金钱</label>
-      <div class="input">
-        <%= f.select :credit, 11.times.collect{|i| [i, i]}, {}, {:class => 'medium',:id => 'select_credit'} %> 元
-        <span id="currentUserAccount" class="help-inline">您当前余额为:<%= current_user.credit %></span>
-        <span id="recharge">
-          <span id='credit_tips' class="help-inline"></span>
-          <a class="btn primary" id="into_recharge" style="display:none">充值</a>
-        </span>
-      </div>
-    </div>
-    <!-- reputation -->
-    <div class="clearfix">
-      <label for="question_reputation">积分</label>
-      <div class="input">
-          <%= f.text_field :reputation, :class => "medium", :size => 70, :maxlength => 70 ,:placeholder => "0",:value => ''%>分
-          <span class="help-inline">您当前积分为:<%= current_user.reputation %></span>
-          <span id='reputation_tips' class="help-inline"></span>
-      </div>
-    </div>
-    <!-- actions -->
-    <div class="actions actions_bottom">
-      <%= f.submit "提交问题", :class => "btn primary" %>
-      &nbsp;<a href="/" class="btn">返回</a>
-    </div>
-  </fieldset>
-  <div id="control" style="z-index:10010;display:none">
-    <div id="dialog_payment" style="display:none">
-     <span> 流水号：</span><span id='order_number'></span>
-     <h1 id="order_credit" class=""></h1>
-     <div id="alipay_form"></div>
+<%= form_for @question, :remote => true, :html => {'data-type' => "json"} do |f| %>
+<fieldset>
+  <!-- title -->
+  <div class="clearfix">
+    <label for="question_title">标题</label>
+    <div class="input title_block">
+      <%= f.text_field :title, :class => "xxlarge", :size => 70, :maxlength => 70 ,:placeholder => "输入您的问题的标题"%>
+      <span id="titleCount" class="help-inline">70</span>
     </div>
   </div>
+  <!-- content -->
+  <div class="clearfix">
+    <label for="question_content"></label>
+    <div class="input">
+      <%= f.text_area :content, :class => "xxlarge", :rows => 10 %>
+      <span id="contentTips" class="help-block">在文本框中完成你对问题的描述</span>
+    </div>
+  </div>
+  <!-- rules_list -->
+  <div class="clearfix">
+    <label>竞标规则</label>
+    <div class="input" id="rules_list">
+      <ul class="inputs-list">
+        <% [1, 2, 3].each  do |i| %>
+        <li>
+          <label>
+            <%= f.check_box 'rules_list', {:multiple => true}, i, nil %>
+            <span><%= Settings.send("r#{i}") %></span>
+          </label>
+        </li>
+        <% end %>
+        <li>
+          <label id="addedRule">
+            <input type="checkbox" name="customized" value="0">
+            <span>额外的规则</span>
+          </label>
+          <textarea id="additional_rule" style="display:none" name="question[customized_rule]" class="xxlarge" row=3 placeholder="输入您自定义的规则"></textarea>
+        </li>
+      </ul>
+      <span class="help-block"><strong>提示:</strong> 点击上面的选择框输入更多的竞标规则</span>
+    </div>
+  </div>
+  <!-- credit -->
+  <div class="clearfix">
+    <label for="question_credit">金钱</label>
+    <div class="input">
+      <%= f.select :credit, 11.times.collect{|i| [i, i]}, {}, {:class => 'medium',:id => 'select_credit'} %> 元
+      <span id="currentUserAccount" class="help-inline">您当前余额为:<%= current_user.credit %></span>
+      <span id="recharge">
+        <span id='credit_tips' class="help-inline"></span>
+        <a class="btn primary" id="into_recharge" style="display:none">充值</a>
+      </span>
+    </div>
+  </div>
+  <!-- reputation -->
+  <div class="clearfix">
+    <label for="question_reputation">积分</label>
+    <div class="input">
+      <%= f.text_field :reputation, :class => "medium", :size => 70, :maxlength => 70 ,:value => 0%>分
+      <span class="help-inline">您当前积分为:<%= current_user.reputation %></span>
+      <span id='reputation_tips' class="help-inline"></span>
+    </div>
+  </div>
+  <div class="clearfix">
+    <label for="question_datepicker">截止时间</label>
+    <div class="input">
+      <input type="text" id="question_datepicker" name="end_date" readonly="readonly">
+    </div>
+  </div>
+  <!-- actions -->
+  <div class="actions actions_bottom">
+    <%= f.submit "提交问题", :class => "btn primary" %>
+    &nbsp;<a href="/" class="btn">返回</a>
+  </div>
+</fieldset>
+<div id="control" style="z-index:10010;display:none">
+  <div id="dialog_payment" style="display:none">
+    <span> 流水号：</span><span id='order_number'></span>
+    <h1 id="order_credit" class=""></h1>
+    <div id="alipay_form"></div>
+  </div>
+</div>
 <% end %>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
