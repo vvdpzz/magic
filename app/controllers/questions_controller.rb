@@ -146,6 +146,8 @@ class QuestionsController < ApplicationController
       oq_count = question.favorite_questions_count
       if record.blank?
         current_user.favorite_questions.create(:question_id => question.id)
+        current_user.update_attribute(:favorite_questions_count, of_count+1)
+        question.update_attribute(:favorite_questions_count, oq_count+1)
       else
         if record.status
            current_user.update_attribute(:favorite_questions_count, of_count-1)
