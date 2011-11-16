@@ -74,6 +74,8 @@ Magic::Application.routes.draw do
       post :set_unread_count
     end
   end
+  
+  resources :request_cash
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

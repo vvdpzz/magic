@@ -142,8 +142,8 @@ getUserCredit = (callback)->
     callback() if callback
     
 # add error style
-addDomError = (div...)->
+window.addDomError = (div...)->
   el.addClass("error").closest('.clearfix').addClass('error') for el in div
-removeDomError = (div...)->
+window.removeDomError = (div...)->
   el.removeClass("error").closest('.clearfix').removeClass('error') for el in div
   

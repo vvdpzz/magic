@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111115072855) do
+ActiveRecord::Schema.define(:version => 20111116103742) do
 
   create_table "answers", :id => false, :force => true do |t|
     t.integer  "id",             :limit => 8
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(:version => 20111115072855) do
     t.integer  "followed_questions_count",                                            :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "favorite_questions_count",                                            :default => 0
+    t.integer  "favorite_questions_count"
   end
 
   add_index "questions", ["user_id"], :name => "index_questions_on_user_id"
@@ -164,6 +164,15 @@ ActiveRecord::Schema.define(:version => 20111115072855) do
   add_index "reputation_transactions", ["user_id"], :name => "index_reputation_transactions_on_user_id"
   add_index "reputation_transactions", ["winner_id"], :name => "index_reputation_transactions_on_winner_id"
 
+  create_table "request_cashes", :id => false, :force => true do |t|
+    t.integer  "id",         :limit => 8
+    t.integer  "user_id",    :limit => 8,                                                :null => false
+    t.decimal  "credit",                  :precision => 8, :scale => 2, :default => 0.0
+    t.integer  "status",                                                :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :primary_key => "email", :force => true do |t|
     t.integer  "id",                       :limit => 8
     t.string   "name",                                                                  :default => ""
@@ -180,7 +189,6 @@ ActiveRecord::Schema.define(:version => 20111115072855) do
     t.string   "last_sign_in_ip"
     t.decimal  "credit",                                  :precision => 8, :scale => 2, :default => 0.0
     t.integer  "reputation",                                                            :default => 0
-    t.integer  "notifications_count",                                                   :default => 0
     t.integer  "questions_count",                                                       :default => 0
     t.integer  "answers_count",                                                         :default => 0
     t.integer  "comments_count",                                                        :default => 0
@@ -194,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20111115072855) do
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.decimal  "locked_credit",                           :precision => 8, :scale => 2, :default => 0.0
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
