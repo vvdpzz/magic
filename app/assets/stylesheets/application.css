@@ -191,4 +191,10 @@ font-weight: normal;
 line-height: 18px;
 margin-bottom: 2px;
 }
+#notification-container{
+  max-height:200px;
+  overflow:auto;
+  max-width:300px;
+  _width:300px;
+}
 
