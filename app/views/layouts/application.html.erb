@@ -42,9 +42,11 @@
       </div>
     </div>
   </div>
-  <div style="z-index: 1000; ">
-    <div id="msg_warpper" style="position: absolute;display:none;">
-      <div id="msg_warpper_head">
+    <div id="msg_warpper" style="position:absolute;display:none;">
+      <div class="msg_warpper_arrow">
+        <span>◆</span>
+      </div>
+      <div class="msg_warpper_head">
         <a href="#">通知</a>
       </div>
       <div id="msg_warpper_container">
@@ -53,12 +55,11 @@
             <span class="notification-time"></span>
         </div>
       </div>
-      <div id="msg_warpper_footer">
+      <div class="msg_warpper_footer">
         <a href="/notifications" style="text-align:middle">查看所有通知</a>
         <a id="msg_warpper_close" style="float:right">关闭</a>
       </div>
     </div>
-  </div>
 </body>
 </html>
 
@@ -78,8 +79,7 @@
 	var notification_channel = pusher.subscribe("presence-notifications_<%= current_user.id %>");
 	notification_channel.bind('notification_created', function(notification) {
 		var elem = contructNotificationItem(notification);
-		elem.prependTo('#msg_warpper_container');
-		
+		elem.prependTo('#msg_warpper_container');		
 		count = 1;
 		if($('#nav-ntf-new-num').text().trim() != '')
 			count = parseInt($('#nav-ntf-new-num').text().trim()) + 1;
@@ -91,6 +91,7 @@
     initNav();
     msg_warpper_init()
     $("#notify-page a").bind('click',function(){
+      $('.msg_warpper_arrow').css("left",$(this).position().left)
       $.post('/notifications/set_unread_count');
 			$('#nav-ntf-new-num').text('').hide();
       $("#msg_warpper").slideToggle();
