@@ -45,11 +45,11 @@
   <div style="z-index: 1000; ">
     <div id="msg_warpper" style="position: absolute;display:none;">
       <div id="msg_warpper_head">
-        <a href="#">通知</a>
+        通知
       </div>
       <div id="msg_warpper_container">
         <div id="itemBox" class="itemBox" style="display:none;">
-            <p></p>
+            <p class="notification-content"></p>
             <span class="notification-time"></span>
         </div>
       </div>
@@ -75,25 +75,25 @@
   });
   
   //Notifications Pusher
-	var notification_channel = pusher.subscribe("presence-notifications_<%= current_user.id %>");
-	notification_channel.bind('notification_created', function(notification) {
-		var elem = contructNotificationItem(notification);
-		elem.prependTo('#msg_warpper_container');
-		
-		count = 1;
-		if($('#nav-ntf-new-num').text().trim() != '')
-			count = parseInt($('#nav-ntf-new-num').text().trim()) + 1;
-		$('#nav-ntf-new-num').text(count).show();
-	});
+  var notification_channel = pusher.subscribe("presence-notifications_<%= current_user.id %>");
+  notification_channel.bind('notification_created', function(notification) {
+    var elem = contructNotificationItem(notification);
+    elem.prependTo('#msg_warpper_container');
+
+    count = 1;
+    if($('#nav-ntf-new-num').text().trim() != '')
+    count = parseInt($('#nav-ntf-new-num').text().trim()) + 1;
+    $('#nav-ntf-new-num').text(count).show();
+  });
   
   
   $(function(){
     initNav();
     msg_warpper_init()
     $("#notify-page a").bind('click',function(){
-      $.post('/notifications/set_unread_count');
-			$('#nav-ntf-new-num').text('').hide();
       $("#msg_warpper").slideToggle();
+      $.post('/notifications/set_unread_count');
+      $('#nav-ntf-new-num').text('').hide();
     })
   });
   function msg_warpper_init(){

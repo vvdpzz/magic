@@ -137,7 +137,7 @@ body{
   z-index: 999;
   top: 50px!important;
   left:60%;
-  opacity:0.9;
+  opacity:1;
 }
 #msg_warpper_head{
   font-size: 14px;
@@ -212,5 +212,11 @@ padding: 3px 4px;
 .notification-time {
   color: #909090;
   font-size: 11px;
+}
+.notification-content {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+margin-bottom: 2px;
 }
 
