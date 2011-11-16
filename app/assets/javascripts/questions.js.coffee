@@ -3,6 +3,19 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $(->
   $loadingImg = $("<img/>").attr('src', '/assets/loading.gif')
+
+  #datepicker init
+  datepickerOptions = {
+    minDate: 3,
+    maxDate: 30
+    dateFormat: 'yy-mm-dd'
+  }
+  defaultEndDate = 3
+  $("#question_datepicker").datepicker(datepickerOptions);
+  today = new Date();
+  endDate = new Date(today.getTime() + defaultEndDate * 86400 * 1000);
+  $('#question_datepicker').datepicker('setDate', endDate);
+
   question_paymentDlg = {
     title : "赏金支付",
     autoOpen: false,
@@ -35,7 +48,7 @@ $(->
       '遇到困难':()->
           
   }
-  $("#new_question").submit -> 
+  $("#new_question").submit ->
     #jquery object constant
     $contentTips = $("#contentTips")
     $question_credit = $("#select_credit")
