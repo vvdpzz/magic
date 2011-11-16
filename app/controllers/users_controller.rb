@@ -1,3 +1,4 @@
+# encoding: utf-8
 class UsersController < ApplicationController
   can_edit_on_the_spot
   before_filter :build_user, :except => [:cash, :update_attribute_on_the_spot]
@@ -11,25 +12,37 @@ class UsersController < ApplicationController
   def follow
     flag = true
     if @user and @user.id != current_user.id
-     records = FollowedUser.where(:user_id => @user.id, :follower_id => current_user.id)
-     if records.empty?
-       @user.followers.create(:follower_id => current_user.id)
-       $redis.sadd("users:#{current_user.id}.following_users", params[:id])
-       $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
-     else
-       record = records.first
-       if record.flag
-         $redis.srem("users:#{current_user.id}.following_users", params[:id])
-         $redis.srem("users:#{params[:id]}.follower_users", current_user.id)
-       else
-         $redis.sadd("users:#{current_user.id}.following_users", params[:id])
-         $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
-       end
-       flag = record.flag if record.update_attribute(:flag, !record.flag)
-     end
-     render :json => {:flag => flag}, status: :ok
+      records = FollowedUser.where(:user_id => @user.id, :follower_id => current_user.id)
+      if records.empty?
+        @user.followers.create(:follower_id => current_user.id)
+        $redis.sadd("users:#{current_user.id}.following_users", params[:id])
+        $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
+        
+        # add notification to db and pusher
+        html = "<a href='/users/#{current_user.id}'>#{current_user.name}</a> 关注了你。"
+        notification = Notification.create(:user_id => @user.id, :content => html)
+        $redis.incr("notifications:#{@user.id}:unreadcount")
+        Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', MultiJson.encode(notification))
+      else
+        record = records.first
+        if record.flag
+          $redis.srem("users:#{current_user.id}.following_users", params[:id])
+          $redis.srem("users:#{params[:id]}.follower_users", current_user.id)
+        else
+          $redis.sadd("users:#{current_user.id}.following_users", params[:id])
+          $redis.sadd("users:#{params[:id]}.follower_users", current_user.id)
+          
+          # add notification to db and pusher
+          html = "<a href='/users/#{current_user.id}'>#{current_user.name}</a> 关注了你。"
+          notification = Notification.create(:user_id => @user.id, :content => html)
+          $redis.incr("notifications:#{@user.id}:unreadcount")
+          Pusher["presence-notifications_#{@user.id}"].trigger('notification_created', MultiJson.encode(notification))
+        end
+        flag = record.flag if record.update_attribute(:flag, !record.flag)
+      end
+      render :json => {:flag => flag}, status: :ok
     else
-     render :json => {:error => true}, :status => :unprocessable_entity
+      render :json => {:error => true}, :status => :unprocessable_entity
     end
   end
   

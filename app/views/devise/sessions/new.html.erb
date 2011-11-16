@@ -27,6 +27,7 @@
       <div class="actions blank">
         <%= f.submit '登录', :class => "btn primary" %>
         <%= link_to "忘记密码了？", new_password_path(resource_name) %>
+        <%= link_to '申请邀请码', new_request_invitation_path %>
       </div>
     </fieldset>
     <% end %>

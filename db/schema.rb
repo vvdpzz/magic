@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111110135952) do
+ActiveRecord::Schema.define(:version => 20111116025402) do
 
   create_table "answers", :id => false, :force => true do |t|
     t.integer  "id",             :limit => 8
@@ -92,6 +92,15 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
   add_index "followed_users", ["follower_id"], :name => "index_followed_users_on_follower_id"
   add_index "followed_users", ["user_id"], :name => "index_followed_users_on_user_id"
 
+  create_table "notifications", :id => false, :force => true do |t|
+    t.integer  "id",         :limit => 8
+    t.integer  "user_id",    :limit => 8,                    :null => false
+    t.string   "content"
+    t.boolean  "is_read",                 :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "photos", :force => true do |t|
     t.integer  "user_id",    :limit => 8, :null => false
     t.string   "image"
@@ -120,6 +129,7 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
     t.integer  "followed_questions_count",                                            :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "favorite_questions_count",                                            :default => 0
   end
 
   add_index "questions", ["user_id"], :name => "index_questions_on_user_id"
@@ -154,6 +164,14 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
   add_index "reputation_transactions", ["user_id"], :name => "index_reputation_transactions_on_user_id"
   add_index "reputation_transactions", ["winner_id"], :name => "index_reputation_transactions_on_winner_id"
 
+  create_table "request_invitations", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :primary_key => "email", :force => true do |t|
     t.integer  "id",                       :limit => 8
     t.string   "name",                                                                  :default => ""
@@ -170,6 +188,7 @@ ActiveRecord::Schema.define(:version => 20111110135952) do
     t.string   "last_sign_in_ip"
     t.decimal  "credit",                                  :precision => 8, :scale => 2, :default => 0.0
     t.integer  "reputation",                                                            :default => 0
+    t.integer  "notifications_count",                                                   :default => 0
     t.integer  "questions_count",                                                       :default => 0
     t.integer  "answers_count",                                                         :default => 0
     t.integer  "comments_count",                                                        :default => 0

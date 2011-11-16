@@ -1,4 +1,6 @@
 class RequestInvitationsController < ApplicationController
+  skip_before_filter :authenticate_user!
+  layout "welcome"
   # GET /request_invitations
   # GET /request_invitations.json
   def index
