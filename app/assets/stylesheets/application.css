@@ -139,7 +139,7 @@ body{
   left:60%;
   opacity:1;
 }
-.msg_warpper_head{
+#msg_warpper_head{
   font-size: 14px;
   font-weight:bold;
   line-height: 13px;
@@ -149,10 +149,10 @@ body{
 .msg_warpper_close{
   float:right;
 }
-.msg_warpper_head a{
+#msg_warpper_head a{
   color: white;
 }
-.msg_warpper_arrow{
+#msg_warpper_arrow{
   color:#AAA;
   font-size:40px;
   position:absolute;
@@ -163,7 +163,7 @@ body{
   padding: 0;
   height: 240px;
 }
-.msg_warpper_footer{
+#msg_warpper_footer{
   background-color: #AAA;
   text-align: center;
   font-size: 14px;
@@ -190,11 +190,5 @@ font-size: 13px;
 font-weight: normal;
 line-height: 18px;
 margin-bottom: 2px;
-}
-#notification-container{
-  max-height:200px;
-  overflow:auto;
-  max-width:300px;
-  _width:300px;
 }
 
