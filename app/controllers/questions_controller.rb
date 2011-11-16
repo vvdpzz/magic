@@ -38,8 +38,10 @@ class QuestionsController < ApplicationController
     params[:question][:rules_list] = params[:question][:rules_list].reject(&:blank?).map{|i| i.to_i}.to_s
     @question = current_user.questions.build params[:question]
     respond_to do |format|
+      #if @question.valid?
       if @question.save
         @question.save and @question.deduct_credit and @question.order_credit and @question.deduct_reputation and @question.order_reputation
+        @question.strong_create_question
         format.html { redirect_to @question, :notice => 'Question was successfully created.' }
         format.json { render :json => @question, :status => :ok, :location => @question }
       else
@@ -51,6 +53,14 @@ class QuestionsController < ApplicationController
   
   def show
     @question = Question.find params[:id]
+    q_hash = @question.serializable_hash
+    q_data = q_hash.merge! User.basic_hash @question.user_id
+    answers = Answer.where(:question_id => params[:id])
+    a_hash = answers.collect{ |answer| answer.serializable_hash.merge!(User.basic_hash answer.user_id)}
+    q_data = q_data.merge!({:answers => a_hash})
+    respond_to do |format|
+      format.json { render :json => q_data, :status => :ok } 
+    end
   end
 
   def destroy

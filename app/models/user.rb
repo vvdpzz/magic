@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_one :photo
   
   attr_writer :invitation_instructions
-
+  
   def deliver_invitation
     if @invitation_instructions
       ::Devise.mailer.send(@invitation_instructions, self).deliver
@@ -59,6 +59,10 @@ class User < ActiveRecord::Base
   
   def self.basic(id)
     User.select("id,name,avatar").find_by_id(id)
+  end
+  
+  def self.basic_hash(user_id)
+    {:user => User.select("id, name").find_by_id(user_id).serializable_hash}
   end
   
   def has_relationship_redis(user_id)
